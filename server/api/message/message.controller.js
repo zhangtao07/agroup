@@ -25,6 +25,10 @@ var user = {
 	nickname : "张自萌"
 }
 
+exports.upload = function(req,res){
+	
+}
+
 exports.post = function(req, res) {
 	//todo:save mongodb
 

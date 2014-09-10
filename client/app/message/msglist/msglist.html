@@ -8,8 +8,8 @@
 <div class="msglist-box">
 	<plainitem data="item.data" ng-repeat="item in msglist" ng-if="item.type=='plain'"></plainitem>
 </div>
-<div class="msglist-drag" ng-show="dragTip" ng-init="dragTip=false">
-	<input type="text" />
-	将文件拖拽到这里上传
+
+<div class="msglist-drag" ng-show="dragTip" msglist-drag="1"  ng-init="dragTip=false">
+	<div class="dragTip">将文件拖拽到这里上传</div>
 </div>
 
