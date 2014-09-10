@@ -26,7 +26,7 @@ SyncService.prototype.addClient = function(username, socket) {
         }
     });
     socket.on('patch', function(message) {
-        console.log('received patch: ', message);
+        //console.log('received patch: ', message);
         self.onPatch(socket, message);
     });
 };
@@ -64,7 +64,7 @@ module.exports = function(server) {
     serverIO.on('connection', function(socket) {
         socket.on('login', function(message) {
             var filepath = path.join(__dirname,'../public/',message.path);
-            //console.log(filepath);
+            console.log(filepath);
             startSync(filepath, message.username, socket);
         });
     });

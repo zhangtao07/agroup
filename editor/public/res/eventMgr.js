@@ -12,8 +12,8 @@ define([
     "extensions/markdownSectionParser",
     "extensions/partialRendering",
     "extensions/buttonMarkdownSyntax",
-    "extensions/googleAnalytics",
-    "extensions/twitter",
+    //"extensions/googleAnalytics",
+    //"extensions/twitter",
     "extensions/dialogAbout",
     "extensions/dialogManagePublication",
     "extensions/dialogManageSynchronization",
@@ -178,6 +178,8 @@ define([
     addEventHook("onFileClosed");
     addEventHook("onContentChanged");
     addEventHook("onTitleChanged");
+    addEventHook("onContentSynced");
+
 
     // Operations on folders
     addEventHook("onFoldersChanged");
@@ -205,6 +207,7 @@ define([
     addEventHook("onSectionsCreated");
     addEventHook("onCursorCoordinates");
     addEventHook("onEditorPopover");
+    addEventHook('onSectionsSynced');
 
     // Operations on comments
     addEventHook("onDiscussionCreated");

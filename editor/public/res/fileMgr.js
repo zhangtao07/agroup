@@ -30,21 +30,11 @@ define([
         } else {
             //从lostorage获取已有文件
             var fd = fileSystem[storage[gf]];
+            fd.title = file.title;
+            fd.content = file.content;
+            window.fd = fd;
             fileMgr.selectFile(fd);
         }
-    };
-
-    fileMgr.sendPatch = function() {
-        /*var newContent = editor.getValue();
-        if (oldContent != newContent) {
-            console.log('content change', newContent);
-            var patchList = diff.patch_make(oldContent, newContent);
-            var patchText = diff.patch_toText(patchList);
-            oldContent = newContent;
-            socket.emit('patch', {
-                'patch': patchText
-            });
-        }*/
     };
 
     // Set the current file and refresh the editor

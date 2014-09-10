@@ -32,7 +32,7 @@ app.get('/downloadImport', require('./download').importPublic);
 app.use(function(req, res, next) {
     res.renderDebug = function(page) {
         return res.render(page, {
-            cache: !req.query.hasOwnProperty('debug')
+            cache: false //!req.query.hasOwnProperty('debug')
         });
     };
     next();

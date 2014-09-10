@@ -60,6 +60,12 @@ define([
             refreshPreviewLater();
         }
     });
+    eventMgr.addListener('onSectionsSynced', function(newSectionList){
+        //updateSectionList(newSectionList);
+        //highlightSections();
+        //addTrailingLfNode();
+        //pagedownEditor.refreshPreview();
+    });
 
     var fileChanged = true;
     var fileDesc;
@@ -471,6 +477,13 @@ define([
     function setValueNoWatch(value) {
         setValue(value);
         textContent = value;
+        fileDesc.content = value;
+        eventMgr.onContentSynced(fileDesc,value);
+        //TBD
+        //addTrailingLfNode();
+        pagedownEditor.refreshPreview();
+        //refreshPreviewLater();
+        //entMgr.onAsyncPreview();
     }
 
     editor.setValueNoWatch = setValueNoWatch;
