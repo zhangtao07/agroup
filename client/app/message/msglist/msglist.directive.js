@@ -9,6 +9,52 @@ function($http,socket) {
 		templateUrl : 'app/message/msglist/msglist.html',
 		restrict : 'EA',
 		link : function(scope, element, attrs) {
+			
+			
+			
+			console.info(element);
+			
+			var dropZone = element.get(0);
+			
+			dropZone.addEventListener("drop",function(ev){
+				ev.preventDefault();
+				debugger;
+			},true);
+			
+			
+			
+			dropZone.addEventListener("dragover",function(ev){
+				ev.preventDefault();
+			},true);
+			
+			dropZone.addEventListener("dragenter",function(ev){
+				
+				
+				if(ev.target == this){
+					console.info("enter");
+				}
+				
+				
+				/*
+				scope.dragTip = true;
+								scope.$apply();*/
+				
+				
+			},false);
+			dropZone.addEventListener("dragleave",function(ev){
+				
+				if(ev.target == this){
+					console.info("leave");
+				}
+				
+				/*
+				scope.dragTip = false;
+								scope.$apply();*/
+				
+			},false);
+			
+			
+			
 			socket.joinGroup('group1',function(data){
 				
 				scope.msglist.push(JSON.parse(data));	
