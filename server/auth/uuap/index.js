@@ -1,8 +1,10 @@
 //百度内部 UUAP 的登录
 
 var unirest = require('unirest');
+var User = require('../../api/user/user.model');
+var auth = require('../auth.service.js');
 
-var CALLBACK = encodeURIComponent('http://agroup.baidu.com/auth/callback');
+var CALLBACK = encodeURIComponent('http://agroup.baidu.com/auth/uuap/callback');
 
 var UUAP_PROXY_URL = 'http://ext256.offline.bae.baidu.com/uuap-proxy/?url=' + CALLBACK;
 
@@ -27,11 +29,13 @@ module.exports = {
     getUserName(ticket, function(name) {
       if (name) {
         success = true;
+        email = name + '@baidu.com'; //不完全准确，后续待优化
         req.session.user = {
           'name': name,
-          'email': name + '@baidu.com' //不完全准确，后续待优化
-        }
-        res.redirect('/');
+          'email': email
+        };
+
+        auth.addUser(req, name, email);
       } else {
         //重试一次
         res.redirect(req.originalUrl);
