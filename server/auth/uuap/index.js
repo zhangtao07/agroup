@@ -1,7 +1,6 @@
 //百度内部 UUAP 的登录
 
 var unirest = require('unirest');
-var User = require('../../api/user/user.model');
 var auth = require('../auth.service.js');
 
 var CALLBACK = encodeURIComponent('http://agroup.baidu.com/auth/uuap/callback');
@@ -35,7 +34,7 @@ module.exports = {
           'email': email
         };
 
-        auth.addUser(req, name, email);
+        auth.addUser(req, res, name, email);
       } else {
         //重试一次
         res.redirect(req.originalUrl);

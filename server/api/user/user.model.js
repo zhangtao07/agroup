@@ -13,5 +13,4 @@ var UserSchema = new Schema({
   provider: String
 });
 
-
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('users', UserSchema);

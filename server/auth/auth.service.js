@@ -1,6 +1,7 @@
+'use strict';
 var User = require('../api/user/user.model');
 
-exports.addUser = function(req, name, email) {
+exports.addUser = function(req, res, name, email) {
   User.findOne({
     email: email
   }, function(err, user) {
@@ -8,8 +9,8 @@ exports.addUser = function(req, name, email) {
       req.session.user._id = user._id;
       res.redirect('/');
     } else {
-      var user = new User({name: name, email: email});
-      user.save(function(error, savedUser) {
+      var newUser = new User({name: name, email: email});
+      newUser.save(function(error, savedUser) {
         req.session.user._id = savedUser._id;
         res.redirect('/');
       });
