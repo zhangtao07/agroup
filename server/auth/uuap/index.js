@@ -33,7 +33,6 @@ module.exports = {
           'name': name,
           'email': email
         };
-
         auth.addUser(req, res, name, email);
       } else {
         //重试一次
