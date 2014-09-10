@@ -42,7 +42,11 @@ var all = {
   },
 
   // Default auth is fake
-  auth: 'fake'
+  auth: 'fake',
+  
+  "upload_temp_dir":"./upload/.tmp/",
+  "upload__dir":"./upload/"
+  
 };
 
 // Export the config object based on the NODE_ENV

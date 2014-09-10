@@ -4,6 +4,62 @@
   flex-direction:column-reverse;
   
 }
+
+.msglist-form{
+  display:flex;
+  height:30px;
+  
+  margin:0 5px;
+  
+  .msglist-form-left{
+    width:40px;
+    height:100%;
+    line-height:28px;
+    text-align:center;
+    background:#eee;
+    border-radius:5px 0 0 5px;
+    border:1px solid #ccc;
+  }
+  .msglist-form-right{
+    flex-grow: 1;
+    height:100%;
+    position:relative;
+    border:1px solid #ccc;
+    border-left:0;
+    background:#fff;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 0px;
+    overflow:hidden;
+    .message-input{
+      border:none;
+      height:100%;
+      width:100%;
+      padding:0 5px;
+    }
+    .upload-process{
+      @include match_parent();
+      background:#000;
+      .upload-process-percent{
+        @include match_parent();
+        background:#ff0000;
+        
+      }
+      .upload-process-text{
+        @include match_parent();
+        line-height:1.8em;
+        color:#fff;
+        text-align:center;
+      }
+    } 
+  }
+
+}
+
+
+
+
 msglist{
   
   display:block;
@@ -13,12 +69,10 @@ msglist{
   top:0;
   bottom:0;
   overflow:auto;
+  padding:0 10px;
+  
   .msglist-drag{
-    position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
+   @include match_parent();
     width:100%;
     background:rgba(255,255,255,0.5);
     text-align:center;

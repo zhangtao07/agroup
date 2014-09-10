@@ -47,7 +47,11 @@
     "socketio-jwt": "^2.0.2",
     "moment":"~2.8.3",
     "unirest": "^0.2.7",
-    "dateformat":"latest"
+    "dateformat":"latest",
+    "busboy":"latest",
+    "path":"latest",
+    "temp":"latest",
+    "mkdirp":"latest"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

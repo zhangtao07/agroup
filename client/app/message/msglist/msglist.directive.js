@@ -2,7 +2,9 @@
 
 angular.module('agroupApp').directive('msglist', ['$http', 'socket',
 function($http, socket) {
-
+	
+	var groupId = "group1";
+	
 	return {
 		templateUrl : 'app/message/msglist/msglist.html',
 		restrict : 'EA',
@@ -10,35 +12,59 @@ function($http, socket) {
 
 			var dropZone = element.get(0);
 
-			
-
 			dropZone.ondragover = function() {
-	
+
 				scope.dragTip = true;
 				scope.$apply();
 				return false;
 			};
 			dropZone.ondragend = function() {
-				
+
 				scope.dragTip = false;
 				scope.$apply();
 				return false;
 			};
-			dropZone.ondragleave = function(ev){
-				
-				if( $(ev.target).attr("msglist-drag") == "1"){
-					
+			dropZone.ondragleave = function(ev) {
+
+				if ($(ev.target).attr("msglist-drag") == "1") {
+
 					scope.dragTip = false;
 					scope.$apply();
 				}
 				return false;
 			}
-			
-			function sendFile(){
-				console.info(arguments);
+			function sendFile(file) {
+				var uri = "api/message/upload";
+				var xhr = new XMLHttpRequest();
+				var formData = new FormData();
+				formData.append('groupId', groupId);
+				formData.append('file', file);
+
+				xhr.open("POST", uri, true);
+				scope.upload_process=0;
+				scope.$apply();
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						if(xhr.responseText == "ok"){
+							scope.upload_process=-1;
+							scope.$apply();
+						}
+						
+					}
+				};
+
+				xhr.upload.addEventListener("progress", function(e) {
+					if (e.lengthComputable) {
+						var percentage = Math.round((e.loaded * 100) / e.total);
+						scope.upload_process=percentage;
+						scope.$apply();
+					}
+				}, false);
+
+				xhr.send(formData);
 			}
-			
-			
+
+
 			dropZone.ondrop = function(event) {
 				event.stopPropagation();
 				event.preventDefault();
@@ -50,9 +76,7 @@ function($http, socket) {
 				}
 			};
 
-			
-
-			socket.joinGroup('group1', function(data) {
+			socket.joinGroup(groupId, function(data) {
 
 				scope.msglist.push(JSON.parse(data));
 			});

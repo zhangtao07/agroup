@@ -1,8 +1,18 @@
 <h1>msglist</h1>
 <form ng-submit="onPostMessage()" onsubmit="return false;">
-	<div class="input-group">
-		<span class="input-group-addon">@</span>
-		<input type="text" ng-model="postText" class="form-control" placeholder="Username">
+	<div class="msglist-form">
+		<div class="msglist-form-left">
+			<span class="control-label">@</span>	
+		</div>
+		<div class="msglist-form-right">
+			<input type="text" ng-model="postText" class="message-input" placeholder="发送消息给Group1">
+			<div class="upload-process" ng-show="upload_process>=0" ng-init="upload_process=-1">
+				<div class="upload-process-percent" ng-style="{'width':upload_process+'%'}"></div>
+				<div class="upload-process-text">正在上传中({{upload_process}}%)</div>
+			</div>	
+		</div>
+		
+		
 	</div>
 </form>
 <div class="msglist-box">
