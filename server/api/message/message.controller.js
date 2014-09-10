@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var fs = require('fs');
 var Message = require('./message.model');
-var observe = require('./message.observe');
+var observe = require('../../components/group.observe');
 exports.list = function(req, res) {
 	
 	Message.find(function(err,messages){
@@ -40,8 +40,8 @@ exports.post = function(req, res) {
 		if (err)
 			return console.error(err);
 		var data = message.getMessage();
-		observe.groupEmit("group1", data);
-		return res.jsonp({err:0,data:data});
+		observe.groupBroadcast("group1", data);
+		return res.jsonp({err:0});
 	})
 
 	

@@ -24,9 +24,11 @@ function($http,socket) {
 					'message':scope.postText,
 					'type':'plain'
 				}).success(function(data){
+					/*
 					if(data.err == 0){
-						scope.msglist.push(data.data);	
-					}
+											scope.msglist.push(data.data);	
+										}*/
+					
 					
 				});
 			}
