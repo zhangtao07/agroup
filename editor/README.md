@@ -22,12 +22,13 @@ make build
 url 参数说明
 
 ```
-http://localhost:3000/editor?group=a&file=硬的游戏开放平台.md&debug
+http://localhost:3000/editor?group=a&file=硬的游戏开放平台.md&debug&console
 ```
 
 小组名称 group (必填: 目前为 a)   
 文件名称 file (必填: 目前为 硬的游戏开放平台.md)   
 是否开启调试 debug
+是否开启console console
 
 
 清除Chrome AppCache缓存

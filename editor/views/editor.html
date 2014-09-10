@@ -23,7 +23,7 @@
             */
 
             function getParam(param){
-                var reg = new RegExp('.*'+param+'=([^&]+)\&.*');
+                var reg = new RegExp('.*'+param+'=([^&]+).*');
                 var value = null;
                 if(reg.test(location.search)){
                     value = location.search.replace(reg,'$1');

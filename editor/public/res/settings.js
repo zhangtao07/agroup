@@ -12,7 +12,7 @@ define([
         fontSizeRatio: 1,
         maxWidthRatio: 1,
         cursorFocusRatio: 0.5,
-        defaultContent: "\n\n\n> Written with [StackEdit](" + constants.MAIN_URL + ").",
+        defaultContent: "\n\n\n> Written with [AGroup](" + constants.MAIN_URL + ").",
         commitMsg: "Published with " + constants.MAIN_URL,
         conflictMode: 'merge',
         markdownMimeType: 'text/plain',
