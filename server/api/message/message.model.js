@@ -2,48 +2,62 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ago = require('../../components/dateformate/ago');
+    ago = require('../../components/dateformate/ago'),
+    User = require('../user/user.model'),
+    Group = require("../group/group.model");
     
-    
-var User = new Schema({
-	avartar:String,
-	nickname:String
-});
-
-var User = mongoose.model('User', User);
-
 
 
 var MessageSchema = new Schema({
 	  content: String,
-	  filepath: String,
+	  file: {type: mongoose.Schema.Types.ObjectId, ref: 'File'},
 	  type:String,
 	  date: {type: Date, default: Date.now },
-	  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+	  user: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
+	  group : {type: mongoose.Schema.Types.ObjectId, ref: 'Group'}
 });
 
-MessageSchema.methods.getMessage = function(){
-	var res;
-	switch(this.type){
-		case 'plain':
-		res = this.getPlain();
-		break;
-	}
-	return res;
+MessageSchema.methods.getImageContent = function(){
+  console.info(this.type);
+  if(!/^image\//.test(this.type)){
+    return false;
+  }
+  return {
+    type:"image",
+    content:{
+      "thumbnail":"api/image/upload/"+this.file._id+"?updateDate="+this.file.updateDate.getTime(),
+      "filename":this.file.filename
+    }
+
+  }
 }
 
-MessageSchema.methods.getPlain = function(){
-	return {
-		data:{
-			id:this._id,
-			avartar:'http://tp4.sinaimg.cn/2129028663/180/5684393877/1',
-			nickname:'张自萌',
-			time:ago(this.date),
-			content:this.content
-		},
-		'type':'plain'
-		
-	}
+MessageSchema.methods.getPlainContent = function(){
+  if(this.type!="plain"){
+    return false;
+  }
+  return {
+    type:"plain",
+    content:this.content
+  }
 }
+
+MessageSchema.methods.getMessage = function(user){
+  if(!user){
+    user = this.user;
+  }
+
+  var contentObj = this.getPlainContent()||this.getImageContent();
+
+  return {
+      id:this._id,
+      avartar:'api/image/avartar/'+user._id,
+      nickname:user.name,
+      time:ago(this.date),
+      content:contentObj.content,
+      'type':contentObj.type
+  }
+}
+
 
 module.exports = mongoose.model('Message', MessageSchema);

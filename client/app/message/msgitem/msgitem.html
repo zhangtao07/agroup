@@ -1,0 +1,20 @@
+<div class="plainitem-box">
+	<div class="msg-avatar">
+		<img ng-src="{{data.avartar}}"/>
+	</div>
+	<div class="msg-commonbox">
+		<div class="msg-hd">
+			<div class="msg-hd-title">
+				{{data.nickname}}
+			</div>
+			<div class="msg-item-time">
+				{{data.time}}
+			</div>
+			<div class="msg-item-toolbar"></div>
+		</div>
+		<div class="plainitem">
+			<plainitem data="data.content" ng-if="data.type=='plain'"></plainitem>
+            <imageitem data="data.content" ng-if="data.type=='image'"></plainitem>
+		</div>
+	</div>
+</div>
