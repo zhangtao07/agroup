@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('plainitem', function () {
+  .directive('imageitem', function () {
     return {
-      templateUrl: 'app/message/plainitem/plainitem.html',
+      templateUrl: 'app/message/imageitem/imageitem.html',
       restrict: 'EA',
       scope:{
-        data:'=data'
+        'data':'=data'
       },
       link: function (scope, element, attrs) {
-
+        console.info(scope.data.thumbnail)
       }
     };
   });

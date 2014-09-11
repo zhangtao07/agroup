@@ -10,13 +10,17 @@ function requiredProcessEnv(name) {
   return process.env[name];
 }
 
+
 // All configurations will extend these options
 // ============================================
+
+var rootPath = path.normalize(__dirname + '/../../..');
+
 var all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
-  root: path.normalize(__dirname + '/../../..'),
+  root:rootPath,
 
   // Server port
   port: process.env.PORT || 9000,
@@ -44,10 +48,12 @@ var all = {
   // Default auth is fake
   auth: 'fake',
   
-  "upload_temp_dir":"./upload/.tmp/",
-  "upload__dir":"./upload/"
+  "upload_temp_dir":rootPath+"/upload/.tmp",
+  "upload__dir":rootPath+"/upload"
   
 };
+
+
 
 // Export the config object based on the NODE_ENV
 // ==============================================

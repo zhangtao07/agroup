@@ -5,7 +5,7 @@
 			<span class="control-label">@</span>	
 		</div>
 		<div class="msglist-form-right">
-			<input type="text" ng-model="postText" class="message-input" placeholder="发送消息给Group1">
+			<input type="text" ng-model="postText" class="message-input" placeholder="发送消息给{{group.name}}">
 			<div class="upload-process" ng-show="upload_process>=0" ng-init="upload_process=-1">
 				<div class="upload-process-percent" ng-style="{'width':upload_process+'%'}"></div>
 				<div class="upload-process-text">正在上传中({{upload_process}}%)</div>
@@ -16,7 +16,7 @@
 	</div>
 </form>
 <div class="msglist-box">
-	<plainitem data="item.data" ng-repeat="item in msglist" ng-if="item.type=='plain'"></plainitem>
+	<msgitem data="item" ng-repeat="item in msglist" ></msgitem>
 </div>
 
 <div class="msglist-drag" ng-show="dragTip" msglist-drag="1"  ng-init="dragTip=false">

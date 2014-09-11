@@ -28,3 +28,12 @@ Thing.find({}).remove(function() {
     info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
   });
 });
+var Group = require('../api/group/group.model');
+
+Group.find({},function(err,list){
+   if(list.length == 0){
+       Group.create({
+           name: 'Agroup项目讨论组'
+       });
+   }
+});
