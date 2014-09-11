@@ -115,8 +115,40 @@ define([
         eventMgr.onSectionsCreated(sectionList);
     }
 
+
+    function syncFileContent(fileDescParam, content) {
+        if(fileDescParam !== fileDesc) {
+            return;
+        }
+        var frontMatter = (fileDesc.frontMatter || {})._frontMatter || '';
+        var text = content.substring(frontMatter.length);
+        var tmpText = text + "\n\n";
+        function addSection(startOffset, endOffset) {
+            var sectionText = tmpText.substring(offset, endOffset);
+            sectionList.push({
+                id: ++sectionCounter,
+                text: sectionText,
+                textWithFrontMatter: frontMatter + sectionText
+            });
+            frontMatter = '';
+        }
+        sectionList = [];
+        var offset = 0;
+        // Look for delimiters
+        tmpText.replace(regexp, function(match, matchOffset) {
+            // Create a new section with the text preceding the delimiter
+            addSection(offset, matchOffset);
+            offset = matchOffset;
+        });
+        // Last section
+        addSection(offset, text.length);
+        eventMgr.onSectionsSynced(sectionList);
+        //eventMgr.onSectionsCreated(sectionList);
+    }
+
     markdownSectionParser.onFileOpen = parseFileContent;
     markdownSectionParser.onContentChanged = parseFileContent;
+    markdownSectionParser.onContentSynced = syncFileContent;
 
     return markdownSectionParser;
 });

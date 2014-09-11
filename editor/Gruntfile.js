@@ -180,7 +180,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build-js', function() {
 
         // JSHint validation
-        grunt.task.run('jshint');
+        //grunt.task.run('jshint');
 
         // Run r.js optimization
         grunt.task.run('requirejs');

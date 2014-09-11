@@ -13,5 +13,6 @@ angular.module('agroupApp', [
     $urlRouterProvider
       .otherwise('/');
 
+
     $locationProvider.html5Mode(true);
   })

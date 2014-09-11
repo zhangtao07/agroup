@@ -32,7 +32,7 @@ app.get('/downloadImport', require('./download').importPublic);
 app.use(function(req, res, next) {
     res.renderDebug = function(page) {
         return res.render(page, {
-            cache: !req.query.hasOwnProperty('debug')
+            cache: false //!req.query.hasOwnProperty('debug')
         });
     };
     next();
@@ -40,7 +40,8 @@ app.use(function(req, res, next) {
 
 // Serve landing.html in /
 app.get('/', function(req, res) {
-    res.renderDebug('landing.html');
+    //res.renderDebug('landing.html');
+    res.renderDebug('editor.html');
 });
 
 // Serve editor.html in /viewer

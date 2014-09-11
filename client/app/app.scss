@@ -5,6 +5,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 @import '../assets/sass/flex.scss';
 
+
 /**
  * App-wide Styles
  */
@@ -17,11 +18,16 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
   bottom:0;
 }
 
+
 .browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+.container {
+  width: auto;
 }
 
 // Component styles are injected through grunt
@@ -31,4 +37,5 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'message/msglist/msglist.scss';
 @import 'message/plainitem/plainitem.scss';
 @import 'modal/modal.scss';
+@import 'navbar/navbar.scss';
 // endinjector
