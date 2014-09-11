@@ -65,8 +65,8 @@ define([
         }
       });
       eventMgr.addListener('onSectionsSynced', function(newSectionList) {
-        console.log(newSectionList);
-        checkContentChange();
+        //console.log(newSectionList);
+        //checkContentChange();
         //for (var i = 0, len = newSectionList.length; i < len; i++) {
           //highlight(newSectionList[i]);
         //}
