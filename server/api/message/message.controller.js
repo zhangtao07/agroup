@@ -36,7 +36,7 @@ var temp = require("temp");
 
 function upload(tempFile,sha1, filename, mimetype, group, size,encoding) {
 	var date = new Date();
-	var upload_dir = config.upload__dir;
+	var upload_dir = config.upload_dir;
 	var saveFile = upload_dir+"/"+group+"/"+sha1.substring(0,1)+"/"+sha1.substring(2)+path.extname(filename);
 	
 	fs.renameSync(tempFile,saveFile);
