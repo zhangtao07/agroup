@@ -18,7 +18,8 @@ define([
       if (group && file) {
         var username = new Date();
         socket.emit('login', {
-          path: decodeURI("doc/" + group + '/' + file),
+          group: decodeURI(group),
+          filename: decodeURI(file),
           username: username
         });
       }
@@ -28,21 +29,25 @@ define([
         var patches = diff.patch_fromText(patch);
         var results = diff.patch_apply(patches, editor.getValue());
         var content = results[0];
-        editor.setValueNoWatch(content, true);
+        editor.syncValueNoWatch(content, true);
+      });
+
+      eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
+        var patchList = diff.patch_make(oldContent, newContent);
+        var patchText = diff.patch_toText(patchList);
+        socket.emit('patch', {
+          patch: patchText,
+          selectionMgr: {
+            selectionStart: editor.selectionMgr.selectionStart,
+            selectionEnd: editor.selectionMgr.selectionEnd,
+            cursorY: editor.selectionMgr.cursorY
+          }
+        });
       });
 
 
-      eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
-          var patchList = diff.patch_make(oldContent, newContent);
-          var patchText = diff.patch_toText(patchList);
-          socket.emit('patch', {
-            patch: patchText,
-            selectionMgr: {
-              selectionStart: editor.selectionMgr.selectionStart,
-            selectionEnd: editor.selectionMgr.selectionEnd,
-            cursorY: editor.selectionMgr.cursorY
-            }
-          });
+      eventMgr.addListener('onEditorPopover', function(){
+        console.log(arguments);
       });
 
       return socket;
