@@ -30,7 +30,9 @@ exports.list = function (req, res) {
 exports.upload = function (req, res) {
   var user = req.session.user;
 
+
   upload(req, function (file) {
+
 
     var message = new Message({
       'file':file._id,
