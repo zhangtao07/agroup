@@ -19,7 +19,7 @@ SyncService.prototype.addClient = function(username, socket) {
   socket.on('disconnect', function() {
     self.clientNum -= 1;
     if (self.clientNum === 0) {
-      console.log('client leave');
+      //console.log('client leave');
       cache.saveToDisk(self.group,self.filename);
     }
   });
@@ -30,7 +30,7 @@ SyncService.prototype.addClient = function(username, socket) {
     var content = results[0];
     self.content = content;
     self.onPatch(socket, message);
-    console.log(self.content === cache.get(self.group,self.filename),self.content);
+    //console.log(self.content === cache.get(self.group,self.filename),self.content);
   });
 };
 
