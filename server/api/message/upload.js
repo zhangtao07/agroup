@@ -12,7 +12,7 @@ var sizeOf = require('image-size');
 
 function upload(tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
   var date = new Date();
-  var upload_dir = config.upload__dir;
+  var upload_dir = config.upload_dir;
   var saveFile = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
   var saveDir = path.dirname(saveFile);
   if (!fs.existsSync(saveDir)) {

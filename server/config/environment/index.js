@@ -4,7 +4,7 @@ var path = require('path');
 var _ = require('lodash');
 
 function requiredProcessEnv(name) {
-  if(!process.env[name]) {
+  if (!process.env[name]) {
     throw new Error('You must set the ' + name + ' environment variable');
   }
   return process.env[name];
@@ -20,7 +20,7 @@ var all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
-  root:rootPath,
+  root: rootPath,
 
   // Server port
   port: process.env.PORT || 9000,
@@ -44,18 +44,14 @@ var all = {
 
   // Default auth is fake
   auth: 'fake',
-  
 
-  "upload_temp_dir":rootPath+"/upload/.tmp",
-  "upload__dir":rootPath+"/upload"
-
-  
+  upload_temp_dir: rootPath + "/upload/.tmp",
+  upload_dir: rootPath + "/upload"
 };
-
 
 
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
   all,
-  require('./' + process.env.NODE_ENV + '.js') || {});
+    require('./' + process.env.NODE_ENV + '.js') || {});
