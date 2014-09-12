@@ -2,27 +2,27 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var crypto = require('crypto');
 
-var Message = require('./message.model');
 var observe = require('../../components/group.observe');
-var User = require('../user/user.model');
 var upload = require('./upload');
 exports.list = function (req, res) {
 
   var groupId = req.query.groupId;
-  Message.find({group: groupId}).populate('user').populate('file').exec(function (err, messages) {
-    if (err)
-      return console.error(err);
+
+  req.models.message.find({
+    group_id: groupId
+
+  }, function (err, messages) {
     var datas = [];
     messages.forEach(function (message) {
       datas.push(message.getMessage());
     });
-    return res.jsonp({
+    return res.status(200).jsonp({
       err: 0,
       data: datas
     });
   });
+
 
 };
 
@@ -32,29 +32,27 @@ exports.upload = function (req, res) {
 
 
   upload(req, function (file) {
-
-
-    var message = new Message({
-      'file':file._id,
+    req.models.message.create({
+      'file_id': file.id,
       'type': file.mimetype,
-      'user': user._id,
-      'group':file.group
-    });
+      'user_id': user.id,
+      'group_id': file.group_id,
+      'date':new Date
+    },function (err,msg) {
 
-
-
-    Message.create(message,function(){
-      Message.findById(message._id).populate('user').populate('file').exec(function (err, msg) {
-        if (err){
+        if (err) {
           return console.error(err);
         }
-        var data = msg.getMessage();
-        observe.groupBroadcast(file.group, data);
+        var data = msg.getMessage({
+          file:file,
+          user:user
+        });
+        observe.groupBroadcast(file.group_id, data);
         res.writeHead(200, {
           'Connection': 'close'
         });
         res.end("ok");
-      });
+
     });
 
 
@@ -72,18 +70,18 @@ exports.post = function (req, res) {
 
   var groupId = req.body.groupId;
 
-
-  var message = new Message({
+  req.models.message.create({
     'content': req.body['message'],
     'type': req.body['type'],
-    'user': user._id,
-    'group': groupId
-  });
-
-  message.save(function (err, message) {
+    'user_id': user.id,
+    'group_id': groupId,
+    'date': new Date
+  }, function (err, message) {
     if (err)
       return console.error(err);
-    var data = message.getMessage(user);
+    var data = message.getMessage({
+      user: user
+    });
     observe.groupBroadcast(groupId, data);
     return res.jsonp({
       err: 0

@@ -15,9 +15,10 @@ var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
 var session = require('express-session');
-var mongoStore = require('connect-mongo')(session);
-var mongoose = require('mongoose');
-
+//var mongoStore = require('connect-mongo')(session);
+//var mongoose = require('mongoose');
+var models = require('../model/');
+var SessionStore = require('express-mysql-session');
 module.exports = function(app) {
   var env = app.get('env');
 
@@ -29,13 +30,29 @@ module.exports = function(app) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
+  app.use(function (req, res, next) {
+    models(function (err, db) {
+      if (err) return next(err);
 
+      req.models = db.models;
+      req.db     = db;
+      next();
+
+
+    });
+  })
   // Persist sessions with mongoStore
   // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
+
   app.use(session({
+    key: 'session_cookie_name',
+    secret: 'session_cookie_secret',
+    store: new SessionStore(config.sessionStorage)
+  }))
+  /*app.use(session({
     secret: config.secrets.session,
     store: new mongoStore({ mongoose_connection: mongoose.connection })
-  }));
+  }));*/
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

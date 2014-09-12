@@ -5,12 +5,11 @@ var mkdirp = require('mkdirp');
 var crypto = require('crypto');
 var config = require("../../config/environment/index");
 var fs = require("fs");
-var File = require("./file.model.js");
 var sizeOf = require('image-size');
 
 
 
-function upload(tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
+function upload(fileModel,tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
   var date = new Date();
   var upload_dir = config.upload_dir;
   var saveFile = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -26,19 +25,22 @@ function upload(tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
 
 
 
-  var file = new File({
+  var file = {
     filepath: saveFile,
     filename: filename,
     mimetype: mimetype,
     size: size,
-    group: group,
-    encoding: encoding
-  });
+    group_id: group,
+    encoding: encoding,
+    createDate:new Date,
+    updateDate:new Date
+  };
 
   if(/^image\//.test(mimetype)){
 
     sizeOf(saveFile,function(err,dimensions){
-      file.dimension.push(dimensions);
+      file.width = dimensions.width;
+      file.height = dimensions.height;
       checkdone();
     });
 
@@ -47,7 +49,10 @@ function upload(tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
   }
 
   function checkdone(){
-    File.create(file, function (obj, file) {
+    fileModel.create(file, function (err, file) {
+      if(err){
+        console.err(err);
+      }
       cb && cb(file);
     });
   }
@@ -86,7 +91,7 @@ module.exports = function (req, callback) {
 
       var stat = fs.statSync(tempPath);
 
-      upload(tempPath, d, filename, mimetype, fields['groupId'], stat['size'], encoding, function (res) {
+      upload(req.models.file,tempPath, d, filename, mimetype, fields['groupId'], stat['size'], encoding, function (res) {
         result = res;
         checkDone();
       });

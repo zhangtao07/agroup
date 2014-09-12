@@ -1,11 +1,11 @@
 'use strict';
 
-var File = require("../message/file.model");
+var File = require("../../model/file.model.js");
 
 // Get list of images
 exports.upload = function (req, res) {
   var id = req.params.id;
-  File.findById(id, 'filepath', function (err, file) {
+  req.models.file.get(id, function (err, file) {
     res.sendFile(file.filepath, {maxAge: 10*365 * 24 * 60 * 60,headers:{
       'Content-Type':file.type
     }},function(err){

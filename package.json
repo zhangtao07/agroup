@@ -60,7 +60,12 @@
     "path": "latest",
     "temp": "latest",
     "mkdirp": "latest",
-    "image-size": "latest"
+    "image-size": "latest",
+    "orm":"latest",
+    "mysql":"latest",
+    "express-mysql-session":"latest",
+    "q":"latest"
+
   },
   "devDependencies": {
     "grunt": "~0.4.4",
