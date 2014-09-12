@@ -59,7 +59,6 @@ var all = {
     database: mysql.database
   }
 
-  
 };
 
 
