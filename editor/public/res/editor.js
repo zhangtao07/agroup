@@ -24,6 +24,9 @@ define([
       var marginElt;
       var $marginElt;
       var previewElt;
+      var $cursorElt;
+      var $avatarElt;
+      var $inputOffset;
       var pagedownEditor;
       var trailingLfNode;
 
@@ -43,6 +46,7 @@ define([
           timeoutId = setTimeout(refreshPreview, elapsedTime < 2000 ? elapsedTime : 2000);
         };
       })();
+
       eventMgr.addListener('onPagedownConfigure', function(pagedownEditorParam) {
         pagedownEditor = pagedownEditorParam;
       });
@@ -61,10 +65,12 @@ define([
         }
       });
       eventMgr.addListener('onSectionsSynced', function(newSectionList) {
-        //updateSectionList(newSectionList);
-        //highlightSections();
-        //addTrailingLfNode();
-        //pagedownEditor.refreshPreview();
+        //console.log(newSectionList);
+        //checkContentChange();
+        //for (var i = 0, len = newSectionList.length; i < len; i++) {
+          //highlight(newSectionList[i]);
+        //}
+        //updatesectionlist(newsectionlist);
       });
 
       var fileChanged = true;
@@ -403,12 +409,12 @@ define([
       function setValue(value) {
         var startOffset = diffMatchPatch.diff_commonPrefix(textContent, value);
         if (startOffset === textContent.length) {
-          startOffset--;
+            startOffset--;
         }
         var endOffset = Math.min(
-            diffMatchPatch.diff_commonSuffix(textContent, value),
-            textContent.length - startOffset,
-            value.length - startOffset
+              diffMatchPatch.diff_commonSuffix(textContent, value),
+              textContent.length - startOffset,
+              value.length - startOffset
             );
         var replacement = value.substring(startOffset, value.length - endOffset);
         var range = selectionMgr.createRange(startOffset, textContent.length - endOffset);
@@ -416,10 +422,45 @@ define([
         range.insertNode(document.createTextNode(replacement));
         range.detach();
         return {
-          start: startOffset,
+            start: startOffset,
             end: value.length - endOffset
         };
       }
+      function syncValue(value) {
+        var startOffset = diffMatchPatch.diff_commonPrefix(textContent, value);
+        if (startOffset === textContent.length) {
+            startOffset--;
+        }
+        var endOffset = Math.min(
+              diffMatchPatch.diff_commonSuffix(textContent, value),
+              textContent.length - startOffset,
+              value.length - startOffset
+            );
+        var replacement = value.substring(startOffset, value.length - endOffset);
+        var range = selectionMgr.createRange(startOffset, textContent.length - endOffset);
+        range.deleteContents();
+        var st = crel('span');
+        st.innerHTML = Prism.highlight(replacement, Prism.languages.md);
+        range.insertNode(st);//;document.createTextNode(replacement));
+        range.detach();
+        var offset = $(st).position();
+        window.st = st;
+        $cursorElt.css({
+          top: offset.top ,//- $inputOffset.top,
+          left: offset.left,
+          opacity: 1
+        });
+        $avatarElt.css({
+          top: offset.top ,//- $inputOffset.top,
+          opacity: 1
+        });
+
+        return {
+            start: startOffset,
+            end: value.length - endOffset
+        };
+      }
+
 
       editor.setValue = setValue;
 
@@ -477,16 +518,20 @@ define([
       function setValueNoWatch(value) {
         setValue(value);
         textContent = value;
+      }
+
+      function svnw(value){
+        syncValue(value);
         fileDesc.content = value;
+        textContent = value;
         eventMgr.onContentSynced(fileDesc, value);
-        //TBD
-        //addTrailingLfNode();
-        pagedownEditor.refreshPreview();
-        //refreshPreviewLater();
-        //entMgr.onAsyncPreview();
+        //pagedownEditor.refreshPreview();
+        refreshPreviewLater();
+        checkContentChange();
       }
 
       editor.setValueNoWatch = setValueNoWatch;
+      editor.syncValueNoWatch = svnw;
 
       function getValue() {
         return textContent;
@@ -769,6 +814,9 @@ define([
         marginElt = inputElt.querySelector('.editor-margin');
         $marginElt = $(marginElt);
         previewElt = document.querySelector('.preview-container');
+        $cursorElt = $(crel('span',{ class:"cursor-helper" })).appendTo($inputElt);
+        $avatarElt = $(crel('img',{ class:'avatar-helper', src:'/res/img/avatar.jpg'})).appendTo($inputElt);
+        $inputOffset = $contentElt.offset();
 
         $inputElt.addClass(settings.editorFontClass);
 

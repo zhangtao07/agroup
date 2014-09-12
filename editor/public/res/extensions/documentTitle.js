@@ -14,7 +14,7 @@ define([
         }
 
         var title = fileDesc.title;
-        document.title = "StackEdit – " + title;
+        document.title = "AGroup – " + title;
         $fileTitleNavbar.html(fileDesc.composeTitle());
         $(".file-title").text(title);
         $(".input-file-title").val(title);
