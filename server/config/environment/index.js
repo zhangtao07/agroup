@@ -46,6 +46,7 @@ var all = {
   auth: 'fake',
 
   upload_temp_dir: rootPath + "/upload/.tmp",
+
   upload_dir: rootPath + "/upload"
 };
 
