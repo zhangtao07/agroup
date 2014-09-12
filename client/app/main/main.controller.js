@@ -2,7 +2,13 @@
 
 angular.module('agroupApp')
   .controller('MainCtrl', function ($scope, $http, socket) {
-    $scope.awesomeThings = [];
+    $scope.watchGroups = [
+      'FEX',
+      'FIS',
+      'END',
+      'fcube',
+      'agroup'
+    ];
 
     $scope.$on('$destroy', function () {
 

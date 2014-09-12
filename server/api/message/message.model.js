@@ -18,7 +18,7 @@ var MessageSchema = new Schema({
 });
 
 MessageSchema.methods.getImageContent = function(){
-  console.info(this.type);
+
   if(!/^image\//.test(this.type)){
     return false;
   }
