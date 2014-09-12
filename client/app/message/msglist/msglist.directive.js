@@ -14,7 +14,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket',
 
         $http.get('api/group/').success(function (obj) {
           scope.group = obj.data;
-          var groupId = scope.group._id;
+          var groupId = scope.group.id;
 
 
 

@@ -8,12 +8,12 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var express = require('express');
-var mongoose = require('mongoose');
-var orm = require('orm');
+//var mongoose = require('mongoose');
 var config = require('./config/environment');
 
+
 // Connect to database
-mongoose.connect(config.mongo.uri, config.mongo.options);
+//mongoose.connect(config.mongo.uri, config.mongo.options);
 
 // Setup server
 var app = express();
@@ -23,19 +23,14 @@ var socketio = require('socket.io')(server, {
   path: '/socket.io-client'
 });
 
-app.use(orm.express("mysql://root:@127.0.0.1:3306/agroup", {
-  define: function (db, models, next) {
-      models.group = db.define("group", {
-        name : String
-      });
-      next();
-  }
-}));
 
+
+require('./model/')(function (err, db) {
+  require("./config/seed")(db);
+});
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
-require('./')
 
 // Start server
 server.listen(config.port, config.ip, function () {

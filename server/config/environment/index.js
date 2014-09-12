@@ -16,6 +16,10 @@ function requiredProcessEnv(name) {
 
 var rootPath = path.normalize(__dirname + '/../../..');
 
+var envConfig = require('./' + process.env.NODE_ENV + '.js') || {};
+
+var mysql = envConfig.mysql;
+
 var all = {
   env: process.env.NODE_ENV,
 
@@ -47,15 +51,23 @@ var all = {
   
 
   "upload_temp_dir":rootPath+"/upload/.tmp",
-  "upload__dir":rootPath+"/upload"
+  "upload__dir":rootPath+"/upload",
+  sessionStorage:{
+    host: mysql.host,
+    port: mysql.port || 3306,
+    user: mysql.user,
+    password: mysql.password,
+    database: mysql.database
+  }
 
   
 };
 
 
 
+
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
-  all,
-  require('./' + process.env.NODE_ENV + '.js') || {});
+  all,envConfig
+  );
