@@ -10,11 +10,11 @@ define([
     var buttonStat = new Extension("buttonStat", 'Button "Statistics"', true, true);
     buttonStat.settingsBlock = buttonStatSettingsBlockHTML;
     buttonStat.defaultConfig = {
-        name1: "Characters",
+        name1: "字符",
         value1: "\\S",
-        name2: "Words",
+        name2: "字数",
         value2: "\\S+",
-        name3: "Paragraphs",
+        name3: "段落",
         value3: "\\S.*"
     };
 
