@@ -16,7 +16,7 @@ if(false && !process.env.NO_CLUSTER && cluster.isMaster) {
 }
 else {
     // Listen on port 3000
-    var port = process.env.PORT || 3000;
+    var port = process.env.PORT || 8011;
     var server = http.createServer(app);
     fileSync(server);
 

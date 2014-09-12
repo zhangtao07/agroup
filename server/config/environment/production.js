@@ -16,5 +16,8 @@ module.exports = {
             'mongodb://localhost/agroup'
   },
 
-  auth: 'uuap'
+  auth: 'uuap',
+
+  upload_temp_dir: "/home/agroup/files/upload/.tmp",
+  upload_dir: "/home/agroup/files/upload/"
 };
