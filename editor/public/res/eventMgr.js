@@ -31,17 +31,17 @@ define([
     "extensions/mathJax",
     "extensions/emailConverter",
     "extensions/scrollSync",
-    "extensions/buttonSync",
-    "extensions/buttonPublish",
-    "extensions/buttonStat",
-    "extensions/buttonHtmlCode",
-    "extensions/buttonViewer",
-    "extensions/welcomeTour",
-    "extensions/shortcuts",
-    "extensions/userCustom",
-    "extensions/comments",
+    //"extensions/buttonSync",
+    //"extensions/buttonPublish",
+    //"extensions/buttonStat",
+    //"extensions/buttonHtmlCode",
+    //"extensions/buttonViewer",
+    //"extensions/welcomeTour",
+    //"extensions/shortcuts",
+    //"extensions/userCustom",
+    //"extensions/comments",
     "extensions/findReplace",
-    "extensions/htmlSanitizer",
+    //"extensions/htmlSanitizer",
     "bootstrap",
     "jquery-waitforimages"
 ], function($, _, crel, mousetrap, utils, logger, Extension, settings, settingsExtensionsAccordionHTML) {
@@ -313,8 +313,8 @@ define([
         var file = window.getParam('file');
         var url = '';
         if(group && file){
-            url = 'doc/' + group + '/' + file;
-            $.get(url, function(data) {
+            url = '/file/' + group + '/' + file;
+            $.post(url, function(data) {
                 // Call onReady listeners
                 onReady({
                     title: file ? window.decodeURI(file).replace('.md','') :'welcome',

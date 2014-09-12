@@ -12,8 +12,8 @@ define([
         "eventMgr",
         "text!html/bodyEditor.html",
         "text!html/bodyViewer.html",
-        "text!html/tooltipSettingsTemplate.html",
-        "text!html/tooltipSettingsPdfOptions.html",
+        //"text!html/tooltipSettingsTemplate.html",
+        //"text!html/tooltipSettingsPdfOptions.html",
         'pagedown'
         ], function($, _, crel, editor, layout, constants, utils, storage, settings, eventMgr, bodyEditorHTML, bodyViewerHTML, settingsTemplateTooltipHTML, settingsPdfOptionsTooltipHTML) {
 
@@ -263,22 +263,22 @@ define([
                 $(".wmd-button-row li").addClass("btn btn-success").css("left", 0).find("span").hide();
 
                 // Add customized buttons
-                var $btnGroupElt = $('.wmd-button-group1');
-                $("#wmd-bold-button").append($('<i class="icon-bold">')).appendTo($btnGroupElt);
-                $("#wmd-italic-button").append($('<i class="icon-italic">')).appendTo($btnGroupElt);
-                $btnGroupElt = $('.wmd-button-group2');
-                $("#wmd-link-button").append($('<i class="icon-globe">')).appendTo($btnGroupElt);
-                $("#wmd-quote-button").append($('<i class="icon-indent-right">')).appendTo($btnGroupElt);
-                $("#wmd-code-button").append($('<i class="icon-code">')).appendTo($btnGroupElt);
-                $("#wmd-image-button").append($('<i class="icon-picture">')).appendTo($btnGroupElt);
-                $btnGroupElt = $('.wmd-button-group3');
-                $("#wmd-olist-button").append($('<i class="icon-list-numbered">')).appendTo($btnGroupElt);
-                $("#wmd-ulist-button").append($('<i class="icon-list-bullet">')).appendTo($btnGroupElt);
-                $("#wmd-heading-button").append($('<i class="icon-text-height">')).appendTo($btnGroupElt);
-                $("#wmd-hr-button").append($('<i class="icon-ellipsis">')).appendTo($btnGroupElt);
-                $btnGroupElt = $('.wmd-button-group5');
-                $("#wmd-undo-button").append($('<i class="icon-reply">')).appendTo($btnGroupElt);
-                $("#wmd-redo-button").append($('<i class="icon-forward">')).appendTo($btnGroupElt);
+                //var $btnGroupElt = $('.wmd-button-group1');
+                //$("#wmd-bold-button").append($('<i class="icon-bold">')).appendTo($btnGroupElt);
+                //$("#wmd-italic-button").append($('<i class="icon-italic">')).appendTo($btnGroupElt);
+                //$btnGroupElt = $('.wmd-button-group2');
+                //$("#wmd-link-button").append($('<i class="icon-globe">')).appendTo($btnGroupElt);
+                //$("#wmd-quote-button").append($('<i class="icon-indent-right">')).appendTo($btnGroupElt);
+                //$("#wmd-code-button").append($('<i class="icon-code">')).appendTo($btnGroupElt);
+                //$("#wmd-image-button").append($('<i class="icon-picture">')).appendTo($btnGroupElt);
+                //$btnGroupElt = $('.wmd-button-group3');
+                //$("#wmd-olist-button").append($('<i class="icon-list-numbered">')).appendTo($btnGroupElt);
+                //$("#wmd-ulist-button").append($('<i class="icon-list-bullet">')).appendTo($btnGroupElt);
+                //$("#wmd-heading-button").append($('<i class="icon-text-height">')).appendTo($btnGroupElt);
+                //$("#wmd-hr-button").append($('<i class="icon-ellipsis">')).appendTo($btnGroupElt);
+                //$btnGroupElt = $('.wmd-button-group5');
+                //$("#wmd-undo-button").append($('<i class="icon-reply">')).appendTo($btnGroupElt);
+                //$("#wmd-redo-button").append($('<i class="icon-forward">')).appendTo($btnGroupElt);
             };
 
             // Initialize multiple things and then fire eventMgr.onReady
@@ -372,7 +372,7 @@ define([
                 //});
             }, 3000);
 
-            eventMgr.addListener('onOfflineChanged', checkPayment);
+            //eventMgr.addListener('onOfflineChanged', checkPayment);
 
             // Other initialization that are not prioritary
             eventMgr.addListener("onReady", function() {
@@ -534,13 +534,13 @@ define([
                     utils.resetModalInputs();
                 });
 
-                utils.createTooltip(".tooltip-lazy-rendering", 'Disable preview rendering while typing in order to offload CPU. Refresh preview after 500 ms of inactivity.');
-                utils.createTooltip(".tooltip-default-content", [
-                        'Thanks for supporting StackEdit by adding a backlink in your documents!<br/><br/>',
-                        '<b class="text-danger">NOTE: Backlinks in Stack Exchange Q/A are not welcome.</b>'
-                        ].join(''));
-                utils.createTooltip(".tooltip-template", settingsTemplateTooltipHTML);
-                utils.createTooltip(".tooltip-pdf-options", settingsPdfOptionsTooltipHTML);
+                //utils.createTooltip(".tooltip-lazy-rendering", 'Disable preview rendering while typing in order to offload CPU. Refresh preview after 500 ms of inactivity.');
+                //utils.createTooltip(".tooltip-default-content", [
+                        //'Thanks for supporting StackEdit by adding a backlink in your documents!<br/><br/>',
+                        //'<b class="text-danger">NOTE: Backlinks in Stack Exchange Q/A are not welcome.</b>'
+                        //].join(''));
+                //utils.createTooltip(".tooltip-template", settingsTemplateTooltipHTML);
+                //utils.createTooltip(".tooltip-pdf-options", settingsPdfOptionsTooltipHTML);
 
                 // Avoid dropdown panels to close on click
                 $("div.dropdown-menu").click(function(e) {

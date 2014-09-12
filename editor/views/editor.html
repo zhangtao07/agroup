@@ -12,6 +12,34 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="msvalidate.01" content="5E47EE6F67B069C17E3CDD418351A612">
+        <style type="text/css">
+          .navbar .btn{
+            display: none;
+          }
+          .cursor-helper{
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-bottom: 2px solid #CC4C4C;
+            z-index: 9999;
+            width: 8px;
+            margin-top: .2em;
+            height: 1em;
+            opacity:0;
+          }
+          .avatar-helper{
+            opacity:0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            width: 20px;
+            margin-left: .2em;
+          }
+          #wmd-input{
+            position:relative;
+          }
+        </style>
         <script>
             // Use ?debug to serve original JavaScript files instead of minified
             window.baseDir = 'res';
