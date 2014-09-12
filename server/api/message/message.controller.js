@@ -41,11 +41,20 @@ exports.upload = function (req, res) {
       'group':file.group
     });
 
+
+
     Message.create(message,function(){
-      res.writeHead(200, {
-        'Connection': 'close'
+      Message.findById(message._id).populate('user').populate('file').exec(function (err, msg) {
+        if (err){
+          return console.error(err);
+        }
+        var data = msg.getMessage();
+        observe.groupBroadcast(file.group, data);
+        res.writeHead(200, {
+          'Connection': 'close'
+        });
+        res.end("ok");
       });
-      res.end("ok");
     });
 
 
