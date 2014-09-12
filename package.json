@@ -52,7 +52,9 @@
     "path":"latest",
     "temp":"latest",
     "mkdirp":"latest",
-    "image-size":"latest"
+    "image-size":"latest",
+    "orm":"latest",
+    "mysql":"latest"
   },
   "devDependencies": {
     "grunt": "~0.4.4",
