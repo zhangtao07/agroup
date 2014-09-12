@@ -1,11 +1,22 @@
 
 #go where to go ? and then ?
-sdf
-quite different ajldjfajsfjaljfjlajsjfajf lasjdljajfjajdfasljfajdfalf
-aldjflafj
 
-where to go madfljadflajsdlfjaldjflajsdfljasjfalsfjasfjalf
 
+jasldjfasdf
+
+----------
+
+ 1. 
+
+> `[List item](http://end.baidu.com)`
+
+# adsf
+> asdfj
+
+``` javascript
+	function abc(){
+	}
+```
 
 
 
