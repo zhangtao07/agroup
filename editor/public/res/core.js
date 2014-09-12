@@ -263,22 +263,22 @@ define([
                 $(".wmd-button-row li").addClass("btn btn-success").css("left", 0).find("span").hide();
 
                 // Add customized buttons
-                //var $btnGroupElt = $('.wmd-button-group1');
-                //$("#wmd-bold-button").append($('<i class="icon-bold">')).appendTo($btnGroupElt);
-                //$("#wmd-italic-button").append($('<i class="icon-italic">')).appendTo($btnGroupElt);
-                //$btnGroupElt = $('.wmd-button-group2');
-                //$("#wmd-link-button").append($('<i class="icon-globe">')).appendTo($btnGroupElt);
-                //$("#wmd-quote-button").append($('<i class="icon-indent-right">')).appendTo($btnGroupElt);
-                //$("#wmd-code-button").append($('<i class="icon-code">')).appendTo($btnGroupElt);
-                //$("#wmd-image-button").append($('<i class="icon-picture">')).appendTo($btnGroupElt);
-                //$btnGroupElt = $('.wmd-button-group3');
-                //$("#wmd-olist-button").append($('<i class="icon-list-numbered">')).appendTo($btnGroupElt);
-                //$("#wmd-ulist-button").append($('<i class="icon-list-bullet">')).appendTo($btnGroupElt);
-                //$("#wmd-heading-button").append($('<i class="icon-text-height">')).appendTo($btnGroupElt);
-                //$("#wmd-hr-button").append($('<i class="icon-ellipsis">')).appendTo($btnGroupElt);
-                //$btnGroupElt = $('.wmd-button-group5');
-                //$("#wmd-undo-button").append($('<i class="icon-reply">')).appendTo($btnGroupElt);
-                //$("#wmd-redo-button").append($('<i class="icon-forward">')).appendTo($btnGroupElt);
+                var $btnGroupElt = $('.wmd-button-group1');
+                $("#wmd-bold-button").append($('<i class="icon-bold">')).appendTo($btnGroupElt);
+                $("#wmd-italic-button").append($('<i class="icon-italic">')).appendTo($btnGroupElt);
+                $btnGroupElt = $('.wmd-button-group2');
+                $("#wmd-link-button").append($('<i class="icon-globe">')).appendTo($btnGroupElt);
+                $("#wmd-quote-button").append($('<i class="icon-indent-right">')).appendTo($btnGroupElt);
+                $("#wmd-code-button").append($('<i class="icon-code">')).appendTo($btnGroupElt);
+                $("#wmd-image-button").append($('<i class="icon-picture">')).appendTo($btnGroupElt);
+                $btnGroupElt = $('.wmd-button-group3');
+                $("#wmd-olist-button").append($('<i class="icon-list-numbered">')).appendTo($btnGroupElt);
+                $("#wmd-ulist-button").append($('<i class="icon-list-bullet">')).appendTo($btnGroupElt);
+                $("#wmd-heading-button").append($('<i class="icon-text-height">')).appendTo($btnGroupElt);
+                $("#wmd-hr-button").append($('<i class="icon-ellipsis">')).appendTo($btnGroupElt);
+                $btnGroupElt = $('.wmd-button-group5');
+                $("#wmd-undo-button").append($('<i class="icon-reply">')).appendTo($btnGroupElt);
+                $("#wmd-redo-button").append($('<i class="icon-forward">')).appendTo($btnGroupElt);
             };
 
             // Initialize multiple things and then fire eventMgr.onReady
