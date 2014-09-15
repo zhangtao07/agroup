@@ -49,8 +49,9 @@ var all = {
   // Default auth is fake
   auth: 'fake',
 
-  upload_temp_dir: rootPath + "/upload/.tmp",
-  upload_dir: rootPath + "/upload",
+  upload_temp_dir: "/upload/.tmp",
+
+  upload_dir: "/upload",
   sessionStorage: {
     host: mysql.host,
     port: mysql.port || 3306,

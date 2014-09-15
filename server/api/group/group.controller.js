@@ -14,6 +14,18 @@ exports.index = function(req, res) {
     });
   });
 };
+
+exports.create = function(req,res){
+  req.models.group.create({
+    name:req.body.name
+  },function(err,group){
+    return res.jsonp(200,{
+      err:0,
+      data:group
+    });
+  });
+}
+
 function handleError(res, err) {
   return res.send(500, err);
 }
