@@ -8,3 +8,5 @@ dist
 /.project
 /upload
 /__test
+res-min
+bower-libs
