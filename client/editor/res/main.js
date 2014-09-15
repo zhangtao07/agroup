@@ -203,6 +203,8 @@ require([
     themeModule,
 ], function($, rangy, core, eventMgr) {
 
+  'use strict';
+
     if (window.noStart) {
         return;
     }

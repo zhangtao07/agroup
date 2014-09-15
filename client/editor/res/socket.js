@@ -6,11 +6,11 @@ define([
     "socketio",
     'diff_match_patch_uncompressed'
     ], function($, _, eventMgr, editor, io, diff_match_patch) {
-
-      var socket = io('/file-sync');
+      'use strict';
+      //io = io.connect('/',{ resource: 'foo/bar/socket.io' });
+      var socket = io('/file-sync',{ path: '/socket.io-client'});
       var diff = new diff_match_patch();
 
-      window.editor = editor;
 
       var group = window.getParam('group');
       var file = window.getParam('file');
@@ -39,14 +39,14 @@ define([
           patch: patchText,
           selectionMgr: {
             selectionStart: editor.selectionMgr.selectionStart,
-            selectionEnd: editor.selectionMgr.selectionEnd,
-            cursorY: editor.selectionMgr.cursorY
+          selectionEnd: editor.selectionMgr.selectionEnd,
+          cursorY: editor.selectionMgr.cursorY
           }
         });
       });
 
 
-      eventMgr.addListener('onEditorPopover', function(){
+      eventMgr.addListener('onEditorPopover', function() {
         console.log(arguments);
       });
 
