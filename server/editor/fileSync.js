@@ -2,24 +2,23 @@ var cache = require('./cache');
 var diff_match_patch = require('googlediff');
 var diff = new diff_match_patch();
 
-function SyncService(content, group, filename) {
+function SyncService(content, msg) {
   this.content = content;
   this.users = [];
   this.clientNum = 0;
-  this.group = group;
-  this.filename = filename;
+  this.fileid = msg.fileid;
+  this.username = msg.username;
 }
 
 SyncService.prototype.addClient = function(username, socket) {
-  socket.join(this.group + '/' + this.filename);
+  socket.join(this.fileid);
   this.users.push(username);
   var self = this;
   this.clientNum += 1;
   socket.on('disconnect', function() {
     self.clientNum -= 1;
     if (self.clientNum === 0) {
-      //console.log('client leave');
-      cache.saveToDisk(self.group, self.filename);
+      cache.saveToDisk(self.fileid);
     }
   });
   socket.on('patch', function(message) {
@@ -29,7 +28,6 @@ SyncService.prototype.addClient = function(username, socket) {
     var content = results[0];
     self.content = content;
     self.onPatch(socket, message);
-    //console.log(self.content === cache.get(self.group,self.filename),self.content);
   });
 };
 
@@ -38,26 +36,24 @@ SyncService.prototype.onPatch = function(socket, message) {
 };
 
 SyncService.prototype.sendMessage = function(socket, messageName, message) {
-  socket.broadcast['in'](this.group + '/' + this.filename).emit(messageName, message);
+  socket.broadcast['in'](this.fileid).emit(messageName, message);
 };
 
-function startSync(message, socket) {
-  var syncService;
-  var group = message.group;
-  var filename = message.filename;
-  var username = message.username;
-  var file = cache.get(group, filename);
-  syncService = new SyncService(file, group, filename);
-  cache.set(group, filename, syncService);
-  syncService.addClient(username, socket);
+function startSync(msg, socket) {
+  var file = cache.get(msg.fileid);
+
+  var syncService = new SyncService(file, msg);
+  syncService.addClient(msg.username, socket);
+
+  cache.set(msg.fileid, syncService);
 }
 
 
 module.exports = function(io) {
   var serverIO = io.of('/file-sync');
   serverIO.on('connection', function(socket) {
-    socket.on('login', function(message) {
-      startSync(message, socket);
+    socket.on('editting', function(msg) {
+      startSync(msg, socket);
     });
   });
 };

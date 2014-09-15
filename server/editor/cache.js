@@ -3,7 +3,13 @@ var path = require('path');
 var cache = {};
 
 function getPath(fileid){
-  return path.join(__dirname, '../../doc/agroup.md');
+  //TBD 等待跟文件系统接入
+  var filepath = path.join(__dirname,'../../.tmp/test.md');
+  var exists = fs.existsSync(filepath);
+  if(!exists){
+    fs.writeFileSync(filepath,'#测试文档');
+  }
+  return filepath;
 }
 
 exports.set = function(fileid, syncService) {
