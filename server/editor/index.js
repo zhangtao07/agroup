@@ -4,6 +4,10 @@ var express = require('express');
 var router = express.Router();
 var cache = require('./cache');
 
+
+router.get('/viewer', function(req, res) {
+  res.render('viewer.html');
+});
 router.get('/*', function(req, res) {
   res.render('editor.html');
 });
