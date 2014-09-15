@@ -29,7 +29,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, enco
     filename: filename,
     mimetype: mimetype,
     size: size,
-    group_id: group,
+    file_id: group,
     encoding: encoding,
     createDate: new Date,
     updateDate: new Date
@@ -50,7 +50,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, enco
   function checkdone() {
     fileModel.create(file, function(err, file) {
       if (err) {
-        console.err(err);
+        console.info(err);
       }
       cb && cb(file);
     });
@@ -74,9 +74,10 @@ module.exports = function(req, callback) {
   var busboy = new Busboy({
     headers: req.headers
   });
-  var fields = {};
+
   busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
-    fields[fieldname] = val;
+    req.body[fieldname] = val;
+
   });
   var result;
   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -88,11 +89,23 @@ module.exports = function(req, callback) {
       var d = shasum.digest('hex');
 
       var stat = fs.statSync(tempPath);
+      if(!req.body['id']){
+        req.models.file.create({
+          name:filename,
+          group_id:req.body['groupId']
+        },function(err,file){
+          upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id, stat['size'], encoding, function(res) {
+            result = res;
+            checkDone();
+          });
+        });
+      }else{
+        upload(req.models.fileversion, tempPath, d, filename, mimetype, req.body['id'], stat['size'], encoding, function(res) {
+          result = res;
+          checkDone();
+        });
+      }
 
-      upload(req.models.file, tempPath, d, filename, mimetype, fields['groupId'], stat['size'], encoding, function(res) {
-        result = res;
-        checkDone();
-      });
 
     });
     var tempDir = config.root+config.upload_temp_dir;
@@ -111,11 +124,6 @@ module.exports = function(req, callback) {
 
   busboy.on('finish', function() {
     checkDone();
-    /*
-     res.writeHead(200, {
-     'Connection' : 'close'
-     });
-     res.end("ok");*/
 
   });
   req.pipe(busboy);
