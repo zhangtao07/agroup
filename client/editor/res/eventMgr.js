@@ -309,19 +309,16 @@ define([
             eventMgr.onEditorPopover();
         });
 
-        var group = window.getParam('group');
-        var file = window.getParam('file');
-        var url = '';
-        if(group && file){
-            url = '/file/' + group + '/' + file;
-            $.post(url, function(data) {
-                // Call onReady listeners
-                onReady({
-                    title: file ? window.decodeURI(file).replace('.md','') :'welcome',
-                    group:group,
-                    content: data
-                },url);
-            });
+        var fileid = window.location.href.replace(/.*\/+/,'');
+        if(fileid){
+          var url = window.location.href.replace(/(.*\/+).*/,'$1') + fileid;
+          $.post(url, function(data) {
+              // Call onReady listeners
+              onReady({
+                  title: data.title,
+                  content: data.content
+              },url);
+          });
         }else{
             onReady();
         }

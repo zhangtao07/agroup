@@ -6,6 +6,8 @@ module.exports = function(orm, db) {
     id: { type: 'serial', key: true },
     name:String
 
+
   });
   File.hasOne('group', db.models.group, { required: true});
 }
+
