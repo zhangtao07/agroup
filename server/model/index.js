@@ -7,9 +7,8 @@ function setup(db, cb) {
   require('./user.model')(orm, db);
   require('./group.model')(orm, db);
   require('./file.model')(orm, db);
+  require('./fileversion.model')(orm, db);
   require('./message.model')(orm, db);
-
-
   return cb(null, db);
 }
 

@@ -26,8 +26,8 @@ module.exports = function(orm, db) {
           return {
             type: "image",
             content: {
-              "thumbnail": "api/image/upload/" + this.file.id + "?updateDate=" + this.file.updateDate.getTime(),
-              "filename": this.file.filename
+              "thumbnail": "api/image/upload/" + this.fileversion.id + "?updateDate=" + this.fileversion.updateDate.getTime(),
+              "filename": this.fileversion.filename
             }
 
           }
@@ -43,8 +43,8 @@ module.exports = function(orm, db) {
         },
         getMessage: function(merge) {
           if (merge) {
-            if (merge.file) {
-              this.file = merge.file;
+            if (merge.fileversion) {
+              this.fileversion = merge.fileversion;
             }
 
             if (merge.user) {
@@ -69,7 +69,7 @@ module.exports = function(orm, db) {
 
     });
 
-  Message.hasOne('file', db.models.file, { required: false, autoFetch: true });
+  Message.hasOne('fileversion', db.models.fileversion, { required: false, autoFetch: true });
 
   Message.hasOne('user', db.models.user, { required: true, autoFetch: true });
 

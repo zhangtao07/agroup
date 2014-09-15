@@ -13,6 +13,9 @@ exports.list = function(req, res) {
     group_id: groupId
 
   }, function(err, messages) {
+    if(err){
+      console.info(err);
+    }
     var datas = [];
     messages.forEach(function(message) {
       datas.push(message.getMessage());
@@ -33,10 +36,10 @@ exports.upload = function(req, res) {
 
   upload(req, function(file) {
     req.models.message.create({
-      'file_id': file.id,
+      'fileversion_id': file.id,
       'type': file.mimetype,
       'user_id': user.id,
-      'group_id': file.group_id,
+      'group_id': req.body['groupId'],
       'date': new Date
     }, function(err, msg) {
 
@@ -44,10 +47,10 @@ exports.upload = function(req, res) {
         return console.error(err);
       }
       var data = msg.getMessage({
-        file: file,
+        fileversion: file,
         user: user
       });
-      observe.groupBroadcast(file.group_id, data);
+      observe.groupBroadcast(req.body.groupId, data);
       res.writeHead(200, {
         'Connection': 'close'
       });
