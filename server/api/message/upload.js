@@ -11,7 +11,8 @@ var sizeOf = require('image-size');
 function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
   var date = new Date();
   var upload_dir = config.upload_dir;
-  var saveFile = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
+  var filePath = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
+  var saveFile = config.root + filePath;
   var saveDir = path.dirname(saveFile);
   if (!fs.existsSync(saveDir)) {
     mkdirp.sync(saveDir);
@@ -24,7 +25,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, enco
 
 
   var file = {
-    filepath: saveFile,
+    filepath: filePath,
     filename: filename,
     mimetype: mimetype,
     size: size,
@@ -94,7 +95,7 @@ module.exports = function(req, callback) {
       });
 
     });
-    var tempDir = config.upload_temp_dir;
+    var tempDir = config.root+config.upload_temp_dir;
     if (!fs.existsSync(tempDir)) {
       mkdirp.sync(tempDir);
     }
