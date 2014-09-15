@@ -6,21 +6,15 @@ define([
     "socketio",
     'diff_match_patch_uncompressed'
     ], function($, _, eventMgr, editor, io, diff_match_patch) {
-      'use strict';
-      //io = io.connect('/',{ resource: 'foo/bar/socket.io' });
       var socket = io('/file-sync',{ path: '/socket.io-client'});
       var diff = new diff_match_patch();
+      var fileid = window.location.href.replace(/.*\/+/,'');
 
-
-      var group = window.getParam('group');
-      var file = window.getParam('file');
-
-      if (group && file) {
+      if (fileid) {
         var username = new Date();
-        socket.emit('login', {
-          group: decodeURI(group),
-          filename: decodeURI(file),
-          username: username
+        socket.emit('editting', {
+          username: username,
+          fileid: decodeURI(fileid),
         });
       }
 

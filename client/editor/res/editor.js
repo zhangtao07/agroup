@@ -815,7 +815,7 @@ define([
         $marginElt = $(marginElt);
         previewElt = document.querySelector('.preview-container');
         $cursorElt = $(crel('span',{ class:"cursor-helper" })).appendTo($inputElt);
-        $avatarElt = $(crel('img',{ class:'avatar-helper', src:'/res/img/avatar.jpg'})).appendTo($inputElt);
+        $avatarElt = $(crel('img',{ class:'avatar-helper', src:'res/img/avatar.jpg'})).appendTo($inputElt);
         $inputOffset = $contentElt.offset();
 
         $inputElt.addClass(settings.editorFontClass);
