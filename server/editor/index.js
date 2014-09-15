@@ -19,7 +19,10 @@ router.post('/:fileid', function(req, res) {
   if (!file) {
     res.status(200).send('file not found');
   } else {
-    res.status(200).send(file);
+    res.status(200).json({
+      title: 'AGroup 测试文档',
+      content: file
+    });
   }
 });
 
