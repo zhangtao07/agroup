@@ -6,9 +6,39 @@ var crypto = require('crypto');
 var config = require("../../config/environment/index");
 var fs = require("fs");
 var sizeOf = require('image-size');
+var exec = require('child_process').exec;
+
+function word2Pdf(file,cb){
+  var output = file+".pdf";
+  exec("java -jar convert.jar -i "+file+" -o "+output,function(){
+    cb&&cb(output);
+  });
+}
+
+function pdf2image(file,cb){
+  var outputPath = path.dirname(file)+"/images/";
+  if(!fs.existsSync(outputPath)){
+    fs.mkdirSync(outputPath);
+  }
+  exec("gm convert -density 300 -resize 50% pdf:"+file+" +adjoin jpeg:"+outputPath+"/%01d.jpg",function(){
+    cb&&cb(outputPath);
+  });
+}
+
+function generateImages(mimetype,file,cb){
+  if(mimetype == "application/pdf") {
+    pdf2image(file, cb);
+  }else if(mimetype == "application/msword"){
+    word2Pdf(file,function(pdf){
+      pdf2image(pdf,cb);
+    })
+  }else{
+    cb&&cb();
+  }
+}
 
 
-function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
+function upload(fileModel, tempFile, sha1, filename, mimetype,fileId, group, size, encoding, cb) {
   var date = new Date();
   var upload_dir = config.upload_dir;
   var filePath = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -29,7 +59,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, enco
     filename: filename,
     mimetype: mimetype,
     size: size,
-    file_id: group,
+    file_id: fileId,
     encoding: encoding,
     createDate: new Date,
     updateDate: new Date
@@ -48,13 +78,18 @@ function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, enco
   }
 
   function checkdone() {
-    fileModel.create(file, function(err, file) {
-      if (err) {
-        console.info(err);
-      }
-      cb && cb(file);
+    generateImages(mimetype,saveFile,function(){
+      fileModel.create(file, function(err, file) {
+        if (err) {
+          console.info(err);
+        }
+        cb && cb(file);
+      });
     });
+
   }
+
+
 
 
 }
@@ -94,13 +129,13 @@ module.exports = function(req, callback) {
           name:filename,
           group_id:req.body['groupId']
         },function(err,file){
-          upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id, stat['size'], encoding, function(res) {
+          upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id,req.body['groupId'], stat['size'], encoding, function(res) {
             result = res;
             checkDone();
           });
         });
       }else{
-        upload(req.models.fileversion, tempPath, d, filename, mimetype, req.body['id'], stat['size'], encoding, function(res) {
+        upload(req.models.fileversion, tempPath, d, filename, mimetype, req.body['id'],req.body['groupId'], stat['size'], encoding, function(res) {
           result = res;
           checkDone();
         });
