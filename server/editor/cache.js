@@ -3,17 +3,17 @@ var path = require('path');
 var cache = {};
 
 function getPath(fileid){
-  return path.join(__dirname, '../../doc/agroup.md', group, filename);
+  return path.join(__dirname, '../../doc/agroup.md');
 }
 
 exports.set = function(fileid, syncService) {
-  cache[group + '/' + filename] = syncService;
+  cache[fileid] = syncService;
   return this;
 };
 exports.saveToDisk = function(fileid) {
-  var file = cache[group + '/' + filename];
+  var file = cache[fileid];
   if (file && file.content) {
-    fs.writeFile(getPath(group,filename), file.content,'utf8');
+    fs.writeFile(getPath(fileid), file.content,'utf8');
     //delete cache[group + '/' + filename];
   }
 };
