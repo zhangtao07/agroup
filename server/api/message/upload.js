@@ -8,8 +8,7 @@ var fs = require("fs");
 var sizeOf = require('image-size');
 
 
-
-function upload(fileModel,tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
+function upload(fileModel, tempFile, sha1, filename, mimetype, group, size, encoding, cb) {
   var date = new Date();
   var upload_dir = config.upload_dir;
   var saveFile = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -24,7 +23,6 @@ function upload(fileModel,tempFile, sha1, filename, mimetype, group, size, encod
   }
 
 
-
   var file = {
     filepath: saveFile,
     filename: filename,
@@ -32,25 +30,25 @@ function upload(fileModel,tempFile, sha1, filename, mimetype, group, size, encod
     size: size,
     group_id: group,
     encoding: encoding,
-    createDate:new Date,
-    updateDate:new Date
+    createDate: new Date,
+    updateDate: new Date
   };
 
-  if(/^image\//.test(mimetype)){
+  if (/^image\//.test(mimetype)) {
 
-    sizeOf(saveFile,function(err,dimensions){
+    sizeOf(saveFile, function(err, dimensions) {
       file.width = dimensions.width;
       file.height = dimensions.height;
       checkdone();
     });
 
-  }else{
+  } else {
     checkdone();
   }
 
-  function checkdone(){
-    fileModel.create(file, function (err, file) {
-      if(err){
+  function checkdone() {
+    fileModel.create(file, function(err, file) {
+      if (err) {
         console.err(err);
       }
       cb && cb(file);
@@ -58,10 +56,9 @@ function upload(fileModel,tempFile, sha1, filename, mimetype, group, size, encod
   }
 
 
-
 }
 
-module.exports = function (req, callback) {
+module.exports = function(req, callback) {
   var checkI = 0;
 
   function checkDone() {
@@ -77,21 +74,21 @@ module.exports = function (req, callback) {
     headers: req.headers
   });
   var fields = {};
-  busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated) {
+  busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
     fields[fieldname] = val;
   });
   var result;
-  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-    file.on('data', function (data) {
+  busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+    file.on('data', function(data) {
       shasum.update(data);
     });
 
-    file.on('end', function () {
+    file.on('end', function() {
       var d = shasum.digest('hex');
 
       var stat = fs.statSync(tempPath);
 
-      upload(req.models.file,tempPath, d, filename, mimetype, fields['groupId'], stat['size'], encoding, function (res) {
+      upload(req.models.file, tempPath, d, filename, mimetype, fields['groupId'], stat['size'], encoding, function(res) {
         result = res;
         checkDone();
       });
@@ -111,7 +108,7 @@ module.exports = function (req, callback) {
 
   });
 
-  busboy.on('finish', function () {
+  busboy.on('finish', function() {
     checkDone();
     /*
      res.writeHead(200, {

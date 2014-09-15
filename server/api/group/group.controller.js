@@ -1,15 +1,16 @@
 'use strict';
 
 
-
 // Get list of groups
 exports.index = function(req, res) {
-  req.models.group.one(function (err, group) {
+  req.models.group.one(function(err, group) {
     console.info(group);
-    if(err) { return handleError(res, err); }
+    if (err) {
+      return handleError(res, err);
+    }
     return res.json(200, {
-        err:0,
-        data:group
+      err: 0,
+      data: group
     });
   });
 };

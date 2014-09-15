@@ -12,17 +12,17 @@
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              FEX <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">END</a></li>
-              <li><a href="#">FIS</a></li>
-              <li><a href="#">AGroup</a></li>
-              <li class="divider"></li>
-              <li><a href="#">#热门#</a></li>
-            </ul>
-          </li>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            FEX <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">END</a></li>
+            <li><a href="#">FIS</a></li>
+            <li><a href="#">AGroup</a></li>
+            <li class="divider"></li>
+            <li><a href="#">#热门#</a></li>
+          </ul>
+        </li>
         <li class="active">
           <a href="#">全部</a>
         </li>
@@ -50,7 +50,9 @@
         </li>
       </ul>
 
-      <a ng-hide="isLoggedIn" href="/auth/login" target="_self"><button type="button" class="btn btn-default navbar-btn navbar-right">登录</button></a>
+      <a ng-hide="isLoggedIn" href="/auth/login" target="_self">
+        <button type="button" class="btn btn-default navbar-btn navbar-right">登录</button>
+      </a>
     </div>
   </div>
 </div>

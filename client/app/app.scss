@@ -5,19 +5,17 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 @import '../assets/sass/flex.scss';
 
-
 /**
  * App-wide Styles
  */
 
-@mixin match_parent(){
-  position:absolute;
-  left:0;
-  right:0;
-  top:0;
-  bottom:0;
+@mixin match_parent() {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
-
 
 .browsehappy {
   margin: 0.2em 0;

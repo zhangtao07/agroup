@@ -11,7 +11,7 @@ exports.addUser = function(req, res, name, email) {
       res.redirect('/');
     } else {
 
-      User.create({name: name, email: email},function(error, savedUser) {
+      User.create({name: name, email: email}, function(error, savedUser) {
         req.session.user.id = savedUser.id;
         res.redirect('/');
       });

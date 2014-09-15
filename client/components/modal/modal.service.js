@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .factory('Modal', function ($rootScope, $modal) {
+  .factory('Modal', function($rootScope, $modal) {
     /**
      * Opens a modal
      * @param  {Object} scope      - an object to be merged with modal's scope
@@ -43,27 +43,30 @@ angular.module('agroupApp')
            */
           return function() {
             var args = Array.prototype.slice.call(arguments),
-                name = args.shift(),
-                deleteModal;
+              name = args.shift(),
+              deleteModal;
 
             deleteModal = openModal({
               modal: {
                 dismissable: true,
                 title: 'Confirm Delete',
                 html: '<p>Are you sure you want to delete <strong>' + name + '</strong> ?</p>',
-                buttons: [{
-                  classes: 'btn-danger',
-                  text: 'Delete',
-                  click: function(e) {
-                    deleteModal.close(e);
+                buttons: [
+                  {
+                    classes: 'btn-danger',
+                    text: 'Delete',
+                    click: function(e) {
+                      deleteModal.close(e);
+                    }
+                  },
+                  {
+                    classes: 'btn-default',
+                    text: 'Cancel',
+                    click: function(e) {
+                      deleteModal.dismiss(e);
+                    }
                   }
-                }, {
-                  classes: 'btn-default',
-                  text: 'Cancel',
-                  click: function(e) {
-                    deleteModal.dismiss(e);
-                  }
-                }]
+                ]
               }
             }, 'modal-danger');
 

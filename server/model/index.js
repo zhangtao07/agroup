@@ -1,4 +1,4 @@
-var orm      = require('orm');
+var orm = require('orm');
 var settings = require('../config/environment');
 
 var connection = null;
@@ -13,10 +13,10 @@ function setup(db, cb) {
   return cb(null, db);
 }
 
-module.exports = function (cb) {
+module.exports = function(cb) {
   if (connection) return cb(null, connection);
 
-  orm.connect(settings.mysql, function (err, db) {
+  orm.connect(settings.mysql, function(err, db) {
     if (err) return cb(err);
 
     connection = db;
