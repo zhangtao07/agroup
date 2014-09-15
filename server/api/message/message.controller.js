@@ -5,16 +5,16 @@ var fs = require('fs');
 
 var observe = require('../../components/group.observe');
 var upload = require('./upload');
-exports.list = function (req, res) {
+exports.list = function(req, res) {
 
   var groupId = req.query.groupId;
 
   req.models.message.find({
     group_id: groupId
 
-  }, function (err, messages) {
+  }, function(err, messages) {
     var datas = [];
-    messages.forEach(function (message) {
+    messages.forEach(function(message) {
       datas.push(message.getMessage());
     });
     return res.status(200).jsonp({
@@ -27,31 +27,31 @@ exports.list = function (req, res) {
 };
 
 
-exports.upload = function (req, res) {
+exports.upload = function(req, res) {
   var user = req.session.user;
 
 
-  upload(req, function (file) {
+  upload(req, function(file) {
     req.models.message.create({
       'file_id': file.id,
       'type': file.mimetype,
       'user_id': user.id,
       'group_id': file.group_id,
-      'date':new Date
-    },function (err,msg) {
+      'date': new Date
+    }, function(err, msg) {
 
-        if (err) {
-          return console.error(err);
-        }
-        var data = msg.getMessage({
-          file:file,
-          user:user
-        });
-        observe.groupBroadcast(file.group_id, data);
-        res.writeHead(200, {
-          'Connection': 'close'
-        });
-        res.end("ok");
+      if (err) {
+        return console.error(err);
+      }
+      var data = msg.getMessage({
+        file: file,
+        user: user
+      });
+      observe.groupBroadcast(file.group_id, data);
+      res.writeHead(200, {
+        'Connection': 'close'
+      });
+      res.end("ok");
 
     });
 
@@ -61,7 +61,7 @@ exports.upload = function (req, res) {
 }
 
 
-exports.post = function (req, res) {
+exports.post = function(req, res) {
   //todo:save mongodb
 
   //get mime info
@@ -76,7 +76,7 @@ exports.post = function (req, res) {
     'user_id': user.id,
     'group_id': groupId,
     'date': new Date
-  }, function (err, message) {
+  }, function(err, message) {
     if (err)
       return console.error(err);
     var data = message.getMessage({

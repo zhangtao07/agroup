@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('NavbarCtrl', function ($scope, $location, $http) {
-    $scope.menu = [{
-      'title': '全部',
-      'link': '/'
-    }];
+  .controller('NavbarCtrl', function($scope, $location, $http) {
+    $scope.menu = [
+      {
+        'title': '全部',
+        'link': '/'
+      }
+    ];
 
     $scope.isCollapsed = true;
 

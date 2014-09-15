@@ -25,32 +25,32 @@
  module.exports = mongoose.model('File', FileSchema);*/
 
 
-module.exports = function (orm, db) {
+module.exports = function(orm, db) {
   var File = db.define('file', {
-    id : { type: 'serial', key: true },
-    filepath:String,
+    id: { type: 'serial', key: true },
+    filepath: String,
     filename: String,
     mimetype: String,
     size: {type: 'number'},
-    encoding:String,
+    encoding: String,
     width: {type: 'number'},
     height: {type: 'number'},
     createDate: {type: 'date', required: true, time: true},
     updateDate: {type: 'date', required: true, time: true}
-  },{
-    hooks:{
+  }, {
+    hooks: {
       beforeCreate: function() {
-        if(this.createDate === null){
+        if (this.createDate === null) {
           this.createDate = new Date();
         }
-        if(this.updateDate === null){
+        if (this.updateDate === null) {
           this.updateDate = new Date();
         }
       }
     }
   });
 
-  File.hasOne('group', db.models.group, { required: true,  autoFetch: true });
+  File.hasOne('group', db.models.group, { required: true, autoFetch: true });
 
 
 }

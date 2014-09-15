@@ -4,7 +4,7 @@
  * Removes server error when user updates input
  */
 angular.module('agroupApp')
-  .directive('mongooseError', function () {
+  .directive('mongooseError', function() {
     return {
       restrict: 'A',
       require: 'ngModel',

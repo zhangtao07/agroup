@@ -51,7 +51,7 @@ var all = {
 
   upload_temp_dir: rootPath + "/upload/.tmp",
   upload_dir: rootPath + "/upload",
-  sessionStorage:{
+  sessionStorage: {
     host: mysql.host,
     port: mysql.port || 3306,
     user: mysql.user,
@@ -62,10 +62,8 @@ var all = {
 };
 
 
-
-
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
-  all,envConfig
-  );
+  all, envConfig
+);

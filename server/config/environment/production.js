@@ -15,17 +15,36 @@ module.exports = {
       process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME ||
       'mongodb://localhost/agroup'
   },
-  mysql: {
-    protocol: "mysql",
-    query: { pool: true },
-    host: "127.0.0.1",
-    database: "agroup",
-    user: "root",
-    password: ""
-  },
+  my sql
+:
+{
+  protocol: "mysql",
+    query
+:
+  {
+    pool: true
+  }
+,
+  host: "127.0.0.1",
+    database
+:
+  "agroup",
+    user
+:
+  "root",
+    password
+:
+  "end"
+}
+,
 
-  auth: 'uuap',
+auth: 'uuap',
 
-  upload_temp_dir: "/home/agroup/files/upload/.tmp",
-  upload_dir: "/home/agroup/files/upload/"
-};
+  upload_temp_dir
+:
+"/home/agroup/files/upload/.tmp",
+  upload_dir
+:
+"/home/agroup/files/upload/"
+}
+;

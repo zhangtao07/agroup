@@ -30,12 +30,12 @@ module.exports = function(app) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
-  app.use(function (req, res, next) {
-    models(function (err, db) {
+  app.use(function(req, res, next) {
+    models(function(err, db) {
       if (err) return next(err);
 
       req.models = db.models;
-      req.db     = db;
+      req.db = db;
       next();
 
 
@@ -50,9 +50,9 @@ module.exports = function(app) {
     store: new SessionStore(config.sessionStorage)
   }))
   /*app.use(session({
-    secret: config.secrets.session,
-    store: new mongoStore({ mongoose_connection: mongoose.connection })
-  }));*/
+   secret: config.secrets.session,
+   store: new mongoStore({ mongoose_connection: mongoose.connection })
+   }));*/
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

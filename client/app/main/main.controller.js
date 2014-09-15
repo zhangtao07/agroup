@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', function ($scope, $http, socket) {
+  .controller('MainCtrl', function($scope, $http, socket) {
     $scope.watchGroups = [
       'FEX',
       'FIS',
@@ -10,7 +10,7 @@ angular.module('agroupApp')
       'agroup'
     ];
 
-    $scope.$on('$destroy', function () {
+    $scope.$on('$destroy', function() {
 
     });
   });

@@ -6,8 +6,6 @@ var Message = require('./../../model/message.model.js');
 
 
 exports.register = function(socket) {
-	
-	
-	
-	
+
+
 }

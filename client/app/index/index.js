@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .config(function ($stateProvider) {
+  .config(function($stateProvider) {
     $stateProvider
       .state('index', {
         url: '/index',

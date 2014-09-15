@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('plainitem', function () {
+  .directive('plainitem', function() {
     return {
       templateUrl: 'app/message/plainitem/plainitem.html',
       restrict: 'EA',
-      scope:{
-        data:'=data'
+      scope: {
+        data: '=data'
       },
-      link: function (scope, element, attrs) {
+      link: function(scope, element, attrs) {
 
       }
     };
