@@ -95,7 +95,7 @@ exports.save = function(fileid) {
           var fv = {
             filepath: path.join(path.dirname(filepath), '/', filename),
             filename: filename,
-            mimetype: 'text/md5',
+            mimetype: 'text/markdown',
             size: 0,
             encoding: 'utf8',
             file_id: fileid
