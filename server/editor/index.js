@@ -14,16 +14,19 @@ router.get('/*', function(req, res) {
 
 router.post('/:fileid', function(req, res) {
   var fileid = req.params.fileid;
-  var file = cache.get(fileid);
+  cache.get(fileid, function(file) {
 
-  if (!file) {
-    res.status(200).send('file not found');
-  } else {
-    res.status(200).json({
-      title: 'AGroup 测试文档',
-      content: file
-    });
-  }
+    if (!file) {
+      res.status(200).send('file not found');
+    } else {
+      res.status(200).json({
+        title: 'AGroup 测试文档',
+        content: file
+      });
+    }
+
+  });
+
 });
 
 

@@ -11,8 +11,9 @@ module.exports = function(orm, db) {
     encoding: String,
     width: {type: 'number'},
     height: {type: 'number'},
-    createDate: {type: 'date', required: true, time: true},
-    updateDate: {type: 'date', required: true, time: true}
+    file_id: String,
+    createDate: {type: 'date', time: true},
+    updateDate: {type: 'date', time: true}
   }, {
     hooks: {
       beforeCreate: function() {
