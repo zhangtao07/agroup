@@ -18,7 +18,7 @@ SyncService.prototype.addClient = function(username, socket) {
   socket.on('disconnect', function() {
     self.clientNum -= 1;
     if (self.clientNum === 0) {
-      cache.saveToDisk(self.fileid);
+      cache.save(self.fileid);
     }
   });
   socket.on('patch', function(message) {
@@ -40,12 +40,12 @@ SyncService.prototype.sendMessage = function(socket, messageName, message) {
 };
 
 function startSync(msg, socket) {
-  var file = cache.get(msg.fileid);
+  cache.get(msg.fileid, function(file) {
+    var syncService = new SyncService(file, msg);
+    syncService.addClient(msg.username, socket);
 
-  var syncService = new SyncService(file, msg);
-  syncService.addClient(msg.username, socket);
-
-  cache.set(msg.fileid, syncService);
+    cache.set(msg.fileid, syncService);
+  });
 }
 
 

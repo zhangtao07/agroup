@@ -3,10 +3,6 @@
 // Development specific configuration
 // ==================================
 module.exports = {
-  // MongoDB connection options
-  mongo: {
-    uri: 'mongodb://localhost/agroup-dev'
-  },
   mysql: {
     protocol: "mysql",
     query: { pool: true },
