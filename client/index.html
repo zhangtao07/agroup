@@ -6,7 +6,7 @@
 <!--[if IE 8]>
 <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js"> <!--<![endif]-->
+<html ng-app="agroupApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,19 +20,24 @@
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/simple-line-icons.css">
+  <link rel="stylesheet" href="assets/css/font.css">
+  <link rel="stylesheet" href="app/less.css">
   <link rel="stylesheet" href="app/app.css">
   <!-- injector:css -->
+  <link rel="stylesheet" href="app/less.css">
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body ng-app="agroupApp">
+<body>
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<div ui-view=""></div>
+<div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded}" ui-view></div>
 
 <!-- build:js({client,node_modules}) app/vendor.js -->
 <!-- bower:js -->
@@ -47,18 +52,28 @@
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angular-socket-io/socket.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
+<script src="bower_components/angular-translate/angular-translate.js"></script>
 <!-- endbower -->
+<script src="assets/js/ui-jq.js"></script>
+<script src="assets/js/ui-load.js"></script>
+<script src="assets/js/ui-validate.js"></script>
 <script src="socket.io-client/socket.io.js"></script>
 <!-- endbuild -->
 <!-- build:js({.tmp,client}) app/app.js -->
 <script src="app/app.js"></script>
 <!-- injector:js -->
+<script src="app/block/commonAside/commonAside.directive.js"></script>
+<script src="app/block/commonFooter/commonFooter.directive.js"></script>
+<script src="app/block/commonHeader/commonHeader.directive.js"></script>
+<script src="app/block/commonNav/commonNav.directive.js"></script>
+<script src="app/block/commonSettings/commonSettings.directive.js"></script>
 <script src="app/group/creategroup/creategroup.directive.js"></script>
 <script src="app/index/index.controller.js"></script>
 <script src="app/index/index.js"></script>
 <script src="app/main/main.controller.js"></script>
 <script src="app/main/main.js"></script>
-<script src="app/message/imageitem/imageitem.directive.js"></script>
+<script src="app/message/fileitem/fileitem.directive.js"></script>
 <script src="app/message/msgitem/msgitem.directive.js"></script>
 <script src="app/message/msglist/msglist.directive.js"></script>
 <script src="app/message/plainitem/plainitem.directive.js"></script>
@@ -69,5 +84,7 @@
 <script src="components/socket/socket.service.js"></script>
 <!-- endinjector -->
 <!-- endbuild -->
+
+<script src="assets/js/directives.js"></script>
 </body>
 </html>

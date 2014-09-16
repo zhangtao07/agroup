@@ -10,13 +10,12 @@ var exec = require('child_process').exec;
 
 function word2Pdf(file,cb){
   var output = file+".pdf";
-  exec("java -jar convert.jar -i "+file+" -o "+output,function(){
+  exec("java -jar "+__dirname+"/convert.jar -i "+file+" -o "+output,function(error, stdout, stderr){
     cb&&cb(output);
   });
 }
 
-function pdf2image(file,cb){
-  var outputPath = path.dirname(file)+"/images/";
+function pdf2image(file,outputPath,cb){
   if(!fs.existsSync(outputPath)){
     fs.mkdirSync(outputPath);
   }
@@ -27,10 +26,10 @@ function pdf2image(file,cb){
 
 function generateImages(mimetype,file,cb){
   if(mimetype == "application/pdf") {
-    pdf2image(file, cb);
+    pdf2image(file,file+'.images', cb);
   }else if(mimetype == "application/msword"){
     word2Pdf(file,function(pdf){
-      pdf2image(pdf,cb);
+      pdf2image(pdf,file+'.images',cb);
     })
   }else{
     cb&&cb();

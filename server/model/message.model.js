@@ -2,6 +2,8 @@
 
 var ago = require('../components/dateformate/ago');
 var Q = require("q");
+var fs = require("fs");
+var config = require("../config/environment");
 module.exports = function(orm, db) {
   var Message = db.define("message", {
       id: { type: 'serial', key: true },
@@ -12,24 +14,23 @@ module.exports = function(orm, db) {
     {
       hooks: {
         beforeCreate: function() {
-          console.info("hook");
           if (this.date === null) {
             this.date = new Date();
           }
         }
       },
       methods: {
-        getImageContent: function() {
-          if (!/^image\//.test(this.type)) {
-            return false;
-          }
+
+
+        getFileContent:function(){
+
           return {
-            type: "image",
-            content: {
-              "thumbnail": "api/image/upload/" + this.fileversion.id + "?updateDate=" + this.fileversion.updateDate.getTime(),
+            type:"file",
+            content:{
+              "images":this.fileversion.getImages(),
+              "filepath":this.fileversion.filepath,
               "filename": this.fileversion.filename
             }
-
           }
         },
         getPlainContent: function() {
@@ -53,7 +54,7 @@ module.exports = function(orm, db) {
           }
 
 
-          var contentObj = this.getPlainContent() || this.getImageContent();
+          var contentObj = this.getPlainContent() || this.getFileContent();
 
 
           return {

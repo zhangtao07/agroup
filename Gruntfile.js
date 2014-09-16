@@ -54,6 +54,17 @@ module.exports = function (grunt) {
         url: 'http://localhost:<%= express.options.port %>'
       }
     },
+    less:{
+      development: {
+        options: {
+
+        },
+        files:{
+          "<%= yeoman.client %>/app/less.css":"<%= yeoman.client %>/assets/less/app.less"
+        }
+
+      }
+    },
     watch: {
       injectJS: {
         files: [
@@ -664,4 +675,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+
 };

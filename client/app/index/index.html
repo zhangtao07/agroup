@@ -1,5 +1,10 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<common-header class="app-header navbar"></common-header>
 
-<div class="col-md-12">
+
+<common-aside class="app-aside hidden-xs {{app.settings.asideColor}}"></common-aside>
+
+<!--<div class="col-md-12">
   <msglist></msglist>
-</div>
+</div>-->
+<common-settings class="settings panel panel-default">
+</common-settings>

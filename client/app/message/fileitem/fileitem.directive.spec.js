@@ -1,10 +1,10 @@
 'use strict';
 
-describe('Directive: imageitem', function() {
+describe('Directive: fileitem', function() {
 
   // load the directive's module and view
   beforeEach(module('agroupApp'));
-  beforeEach(module('app/message/imageitem/imageitem.html'));
+  beforeEach(module('app/message/fileitem/fileitem.html'));
 
   var element, scope;
 
@@ -13,9 +13,9 @@ describe('Directive: imageitem', function() {
   }));
 
   it('should make hidden element visible', inject(function($compile) {
-    element = angular.element('<imageitem></imageitem>');
+    element = angular.element('<fileitem></fileitem>');
     element = $compile(element)(scope);
     scope.$apply();
-    expect(element.text()).toBe('this is the imageitem directive');
+    expect(element.text()).toBe('this is the fileitem directive');
   }));
 });

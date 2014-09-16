@@ -5,7 +5,7 @@
 'use strict';
 
 var errors = require('./components/errors');
-
+var config = require("./config/environment");
 module.exports = function(app) {
 
   // Insert routes below
@@ -16,7 +16,9 @@ module.exports = function(app) {
   app.use('/api/user', require('./api/user'));
 
   app.use('/auth', require('./auth'));
-
+  app.use(new RegExp("(^"+config.upload_dir+"\/.*)"), function(req, res) {
+    res.sendFile(config.root+ req.params[0]);
+  });
   app.use('/editor', require('./editor'))
 
   // All undefined asset or api routes should return a 404

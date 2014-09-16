@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('imageitem', function() {
+  .directive('fileitem', function() {
     return {
-      templateUrl: 'app/message/imageitem/imageitem.html',
+      templateUrl: 'app/message/fileitem/fileitem.html',
       restrict: 'EA',
       scope: {
         'data': '=data'
