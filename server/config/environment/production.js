@@ -3,6 +3,7 @@
 // Production specific configuration
 // =================================
 module.exports = {
+  port: 8999,
   mysql: {
     protocol: "mysql",
     query: { pool: true },
