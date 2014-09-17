@@ -23,7 +23,7 @@ router.post('/:fileid', function(req, res) {
         fileid: fileid,
         title: 'AGroup 测试文档',
         content: file,
-        usr: req.session.user || {}
+        user: req.session.user || {}
       });
     }
 
