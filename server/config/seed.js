@@ -2,7 +2,7 @@
 
 module.exports = function(db, cb) {
 
-  db.sync(function() {
+  db&&db.sync(function() {
     db.models.group.find({}, function(err, groups) {
       if (groups.length == 0) {
         db.models.group.create({

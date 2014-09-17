@@ -60,7 +60,7 @@ module.exports = function (grunt) {
 
         },
         files:{
-          "<%= yeoman.client %>/app/less.css":"<%= yeoman.client %>/assets/less/app.less"
+          "<%= yeoman.client %>/assets/less/less.scss":"<%= yeoman.client %>/assets/less/app.less"
         }
 
       }
@@ -366,6 +366,7 @@ module.exports = function (grunt) {
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
+            'assets/l10n/*',
             'index.html'
           ]
         }, {
@@ -387,6 +388,18 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
+      },
+      static:{
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.client %>',
+            dest: '<%= yeoman.dist %>/public',
+            src: [
+              'assets/fonts/**/*'
+            ]
+          }]
       }
     },
 
@@ -552,7 +565,7 @@ module.exports = function (grunt) {
           ]
         }
       }
-    },
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -655,7 +668,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'injector:sass', 
     'concurrent:dist',
-    'injector',
+//    'injector',
     'wiredep',
     'useminPrepare',
     'autoprefixer',
@@ -667,7 +680,8 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'copy:static'
   ]);
 
   grunt.registerTask('default', [

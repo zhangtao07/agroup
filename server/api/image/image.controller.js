@@ -17,17 +17,6 @@ exports.upload = function(req, res) {
   });
 };
 
-exports.avartar = function(req, res) {
-  var uid = req.params.id;
-  res.sendFile(__dirname + '/photo.jpg', {maxAge: 10 * 365 * 24 * 60 * 60, headers: {
-    'Content-Type': 'image/jpeg'
-  }}, function(err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-  });
-};
 
 
 function handleError(res, err) {

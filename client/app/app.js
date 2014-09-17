@@ -17,6 +17,21 @@ var app = angular.module('agroupApp', [
     'app.directives'
 
   ]).run(
+    [ '$rootScope','$http',
+      function($rootScope,$http) {
+        $rootScope.__user = null;
+        $rootScope.__login = function() {
+          if(this.__user == null){
+            $http.get('/api/user/me').success(function(result) {
+              if ('name' in result) {
+                $rootScope.user = result;
+              }
+            });
+          }
+        }
+//        $rootScope.__login();
+
+      }]).run(
     [ '$rootScope', '$state', '$stateParams', '$window', '$localStorage', '$translate',
       function($rootScope, $state, $stateParams, $window, $localStorage, $translate) {
         // add 'ie' classes to html
@@ -80,15 +95,13 @@ var app = angular.module('agroupApp', [
         }
 
 
-
       }
     ]
   )
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
 
-
-      $locationProvider.html5Mode(true);
+//      $locationProvider.html5Mode(true);
 
 
     }).config(['$translateProvider', function($translateProvider) {
@@ -97,7 +110,7 @@ var app = angular.module('agroupApp', [
       // So, the module will search missing translation tables under the specified urls.
       // Those urls are [prefix][langKey][suffix].
       $translateProvider.useStaticFilesLoader({
-        prefix: 'l10n/',
+        prefix: 'assets/l10n/',
         suffix: '.json'
       });
 
