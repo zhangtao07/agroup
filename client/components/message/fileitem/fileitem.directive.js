@@ -3,7 +3,7 @@
 angular.module('agroupApp')
   .directive('fileitem', function() {
     return {
-      templateUrl: 'app/message/fileitem/fileitem.html',
+      templateUrl: 'components/message/fileitem/fileitem.html',
       restrict: 'EA',
       scope: {
         'data': '=data'

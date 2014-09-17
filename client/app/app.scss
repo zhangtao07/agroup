@@ -31,13 +31,12 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'block/commonHeader/commonHeader.scss';
 @import 'block/commonNav/commonNav.scss';
 @import 'block/commonSettings/commonSettings.scss';
-@import 'group/creategroup/creategroup.scss';
-@import 'index/index.scss';
+@import 'group/group.scss';
 @import 'main/main.scss';
+@import 'group/creategroup/creategroup.scss';
 @import 'message/fileitem/fileitem.scss';
 @import 'message/msgitem/msgitem.scss';
 @import 'message/msglist/msglist.scss';
 @import 'message/plainitem/plainitem.scss';
 @import 'modal/modal.scss';
-@import 'navbar/navbar.scss';
 // endinjector

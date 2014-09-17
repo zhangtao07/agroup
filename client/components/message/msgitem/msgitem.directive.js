@@ -2,7 +2,7 @@
 
 angular.module('agroupApp').directive('msgitem', function() {
   return {
-    templateUrl: 'app/message/msgitem/msgitem.html',
+    templateUrl: 'components/message/msgitem/msgitem.html',
     restrict: 'EA',
     scope: {
       data: '=data'

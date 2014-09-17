@@ -3,8 +3,9 @@
 angular.module('agroupApp')
   .config(function($stateProvider) {
     $stateProvider
-      .state('main', {
-        url: '/',
+      .state('app', {
+        url: '',
+        abstract: true,
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
       });

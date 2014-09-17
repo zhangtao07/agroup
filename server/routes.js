@@ -19,8 +19,7 @@ module.exports = function(app) {
   app.use(new RegExp("(^"+config.upload_dir+"\/.*)"), function(req, res) {
     res.sendFile(config.root+ req.params[0]);
   });
-  app.use('/editor', require('./editor'))
-
+  app.use('/editor', require('./editor'));
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
     .get(errors[404]);

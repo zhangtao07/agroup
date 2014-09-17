@@ -5,7 +5,7 @@
   angular.module('agroupApp')
     .directive('creategroup', ['$modal','$http', function($modal,$http) {
       return {
-        templateUrl: 'app/group/creategroup/creategroup.html',
+        templateUrl: 'components/group/creategroup/creategroup.html',
         restrict: 'EA',
         link: function(scope, element, attrs) {
 
