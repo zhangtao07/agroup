@@ -9,6 +9,11 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
  * App-wide Styles
  */
 
+*{
+  padding:0;
+  margin:0;
+}
+
 @mixin match_parent() {
   position: absolute;
   left: 0;
@@ -24,6 +29,12 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
   padding: 0.2em 0;
 }
 
+.app-content-full .app-content-body{
+  height:100%;
+}
+.app-content.app-content-full{
+  bottom:0;
+}
 // Component styles are injected through grunt
 // injector
 @import 'block/commonAside/commonAside.scss';
