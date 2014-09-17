@@ -444,21 +444,34 @@ define([
         range.insertNode(st);//;document.createTextNode(replacement));
         range.detach();
         var offset = $(st).position();
-        window.st = st;
-        $cursorElt.css({
-          top: offset.top ,//- $inputOffset.top,
-          left: offset.left,
-          opacity: 1
-        });
-        $avatarElt.css({
-          top: offset.top ,//- $inputOffset.top,
-          opacity: 1
-        });
+        updateCursor(offset.top,offset.left);
 
         return {
             start: startOffset,
             end: value.length - endOffset
         };
+      }
+
+      var cursortime = 0;
+      function updateCursor(top,left){
+        $cursorElt.css({
+          top: top ,//- $inputOffset.top,
+          left: left,
+          opacity: 1
+        });
+        $avatarElt.css({
+          top: top ,//- $inputOffset.top,
+          opacity: 1
+        });
+        clearTimeout(cursortime);
+        cursortime = setTimeout(function(){
+            $cursorElt.css({
+              opacity: 0
+            });
+            $avatarElt.css({
+              opacity: 0
+            });
+        },10 * 1000)
       }
 
 
@@ -520,18 +533,17 @@ define([
         textContent = value;
       }
 
-      function svnw(value){
+
+      editor.setValueNoWatch = setValueNoWatch;
+      editor.syncValueNoWatch = function (value,user) {
         syncValue(value);
         fileDesc.content = value;
         textContent = value;
         eventMgr.onContentSynced(fileDesc, value);
         //pagedownEditor.refreshPreview();
         refreshPreviewLater();
-        checkContentChange();
+        //checkContentChange();
       }
-
-      editor.setValueNoWatch = setValueNoWatch;
-      editor.syncValueNoWatch = svnw;
 
       function getValue() {
         return textContent;

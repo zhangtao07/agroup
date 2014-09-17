@@ -1,26 +1,35 @@
 var cache = require('./cache');
 var diff_match_patch = require('googlediff');
 var diff = new diff_match_patch();
+var clientid = 0;
 
 function SyncService(content, msg) {
   this.content = content;
-  this.users = [];
-  this.clientNum = 0;
   this.fileid = msg.fileid;
-  this.username = msg.username;
+  this.clientid = clientid++;
+  this.usr = msg.usr;
 }
 
-SyncService.prototype.addClient = function(username, socket) {
-  socket.join(this.fileid);
-  this.users.push(username);
+SyncService.prototype.addClient = function(socket) {
+
   var self = this;
-  this.clientNum += 1;
-  socket.on('disconnect', function() {
-    self.clientNum -= 1;
-    if (self.clientNum === 0) {
-      cache.save(self.fileid);
-    }
+  socket.join(this.fileid);
+
+  self.sendMessage(socket, 'server:clientJoin', {
+    clientid: self.clientid,
+    username: self.usr.name,
+    avatar: self.usr.avatar
   });
+
+  socket.on('disconnect', function() {
+    cache.save(self.fileid);
+    self.sendMessage(socket, 'server:clientLeave', {
+      clientid: self.clientid,
+      username: self.usr.name,
+      avatar: self.usr.avatar
+    });
+  });
+
   socket.on('patch', function(message) {
     var patch = message.patch;
     var patches = diff.patch_fromText(patch);
@@ -42,8 +51,7 @@ SyncService.prototype.sendMessage = function(socket, messageName, message) {
 function startSync(msg, socket) {
   cache.get(msg.fileid, function(file) {
     var syncService = new SyncService(file, msg);
-    syncService.addClient(msg.username, socket);
-
+    syncService.addClient(socket);
     cache.set(msg.fileid, syncService);
   });
 }
@@ -52,7 +60,7 @@ function startSync(msg, socket) {
 module.exports = function(io) {
   var serverIO = io.of('/file-sync');
   serverIO.on('connection', function(socket) {
-    socket.on('editting', function(msg) {
+    socket.on('editor-join', function(msg) {
       startSync(msg, socket);
     });
   });

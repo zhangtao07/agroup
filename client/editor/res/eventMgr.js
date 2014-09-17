@@ -314,10 +314,7 @@ define([
           var url = window.location.href.replace(/(.*\/+).*/,'$1') + fileid;
           $.post(url, function(data) {
               // Call onReady listeners
-              onReady({
-                  title: data.title,
-                  content: data.content
-              },url);
+              onReady(data,url);
           });
         }else{
             onReady();
