@@ -1,21 +1,21 @@
 'use strict';
 
-describe('Controller: IndexCtrl', function() {
+describe('Controller: GroupCtrl', function () {
 
   // load the controller's module
   beforeEach(module('agroupApp'));
 
-  var IndexCtrl, scope;
+  var GroupCtrl, scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    IndexCtrl = $controller('IndexCtrl', {
+    GroupCtrl = $controller('GroupCtrl', {
       $scope: scope
     });
   }));
 
-  it('should ...', function() {
+  it('should ...', function () {
     expect(1).toEqual(1);
   });
 });

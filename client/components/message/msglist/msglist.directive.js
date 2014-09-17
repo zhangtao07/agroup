@@ -4,7 +4,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket',
   function($http, socket) {
 
     return {
-      templateUrl: 'app/message/msglist/msglist.html',
+      templateUrl: 'components/message/msglist/msglist.html',
       restrict: 'EA',
 
       link: function(scope, element, attrs) {
