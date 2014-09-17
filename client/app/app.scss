@@ -3,7 +3,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 
 @import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
 @import 'font-awesome/scss/font-awesome';
-@import '../assets/sass/flex.scss';
+@import '../assets/less/less.scss';
 
 /**
  * App-wide Styles
@@ -37,6 +37,8 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 }
 // Component styles are injected through grunt
 // injector
+@import 'access/signin/signin.scss';
+@import 'access/signup/signup.scss';
 @import 'block/commonAside/commonAside.scss';
 @import 'block/commonFooter/commonFooter.scss';
 @import 'block/commonHeader/commonHeader.scss';

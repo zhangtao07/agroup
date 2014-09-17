@@ -20,13 +20,8 @@
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
-  <link rel="stylesheet" href="assets/css/animate.css">
-  <link rel="stylesheet" href="assets/css/simple-line-icons.css">
-  <link rel="stylesheet" href="assets/css/font.css">
-  <link rel="stylesheet" href="app/less.css">
   <link rel="stylesheet" href="app/app.css">
   <!-- injector:css -->
-  <link rel="stylesheet" href="app/less.css">
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
@@ -60,9 +55,15 @@
 <script src="assets/js/ui-validate.js"></script>
 <script src="socket.io-client/socket.io.js"></script>
 <!-- endbuild -->
+
 <!-- build:js({.tmp,client}) app/app.js -->
 <script src="app/app.js"></script>
 <!-- injector:js -->
+<script src="app/access/access.js"></script>
+<script src="app/access/signin/signin.controller.js"></script>
+<script src="app/access/signin/signin.js"></script>
+<script src="app/access/signup/signup.controller.js"></script>
+<script src="app/access/signup/signup.js"></script>
 <script src="app/block/commonAside/commonAside.directive.js"></script>
 <script src="app/block/commonFooter/commonFooter.directive.js"></script>
 <script src="app/block/commonHeader/commonHeader.directive.js"></script>
@@ -82,8 +83,9 @@
 <script src="components/mongoose-error/mongoose-error.directive.js"></script>
 <script src="components/socket/socket.service.js"></script>
 <!-- endinjector -->
+<script src="assets/js/directives.js"></script>
 <!-- endbuild -->
 
-<script src="assets/js/directives.js"></script>
+
 </body>
 </html>
