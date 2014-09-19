@@ -26,13 +26,13 @@ define([
       fileMgr.selectFile(fileDesc);
       storage.synclist = storage.synclist + gf + ';';
       storage[gf] = fileDesc.fileIndex;
-      window.fileDesc = fileDesc;
+      //window.fileDesc = fileDesc;
     } else {
       //从lostorage获取已有文件
       var fd = fileSystem[storage[gf]];
       fd.title = file.title;
       fd.content = file.content;
-      window.fd = fd;
+      //window.fd = fd;
       fileMgr.selectFile(fd);
     }
   };

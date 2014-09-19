@@ -24,7 +24,6 @@ function findPath(db, fileid, cb) {
     file_id: fileid
   },1,['updateDate','Z'], function(err, file) {
     if (err) throw err;
-    console.log(file[0].filepath);
     var filepath = file[0] ? file[0].filepath : path.join(__dirname, '../../.tmp/test.md');
     var exists = fs.existsSync(filepath);
     if (!exists) {

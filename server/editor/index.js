@@ -16,17 +16,14 @@ router.post('/:fileid', function(req, res) {
   var fileid = req.params.fileid;
   cache.get(fileid, function(file) {
 
-    //if ('session' in req && 'user' in req.session) {
-    console.log(req.session.user);
-    //}
-
     if (!file) {
       res.status(200).send('file not found');
     } else {
       res.status(200).json({
+        fileid: fileid,
         title: 'AGroup 测试文档',
         content: file,
-        user: req.session && req.session.user
+        user: req.session.user || {}
       });
     }
 

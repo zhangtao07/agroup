@@ -6,7 +6,7 @@ module.exports = function(orm, db) {
     id: { type: 'serial', key: true },
     name: String,
     email: String,
+    avatar: String,
     role: { type: 'text', 'size': 20, defaultValue: 'user'}
-
   });
 }

@@ -426,7 +426,8 @@ define([
             end: value.length - endOffset
         };
       }
-      function syncValue(value) {
+
+      function syncValue(value,user) {
         var startOffset = diffMatchPatch.diff_commonPrefix(textContent, value);
         if (startOffset === textContent.length) {
             startOffset--;
@@ -444,21 +445,42 @@ define([
         range.insertNode(st);//;document.createTextNode(replacement));
         range.detach();
         var offset = $(st).position();
-        window.st = st;
-        $cursorElt.css({
-          top: offset.top ,//- $inputOffset.top,
-          left: offset.left,
-          opacity: 1
-        });
-        $avatarElt.css({
-          top: offset.top ,//- $inputOffset.top,
-          opacity: 1
-        });
+        updateCursor.call(users[user.id],offset.top,offset.left);
 
         return {
             start: startOffset,
             end: value.length - endOffset
         };
+
+      }
+
+      function updateCursor(top,left){
+        this.$cursorElt.css({
+          top: top ,//- $inputOffset.top,
+          left: left,
+          opacity: 1
+        });
+        this.$avatarElt.css({
+          top: top ,//- $inputOffset.top,
+          opacity: 1
+        });
+      }
+
+      var users = {};
+      editor.addUser = addUser;
+      function addUser(user){
+        var usr = users[user.id] = {};
+        usr.$cursorElt = $(crel('span',{ class:"cursor-helper" })).appendTo($inputElt);
+        usr.$avatarElt = $(crel('img',{ class:'avatar-helper', src: user.avatar })).appendTo($inputElt);
+      }
+
+      editor.removeUser = removeUser;
+      function removeUser(user){
+        var id = user.id;
+        if(!users[id]){return;}
+        users[id].$cursorElt.remove();
+        users[id].$avatarElt.remove();
+        delete users[id];
       }
 
 
@@ -520,18 +542,17 @@ define([
         textContent = value;
       }
 
-      function svnw(value){
-        syncValue(value);
+
+      editor.setValueNoWatch = setValueNoWatch;
+      editor.syncValueNoWatch = function (value,user) {
+        syncValue(value,user);
         fileDesc.content = value;
         textContent = value;
         eventMgr.onContentSynced(fileDesc, value);
         //pagedownEditor.refreshPreview();
         refreshPreviewLater();
-        checkContentChange();
+        //checkContentChange();
       }
-
-      editor.setValueNoWatch = setValueNoWatch;
-      editor.syncValueNoWatch = svnw;
 
       function getValue() {
         return textContent;
@@ -814,8 +835,6 @@ define([
         marginElt = inputElt.querySelector('.editor-margin');
         $marginElt = $(marginElt);
         previewElt = document.querySelector('.preview-container');
-        $cursorElt = $(crel('span',{ class:"cursor-helper" })).appendTo($inputElt);
-        $avatarElt = $(crel('img',{ class:'avatar-helper', src:'res/img/avatar.jpg'})).appendTo($inputElt);
         $inputOffset = $contentElt.offset();
 
         $inputElt.addClass(settings.editorFontClass);
