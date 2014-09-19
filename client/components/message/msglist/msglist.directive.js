@@ -7,13 +7,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'groupAPI',
       templateUrl: 'components/message/msglist/msglist.html',
       restrict: 'EA',
       link: function(scope, element, attrs) {
-//        var template = angular.element(document.createElement('uploadpanel'));
-//        template.attr("test","asdas");
-//        var el = $compile( template )( scope , function(cloned, scope){
-//          debugger;
-//        });
-//        angular.element(document.body).append(el);
-//        debugger;
+
         scope.uploadpanel = {}
         attrs.$observe('group', function(group) {
           group = JSON.parse(group);
