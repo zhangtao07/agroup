@@ -5,6 +5,7 @@ var app = angular.module('agroupApp', [
     'ngStorage',
     'pascalprecht.translate',
     'ngCookies',
+    'ngAnimate',
     'ngResource',
     'ngSanitize',
     'btford.socket-io',
@@ -15,23 +16,14 @@ var app = angular.module('agroupApp', [
     'ui.router',
     'ui.bootstrap',
     'app.directives'
-
-  ]).run(
-    [ '$rootScope','$http',
-      function($rootScope,$http) {
-        $rootScope.__user = null;
-        $rootScope.__login = function() {
-          if(this.__user == null){
-            $http.get('/api/user/me').success(function(result) {
-              if ('name' in result) {
-                $rootScope.user = result;
-              }
-            });
-          }
-        }
-//        $rootScope.__login();
-
-      }]).run(
+  ]).config(["$provide", function ($provide) {
+    $provide.value("apiRoot","");
+  }]).run(['$rootScope','userAPI','$q',function($rootScope,userAPI,$q){
+    $q.when(userAPI.getMe()).then(function(obj){
+      $rootScope.__user = obj.data.data;
+//      $rootScope.$apply();
+    });
+  }]).run(
     [ '$rootScope', '$state', '$stateParams', '$window', '$localStorage', '$translate',
       function($rootScope, $state, $stateParams, $window, $localStorage, $translate) {
         // add 'ie' classes to html
@@ -100,10 +92,12 @@ var app = angular.module('agroupApp', [
   )
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
+      $urlRouterProvider
+        .otherwise('/group/Fex讨论组');
 
-//      $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
 
-
+      $httpProvider.interceptors.push('authHttpResponseInterceptor');
     }).config(['$translateProvider', function($translateProvider) {
 
       // Register a loader for the static files

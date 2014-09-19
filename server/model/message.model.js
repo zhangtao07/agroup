@@ -59,7 +59,7 @@ module.exports = function(orm, db) {
 
           return {
             id: this._id,
-            avartar: 'api/image/avartar/' + this.user.id,
+            avartar: 'api/user/avatar/' + this.user.id,
             nickname: this.user.name,
             time: ago(this.date),
             content: contentObj.content,

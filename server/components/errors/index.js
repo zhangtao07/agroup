@@ -4,6 +4,10 @@
 
 'use strict';
 
+var messages = {
+  401:"请先登录"
+}
+
 module.exports[404] = function pageNotFound(req, res) {
   var viewFilePath = '404';
   var statusCode = 404;
@@ -20,3 +24,11 @@ module.exports[404] = function pageNotFound(req, res) {
     res.render(viewFilePath);
   });
 };
+
+module.exports[401] = function noAuth(req,res){
+  res.status(401);
+  res.jsonp({
+    err:401,
+    message:messages[401]
+  });
+}

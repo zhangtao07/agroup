@@ -1,6 +1,8 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('SigninCtrl', function ($scope) {
-    $scope.message = 'Hello';
-  });
+  .controller('SigninCtrl', ['userAPI','$scope',function (userAPI,$scope) {
+    $scope.login = function(){
+
+    };
+  }]);

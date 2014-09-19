@@ -28,15 +28,16 @@
 
 
 <div class="vbox">
+
     <div class="b-b b-light" style="margin: 10px 0;">
         <div>
-            <a class="pull-left thumb-sm avatar"><img src="img/a6.jpg" alt="..."></a>
+            <a class="pull-left thumb-sm avatar"><img ng-src="{{__user.avatar}}" alt="..."></a>
             <div class="m-l-xxl">
                 <form class="m-b-none ng-pristine ng-valid" _lpchecked="1">
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" placeholder="Input your comment here">
+                        <input type="text" class="form-control input-lg" placeholder="发送消息给">
               <span class="input-group-btn">
-                <button class="btn btn-info btn-lg" type="button">POST</button>
+                <button class="btn btn-info btn-lg" type="button">发送</button>
               </span>
                     </div>
                 </form>
@@ -53,4 +54,5 @@
 
 
 </div>
-
+<dropzone on-drop="onDrop(files)"></dropzone>
+<uploadpanel control="uploadpanel"></uploadpanel>

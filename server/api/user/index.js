@@ -4,9 +4,17 @@ var express = require('express');
 
 var router = express.Router();
 
+var extend = require('util')._extend;
+
 router.get('/me', function(req, res) {
   if ('session' in req && 'user' in req.session) {
-    res.json(req.session.user);
+    var user = req.session.user;
+    res.jsonp({
+      err:0,
+      data:extend(user,{
+        avatar:"api/user/avatar/"+user.id
+      })
+    });
   } else {
     res.json({});
   }

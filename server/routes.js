@@ -9,6 +9,14 @@ var config = require("./config/environment");
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/*',function(req,res,next){
+    if(!req.session.user){
+       errors[401](req,res);
+    }else{
+      next();
+    }
+
+  });
   app.use('/api/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
@@ -27,6 +35,7 @@ module.exports = function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get(function(req, res) {
+      console.info("send");
       res.sendfile(app.get('appPath') + '/index.html');
     });
 };
