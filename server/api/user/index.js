@@ -12,7 +12,7 @@ router.get('/me', function(req, res) {
     res.jsonp({
       err:0,
       data:extend(user,{
-        avatar:"api/user/avatar/"+user.id
+        avatar:"/api/user/avatar/"+user.id
       })
     });
   } else {

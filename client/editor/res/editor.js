@@ -1417,9 +1417,9 @@ define([
     insertBeforeSection = _.first(rightSections);
     sectionsToRemove = sectionList.slice(leftIndex, sectionList.length + rightIndex);
     sectionList = leftSections.concat(modifiedSections).concat(rightSections);
-    console.log('modifiedSections',modifiedSections);
-    console.log('insertBeforeSection',insertBeforeSection);
-    console.log('sectionsToRemove',sectionsToRemove);
+    //console.log('modifiedSections',modifiedSections);
+    //console.log('insertBeforeSection',insertBeforeSection);
+    //console.log('sectionsToRemove',sectionsToRemove);
     return {
       m: modifiedSections,
       r: sectionsToRemove,
