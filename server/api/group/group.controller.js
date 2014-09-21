@@ -2,9 +2,11 @@
 
 
 // Get list of groups
-exports.index = function(req, res) {
-  req.models.group.one(function(err, group) {
-    console.info(group);
+exports.getGroupByName = function(req, res) {
+  var groupName = req.query.name;
+  req.models.group.one({
+    name:groupName
+  },function(err,group){
     if (err) {
       return handleError(res, err);
     }
@@ -13,6 +15,7 @@ exports.index = function(req, res) {
       data: group
     });
   });
+  
 };
 
 exports.create = function(req,res){

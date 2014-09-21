@@ -1,0 +1,81 @@
+
+uploadpanel{
+
+
+  i.pull-right,i.icon-close{
+    cursor: pointer;
+  }
+
+  .panel.fold{
+    height:43px;
+  }
+
+  .panel.ng-hide{
+    transform: translateX(100%) translateY(0px);
+  }
+  .panel{
+    transition: height 500ms ease,transform ease 500ms;
+    position: fixed;
+    bottom:0;
+    right:0;
+    width: 500px;
+    height: 300px;
+    border-radius: 2px;
+    border: 1px solid #000;
+    box-shadow: 0 5px 23px rgba(0, 0, 0, 1);
+    margin-bottom:0;
+  }
+  .file-item{
+    height:42px;
+    position: relative;
+    padding:10px 0;
+  }
+
+  .file-process{
+    @include match_parent();
+    background: #BDD6F5;
+  }
+  .file-cell{
+    @include match_parent();
+    width:100%;
+    padding:10px 0;
+    color:#000;
+    .filename{
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      float: left;
+      width: 40%;
+      padding:0 10px;
+    }
+    .filesize{
+
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      float: left;
+      width: 20%;
+    }
+    .filespeed{
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      float: left;
+      width: 30%;
+    }
+  }
+
+  .filetype{
+    margin-right: 10px;
+  }
+
+  .panel-body{
+    padding:0;
+    overflow: auto;
+  }
+  .panel-heading{
+    i{
+      font-size: 20px;
+    }
+  }
+}

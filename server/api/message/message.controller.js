@@ -55,7 +55,6 @@ exports.upload = function(req, res) {
         'Connection': 'close'
       });
       res.end("ok");
-
     });
 
 

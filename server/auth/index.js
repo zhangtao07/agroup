@@ -23,7 +23,7 @@ if (config.auth === 'uuap') {
 
 router.use('/logout', function(req, res, next) {
   delete req.session.user;
-  res.redirect('/');
+  res.redirect(req.query.url||"/")
 });
 
 module.exports = router;
