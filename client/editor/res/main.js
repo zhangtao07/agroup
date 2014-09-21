@@ -12,7 +12,7 @@ requirejs.config({
         main: 'less'
     }],
     paths: {
-        jquery: 'bower-libs/jquery/jquery',
+        jquery: 'bower-libs/jquery/dist/jquery',
         underscore: 'bower-libs/underscore/underscore',
         crel: 'bower-libs/crel/crel',
         jgrowl: 'bower-libs/jgrowl/jquery.jgrowl',

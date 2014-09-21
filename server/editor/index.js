@@ -8,6 +8,11 @@ var cache = require('./cache');
 router.get('/viewer', function(req, res) {
   res.render('viewer.html');
 });
+
+router.get('/merge', function(req, res) {
+  res.render('merge.html');
+});
+
 router.get('/*', function(req, res) {
   res.render('editor.html');
 });
