@@ -87,12 +87,14 @@ define([
 
     var sectionCounter = 0;
     function parseFileContent(fileDescParam, content) {
-        if(fileDescParam !== fileDesc) {
-            return;
-        }
+        //if(fileDescParam !== fileDesc) {
+            //return;
+        //}
+        fileDesc = fileDescParam;
         var frontMatter = (fileDesc.frontMatter || {})._frontMatter || '';
         var text = content.substring(frontMatter.length);
         var tmpText = text + "\n\n";
+        var sectionList = [];
         function addSection(startOffset, endOffset) {
             var sectionText = tmpText.substring(offset, endOffset);
             sectionList.push({
@@ -102,7 +104,6 @@ define([
             });
             frontMatter = '';
         }
-        sectionList = [];
         var offset = 0;
         // Look for delimiters
         tmpText.replace(regexp, function(match, matchOffset) {
@@ -117,12 +118,14 @@ define([
 
 
     function syncFileContent(fileDescParam, content) {
-        if(fileDescParam !== fileDesc) {
-            return;
-        }
+        //if(fileDescParam !== fileDesc) {
+            //return;
+        //}
+        var fileDesc = fileDescParam;
         var frontMatter = (fileDesc.frontMatter || {})._frontMatter || '';
         var text = content.substring(frontMatter.length);
         var tmpText = text + "\n\n";
+        var sectionList = [];
         function addSection(startOffset, endOffset) {
             var sectionText = tmpText.substring(offset, endOffset);
             sectionList.push({
@@ -132,7 +135,6 @@ define([
             });
             frontMatter = '';
         }
-        sectionList = [];
         var offset = 0;
         // Look for delimiters
         tmpText.replace(regexp, function(match, matchOffset) {

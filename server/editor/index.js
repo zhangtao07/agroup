@@ -16,16 +16,12 @@ router.post('/:fileid', function(req, res) {
   var fileid = req.params.fileid;
   cache.get(fileid, function(file) {
 
-    if (!file) {
-      res.status(200).send('file not found');
-    } else {
-      res.status(200).json({
-        fileid: fileid,
-        title: 'AGroup 测试文档',
-        content: file,
-        user: req.session.user || {}
-      });
-    }
+    res.status(200).json({
+      fileid: fileid,
+      title: 'AGroup 测试文档',
+      content: file || 'file not found',
+      user: req.session.user || {}
+    });
 
   });
 
