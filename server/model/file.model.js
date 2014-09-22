@@ -4,7 +4,8 @@
 module.exports = function(orm, db) {
   var File = db.define('file', {
     id: { type: 'serial', key: true },
-    name:String
+    name:String,
+    group_id:String
 
 
   });

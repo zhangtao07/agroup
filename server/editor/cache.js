@@ -22,12 +22,12 @@ function findPath(db, fileid, cb) {
   var fv = db.models.fileversion;
   fv.find({
     file_id: fileid
-  },1,['updateDate','Z'], function(err, file) {
+  }, 1, ['updateDate', 'Z'], function(err, file) {
     if (err) throw err;
-    var filepath = file[0] ? file[0].filepath : path.join(__dirname, '../../.tmp/test.md');
+    var filepath = file[0] ? file[0].filepath : path.join(__dirname, '../../.tmp/'+ fileid + '.md');
     var exists = fs.existsSync(filepath);
     if (!exists) {
-      fs.writeFileSync(filepath, '> 每次grunt serve,.tmp目录下文件会被清空,测试文档路径:.tmp/test.md');
+      fs.writeFileSync(filepath, '\n\nAGroup 一个伟大项目的开始 \n====');
     }
     pathdb[fileid] = filepath;
     return cb && cb(null, filepath);
@@ -57,12 +57,14 @@ function getPath(fileid, cb) {
 function saveToDB(file, cb) {
   getDB(function(err, db) {
     var fv = db.models.fileversion;
-    fv.find({ filepath:file.filepath },1,function (err, exists) {
-      if(exists && exists.length){
+    fv.find({
+      filepath: file.filepath
+    }, 1, function(err, exists) {
+      if (exists && exists.length) {
         exists[0].updateDate = new Date();
         exists[0].save()
-      }else{
-        fv.create([file],function(err,items){
+      } else {
+        fv.create([file], function(err, items) {
           cb(err, file);
         });
       }
@@ -72,7 +74,7 @@ function saveToDB(file, cb) {
 
 function saveToDisk(file, content, cb) {
   fs.writeFile(file.filepath, content, 'utf8', function(err) {
-    fs.stat(file.filepath, function(err,stat) {
+    fs.stat(file.filepath, function(err, stat) {
       file.size = stat.blksize;
       cb(null, file);
     });
@@ -89,6 +91,7 @@ exports.save = function(fileid) {
   if (file && file.content) {
     getPath(fileid, function(filepath) {
       async.waterfall([
+
         function(next) {
           var filename = fileid + '-' + md5(file.content) + '.md';
           var fv = {
@@ -115,15 +118,45 @@ exports.save = function(fileid) {
 exports.get = function(fileid, cb) {
   var file = cache[fileid];
   if (file) {
-    console.log(file.content);
     return cb && cb(file.content);
   } else {
     getPath(fileid, function(filepath) {
-      fs.readFile(filepath, 'utf8',function(err,f){
-        console.log(f);
-        if(err) throw err;
+      fs.readFile(filepath, 'utf8', function(err, f) {
+        if (err) throw err;
         cb(f);
       });
     });
   }
+};
+
+
+exports.createFile = function(group, cb) {
+  async.waterfall(
+    [
+      getDB,
+      function(db, next) {
+        var file = db.models.file;
+        file.create([{
+          name: new Date().toLocaleDateString(),
+          group_id: group
+        }], function(err, items) {
+          cb(err,items[0].id);
+        });
+      }
+    ]);
+};
+
+exports.checkFile = function(fileid, cb) {
+  async.waterfall(
+    [
+      getDB,
+      function(db, next) {
+        var file = db.models.file;
+        file.exists({
+          id: fileid
+        }, function(err, exists) {
+          cb(err,exists);
+        });
+      }
+    ]);
 };
