@@ -11,7 +11,9 @@
       "components" : {
         "COMPONENTS" : "资源",
         "MDS" : "Markdown",
-        "FILES" : "文件"
+        "FILES" : "文件",
+        "TASKS": "任务",
+        "LINKS": "链接"
       },
       "your_stuff" : {
         "YOUR_STUFF": "Your Stuff",

@@ -11,7 +11,9 @@
     "components" : {
       "COMPONENTS" : "Components",
       "MDS" : "Markdowns",
-      "FILES" : "Files"
+      "FILES" : "Files",
+      "TASKS": "Tasks",
+      "LINKS": "Links"
     },
     "your_stuff" : {
       "YOUR_STUFF": "Your Stuff",
