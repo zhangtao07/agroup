@@ -27,7 +27,7 @@ function findPath(db, fileid, cb) {
     var filepath = file[0] ? file[0].filepath : path.join(__dirname, '../../.tmp/test.md');
     var exists = fs.existsSync(filepath);
     if (!exists) {
-      fs.writeFileSync(filepath, '>文件不存在,测试文档:.tmp/test.md');
+      fs.writeFileSync(filepath, '> 每次grunt serve,.tmp目录下文件会被清空,测试文档路径:.tmp/test.md');
     }
     pathdb[fileid] = filepath;
     return cb && cb(null, filepath);
@@ -115,12 +115,15 @@ exports.save = function(fileid) {
 exports.get = function(fileid, cb) {
   var file = cache[fileid];
   if (file) {
+    console.log(file.content);
     return cb && cb(file.content);
   } else {
-
     getPath(fileid, function(filepath) {
-      var f = fs.readFileSync(filepath, 'utf8');
-      cb(f);
+      fs.readFile(filepath, 'utf8',function(err,f){
+        console.log(f);
+        if(err) throw err;
+        cb(f);
+      });
     });
   }
 };

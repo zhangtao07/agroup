@@ -572,7 +572,7 @@ define([
                 }
 
                 //$('.modal-header').append('<a class="dialog-header-message" href="https://github.com/benweet/stackedit/issues/385" target="_blank">Give your feedback <i class="icon-megaphone"></i></a>');
-                checkPayment();
+                //checkPayment();
             });
 
             return core;

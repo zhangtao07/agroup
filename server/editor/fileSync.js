@@ -1,13 +1,13 @@
 var cache = require('./cache');
 var diff_match_patch = require('googlediff');
 var diff = new diff_match_patch();
-var id = 0;
+var id = 1000;
 
 function SyncService(content, msg) {
   this.content = content;
   this.fileid = msg.fileid;
   this.user = msg.user;
-  this.user.id = id++;
+  this.user.id = this.user.id || (id++).toString(36);
 }
 
 SyncService.prototype.addClient = function(socket) {

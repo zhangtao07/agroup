@@ -124,4 +124,4 @@ AGroup 针对内部的特点，采用以下几个不同的思路：
 * 团队功能定制、主题定制
 * 截图 OCR
 * Markdown 转 docx（pandoc）
-* 内容推荐（PredictionIO）
+* 内容推荐（PredictionIO）、相关文档

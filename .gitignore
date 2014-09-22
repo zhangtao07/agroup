@@ -10,4 +10,6 @@ dist
 /__test
 res-min
 bower-libs
-
+bower_components
+test.html
+.DS_Store

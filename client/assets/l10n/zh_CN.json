@@ -1,0 +1,32 @@
+{
+
+"header" : {
+  "navbar" : {
+    "UPLOAD" : "上传",
+    "new" : {
+      "NEW" : "新建",
+      "PROJECT" : "项目",
+      "TASK" : "任务",
+      "USER" : "用户",
+      "EMAIL" : "邮件"
+    },
+    "NOTIFICATIONS" : "Notifications"
+  }
+},
+  "aside" : {
+    "nav" : {
+      "GROUPS" : "群组列表",
+      "components" : {
+        "COMPONENTS" : "Components",
+        "DOCS" : "DOCS",
+        "FILES" : "Files"
+      },
+      "your_stuff" : {
+        "YOUR_STUFF": "Your Stuff",
+        "PROFILE" : "Profile",
+        "DOCUMENTS" : "Documents"
+      }
+    }
+  }
+
+}

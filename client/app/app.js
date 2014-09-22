@@ -34,8 +34,8 @@ var app = angular.module('agroupApp', [
 
         // config
         $rootScope.app = {
-          name: 'Angulr',
-          version: '1.1.3',
+          name: 'Agroup',
+          version: '0.1',
           // for chart colors
           color: {
             primary: '#7266ba',
@@ -56,7 +56,7 @@ var app = angular.module('agroupApp', [
             asideFixed: false,
             asideFolded: false
           }
-        }
+        };
 
         // save settings to local storage
         if (angular.isDefined($localStorage.settings)) {
@@ -70,8 +70,8 @@ var app = angular.module('agroupApp', [
 
         // angular translate
         $rootScope.lang = { isopen: false };
-        $rootScope.langs = {en: 'English', de_DE: 'German', it_IT: 'Italian'};
-        $rootScope.selectLang = $rootScope.langs[$translate.proposedLanguage()] || "English";
+        $rootScope.langs = {en: 'English', zh_CN: '中文'};
+        $rootScope.selectLang = $rootScope.langs[$translate.proposedLanguage()] || "中文";
         $rootScope.setLang = function(langKey, $event) {
           // set the current lang
           $rootScope.selectLang = $rootScope.langs[langKey];

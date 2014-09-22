@@ -27,6 +27,7 @@ define([
         var results = diff.patch_apply(patches, editor.getValue());
         var content = results[0];
         editor.syncValueNoWatch(content, message.user);
+        //editor.setValueNoWatch(content);
       });
 
       eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
@@ -49,7 +50,7 @@ define([
             fileid: decodeURI(fileid),
             user: {
               name: username,
-            avatar: file.user.avatar ? file.user.avatar : '/assets/images/no-headshot.png'
+              avatar: file.user.avatar ? file.user.avatar : '/assets/images/avatar.jpg'
             }
           });
         }
