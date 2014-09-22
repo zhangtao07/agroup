@@ -2,30 +2,65 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-
+var orm = require('orm');
 var observe = require('../../components/group.observe');
 var upload = require('./upload');
+var Q = require("q");
 exports.list = function(req, res) {
 
   var groupId = req.query.groupId;
 
-  req.models.message.find({
-    group_id: groupId
+  var date = req.query.timestamp ? new Date(req.query.timestamp):new Date();
 
-  }, function(err, messages) {
-    if(err){
-      console.info(err);
-    }
-    var datas = [];
-    if (messages) {
-      messages.forEach(function(message) {
-        datas.push(message.getMessage());
-      });
-    }
-    return res.status(200).jsonp({
-      err: 0,
-      data: datas
+  var offset = req.query.offset|| 0;
+
+  var limit = req.query.limit || 10;
+
+  function getCount(){
+    var result = Q.defer();
+    req.models.message.count({
+      group_id: groupId,
+      date:orm.lte(date)
+    },function(err,count){
+      if(err){
+        result.reject(err);
+      }else{
+        result.resolve(count);
+      }
+    })
+    return result.promise;
+  }
+
+  function getData(){
+    var result = Q.defer();
+    req.models.message.find({
+      group_id: groupId,
+      date: orm.lte(date)
+    },{ offset: offset },limit,['date','Z'], function(err, messages) {
+      if(err){
+        result.reject(err);
+      }else{
+        result.resolve(messages);
+      }
     });
+    return result.promise;
+  }
+
+  Q.all([getCount(),getData()]).spread(function (count,messages) {
+    var datas = [];
+    messages.forEach(function(message) {
+      datas.push(message.getMessage());
+    });
+    res.status(200).jsonp({
+      err: 0,
+      data: {
+        list:datas,
+        timestamp:date.getTime(),
+        hasMore:offset<count?true:false
+      }
+    });
+  },function(err1,err2){
+    console.info(err1,err2);
   });
 
 

@@ -1,4 +1,4 @@
-<div class="panel" ng-class="{fold:fold}"  ng-init="fold=false;close=true" ng-hide="close">
+<div class="panel" ng-class="{fold:fold}"   ng-init="fold=false;close=true" ng-hide="close">
     <div class="vbox">
         <div class="panel-heading bg-info">
             <i class="icon-close pull-right" style="margin-left: 10px;" ng-click="close=true"></i>
@@ -7,18 +7,18 @@
             <b>上传进度</b>
             <span class="label bg-dange m-t-xs">{{(uploadItems | filter:filterComplete).length}}/{{uploadItems.length}}</span>
         </div>
-        <div class="panel-body row-row">
+        <div class="panel-body row-row" style="display: block;">
             <div class="upload-list">
                 <div class="file-item " ng-repeat="item in uploadItems">
                     <div class="file-process" ng-if="item.status=='uploading'"
                          ng-style="{width: item.percent + '%'}"></div>
                     <div class="file-cell">
-                        <div class="filename"><i class="fa fa-file-word-o filetype"></i> {{item.filename}}</div>
+                        <div class="filename"><i class="fa fa-file-word-o filetype text-info"></i> {{item.filename}}</div>
                         <div class="filesize">{{item.size}}</div>
                         <div class="filespeed">
                             <span ng-if="item.status=='uploading'">{{item.percent}}%({{item.speed}})</span>
                             <span ng-if="item.status=='cancel'">已取消</span>
-                            <i ng-if="item.status=='complete'" class="glyphicon glyphicon-ok"></i>
+                            <i ng-if="item.status=='complete'" class="glyphicon glyphicon-ok text-info"></i>
                         </div>
                         <div class="fileclose" ng-if="item.status=='uploading'"><i class="icon-close"
                                                                                    ng-click="item.cancel()"></i></div>

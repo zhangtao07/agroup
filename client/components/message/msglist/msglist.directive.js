@@ -1,33 +1,61 @@
 'use strict';
 
-angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'groupAPI', 'messageAPI', '$compile',
-  function($http, socket, groupAPI, messageAPI, $compile) {
+angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI',
+
+  function($http, socket, messageAPI) {
+
 
     return {
       templateUrl: 'components/message/msglist/msglist.html',
       restrict: 'EA',
       link: function(scope, element, attrs) {
-//        var template = angular.element(document.createElement('uploadpanel'));
-//        template.attr("test","asdas");
-//        var el = $compile( template )( scope , function(cloned, scope){
-//          debugger;
-//        });
-//        angular.element(document.body).append(el);
-//        debugger;
+        scope.msglist = [];
+        scope.hasMore = false;
+        var loadParams;
+        scope.loadList = function(groupId,refresh) {
+          debugger;
+
+          if (refresh) {
+            loadParams = {
+              offset: 0,
+              datastamp: null
+            }
+          }
+          if(!groupId){
+            groupId = loadParams.groupId;
+          }else{
+            loadParams.groupId = groupId;
+          }
+          messageAPI.getList(groupId,loadParams.offset, loadParams.datastamp).success(function(res) {
+            var data = res.data;
+            scope.msglist = scope.msglist.concat(scope.msglist, data.list);
+            scope.hasMore = data.hasMore;
+            loadParams.datastamp = data.datastamp;
+            loadParams.offset++;
+          });
+
+        }
+
         scope.uploadpanel = {}
         attrs.$observe('group', function(group) {
-          group = JSON.parse(group);
+          try {
+            group = JSON.parse(group);
+          } catch (e) {
+            return;
+          }
+
+
 
 
           var groupId = group.id;
-
+          scope.loadList(groupId,true);
           scope.onDrop = function(files) {
             files.forEach(function(file) {
-              scope.uploadpanel.addFile(file, function(file,send) {
+              scope.uploadpanel.addFile(file, function(file, send) {
                 var formData = new FormData();
                 formData.append('groupId', groupId);
                 formData.append('file', file);
-                send('api/message/upload',formData);
+                send('api/message/upload', formData);
               });
             });
           }
@@ -35,14 +63,16 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'groupAPI',
 
           socket.joinGroup(groupId, function(data) {
 
-            scope.msglist.push(JSON.parse(data));
+            scope.msglist.unshift(JSON.parse(data));
           });
 
-          $http.get('api/message/list?groupId=' + groupId).success(function(data, status) {
+          messageAPI.getList(groupId, null, 0, 20).
 
-            scope.msglist = data.data;
+            $http.get('api/message/list?groupId=' + groupId).success(function(data, status) {
+
+
 //            scope.$apply();
-          });
+            });
           scope.postText = '';
           scope.onPostMessage = function() {
             $http.post('api/message/post', {

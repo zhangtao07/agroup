@@ -32,10 +32,12 @@
     <div class="b-b b-light" style="margin: 10px 0;">
         <div>
             <a class="pull-left thumb-sm avatar"><img ng-src="{{__user.avatar}}" alt="..."></a>
+
             <div class="m-l-xxl">
-                <form class="m-b-none ng-pristine ng-valid" _lpchecked="1">
+                <form class="m-b-none ng-pristine ng-valid" _lpchecked="1" onsubmit="return false;"
+                      ng-submit="onPostMessage()">
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" placeholder="发送消息给">
+                        <input ng-model="postText" type="text" class="form-control input-lg" placeholder="发送消息给">
               <span class="input-group-btn">
                 <button class="btn btn-info btn-lg" type="button">发送</button>
               </span>
@@ -45,14 +47,16 @@
         </div>
     </div>
     <div class="row-row">
-        <div class="cell">
+        <div class="cell" infinite-scroll="loadList()" infinite-scroll-disabled="hasMore" infinite-scroll-immediate-check="false">
             <div class="m-b b-l m-l-md streamline">
                 <msgitem data="item" ng-repeat="item in msglist"></msgitem>
+                <div style="font-size: 30px;text-align: center;" ng-show="hasMore">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
+
             </div>
         </div>
     </div>
-
-
 </div>
 <dropzone on-drop="onDrop(files)"></dropzone>
-<uploadpanel control="uploadpanel"></uploadpanel>
+<uploadpanel control="uploadpanel" style="display: none;"></uploadpanel>
