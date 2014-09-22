@@ -5,7 +5,7 @@ var app = angular.module('agroupApp', [
     'ngStorage',
     'pascalprecht.translate',
     'ngCookies',
-    'ngAnimate',
+    'infinite-scroll',
     'ngResource',
     'ngSanitize',
     'btford.socket-io',
@@ -15,7 +15,8 @@ var app = angular.module('agroupApp', [
     'ui.validate',
     'ui.router',
     'ui.bootstrap',
-    'app.directives'
+    'app.directives',
+    'ngAnimate'
   ]).config(["$provide", function ($provide) {
     $provide.value("apiRoot","");
   }]).run(['$rootScope','userAPI','$q',function($rootScope,userAPI,$q){
