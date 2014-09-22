@@ -17,9 +17,11 @@ exports.list = function(req, res) {
       console.info(err);
     }
     var datas = [];
-    messages.forEach(function(message) {
-      datas.push(message.getMessage());
-    });
+    if (messages) {
+      messages.forEach(function(message) {
+        datas.push(message.getMessage());
+      });
+    }
     return res.status(200).jsonp({
       err: 0,
       data: datas
