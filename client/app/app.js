@@ -5,7 +5,7 @@ var app = angular.module('agroupApp', [
     'ngStorage',
     'pascalprecht.translate',
     'ngCookies',
-    'ngAnimate',
+    'infinite-scroll',
     'ngResource',
     'ngSanitize',
     'btford.socket-io',
@@ -15,7 +15,8 @@ var app = angular.module('agroupApp', [
     'ui.validate',
     'ui.router',
     'ui.bootstrap',
-    'app.directives'
+    'app.directives',
+    'ngAnimate'
   ]).config(["$provide", function ($provide) {
     $provide.value("apiRoot","");
   }]).run(['$rootScope','userAPI','$q',function($rootScope,userAPI,$q){
@@ -69,7 +70,7 @@ var app = angular.module('agroupApp', [
 
         // angular translate
         $rootScope.lang = { isopen: false };
-        $rootScope.langs = {en: 'English', zh_CN: '中文'};
+        $rootScope.langs = {zh_CN: '中文', en: 'English'};
         $rootScope.selectLang = $rootScope.langs[$translate.proposedLanguage()] || "中文";
         $rootScope.setLang = function(langKey, $event) {
           // set the current lang

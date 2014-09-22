@@ -37,6 +37,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
 //      scope.uploadItems = [];
       scope.methods = scope.control || {};
       scope.methods.addFile = function(file,onprepare) {
+        element.show();
         scope.close = false;
         scope.fold = false;
         var item = {

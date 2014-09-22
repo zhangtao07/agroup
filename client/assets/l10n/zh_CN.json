@@ -2,24 +2,18 @@
 
 "header" : {
   "navbar" : {
-    "UPLOAD" : "上传",
-    "new" : {
-      "NEW" : "新建",
-      "PROJECT" : "项目",
-      "TASK" : "任务",
-      "USER" : "用户",
-      "EMAIL" : "邮件"
-    },
-    "NOTIFICATIONS" : "Notifications"
+    "NOTIFICATIONS" : "通知"
   }
 },
   "aside" : {
     "nav" : {
-      "GROUPS" : "群组列表",
+      "GROUPS" : "群组",
       "components" : {
-        "COMPONENTS" : "Components",
-        "DOCS" : "DOCS",
-        "FILES" : "Files"
+        "COMPONENTS" : "资源",
+        "MDS" : "Markdown",
+        "FILES" : "文件",
+        "TASKS": "任务",
+        "LINKS": "链接"
       },
       "your_stuff" : {
         "YOUR_STUFF": "Your Stuff",
