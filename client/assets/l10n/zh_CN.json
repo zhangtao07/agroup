@@ -5,22 +5,18 @@
     "NOTIFICATIONS" : "通知"
   }
 },
-  "aside" : {
-    "nav" : {
-      "GROUPS" : "群组",
-      "components" : {
-        "COMPONENTS" : "资源",
-        "MDS" : "Markdown",
-        "FILES" : "文件",
-        "TASKS": "任务",
-        "LINKS": "链接"
-      },
-      "your_stuff" : {
-        "YOUR_STUFF": "Your Stuff",
-        "PROFILE" : "Profile",
-        "DOCUMENTS" : "Documents"
-      }
+
+"aside" : {
+  "nav" : {
+    "GROUPS" : "群组",
+    "components" : {
+      "COMPONENTS" : "资源",
+      "MDS" : "Markdown",
+      "FILES" : "文件",
+      "TASKS": "任务",
+      "LINKS": "链接"
     }
   }
+}
 
 }

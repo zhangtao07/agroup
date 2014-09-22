@@ -14,11 +14,6 @@
       "FILES" : "Files",
       "TASKS": "Tasks",
       "LINKS": "Links"
-    },
-    "your_stuff" : {
-      "YOUR_STUFF": "Your Stuff",
-      "PROFILE" : "Profile",
-      "DOCUMENTS" : "Documents"
     }
   }
 }
