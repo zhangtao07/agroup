@@ -2,14 +2,6 @@
 
 "header" : {
   "navbar" : {
-    "UPLOAD" : "Upload",
-    "new" : {
-      "NEW" : "New",
-      "PROJECT" : "Projects",
-      "TASK" : "Task",
-      "USER" : "User",
-      "EMAIL" : "Email"
-    },
     "NOTIFICATIONS" : "Notifications"
   }
 },
@@ -18,7 +10,7 @@
     "GROUPS" : "Groups",
     "components" : {
       "COMPONENTS" : "Components",
-      "DOCS" : "Docs",
+      "MDS" : "Markdowns",
       "FILES" : "Files"
     },
     "your_stuff" : {
