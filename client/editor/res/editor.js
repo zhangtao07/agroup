@@ -617,9 +617,6 @@ define([
   })();
   //setTimeout(testFn,3000);
 
-  eventMgr.addListener('onCursorCoordinates', function(x, y) {
-    console.log(x, y);
-  });
 
 
   function getValue() {
@@ -1055,12 +1052,10 @@ define([
         }
       })
       .on('compositionstart', function() {
-        console.log(isComposing);
         isComposing++;
       })
       .on('compositionend', function() {
         setTimeout(function() {
-          console.log(isComposing);
           isComposing--;
         }, 0);
       })
@@ -1235,11 +1230,6 @@ define([
     insertBeforeSection = _.first(rightSections);
     sectionsToRemove = sectionList.slice(leftIndex, sectionList.length + rightIndex);
 
-    console.log('leftSections',leftSections);
-    console.log('modifiedSections',modifiedSections);
-    console.log('rightSections',rightSections);
-    console.log('insertBeforeSection',insertBeforeSection);
-    console.log('sectionsToRemove', sectionsToRemove);
 
     sectionList = leftSections.concat(modifiedSections).concat(rightSections);
   }

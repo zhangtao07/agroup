@@ -101,14 +101,28 @@ exports.upload = function(req, res) {
 }
 
 
+function getURL(text){
+  var urlGroup;
+  if((urlGroup = /(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w\/#\%_\?=\.]+/.exec(text))){
+    return urlGroup[0];
+  }
+  return null;
+}
+
 exports.post = function(req, res) {
 
   var user = req.session.user;
 
   var groupId = req.body.groupId;
 
+  var message = req.body['message'];
+
+  var url = getLink()
+
+  
+
   req.models.message.create({
-    'content': req.body['message'],
+    'content':message,
     'type': req.body['type'],
     'user_id': user.id,
     'group_id': groupId,

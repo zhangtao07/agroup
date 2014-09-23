@@ -309,15 +309,16 @@ define([
             eventMgr.onEditorPopover();
         });
 
-        var fileid = window.location.href.replace(/.*\/+/,'');
+        var group = window.location.href.replace(/.*\/+(\w+)\?.*/,'$1');
+        var fileid = window.location.href.replace(/.*\?file=([\w]+).*/,'$1');
         if(fileid){
-          var url = window.location.href.replace(/(.*\/+).*/,'$1') + fileid;
+          var url = window.location.href.replace(/(.*\/+).*/,'$1') + group + '?file=' + fileid;
           $.post(url, function(data) {
               // Call onReady listeners
               onReady(data,url);
           });
         }else{
-            onReady();
+          onReady();
         }
     };
 

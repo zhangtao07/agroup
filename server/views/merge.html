@@ -1,0 +1,64 @@
+<!--
+This example demonstrates the minimum amount of code required to use Mergely.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Agroup Editor</title>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="Merge and Diff your documents with diff online and share"
+  />
+  <meta name="keywords" content="diff,merge,compare,jsdiff,comparison,difference,file,text,unix,patch,algorithm,saas,longest common subsequence"
+  />
+  <meta name="author" content="Jamie Peabody" />
+
+  <!-- Requires jQuery -->
+  <script src="res/bower-libs/jquery/dist/jquery.js" type="text/javascript"></script>
+
+  <!-- Requires CodeMirror -->
+  <script type="text/javascript" src="res/bower-libs/codemirror/lib/codemirror.js"></script>
+  <link type="text/css" rel="stylesheet" href="res/bower-libs/codemirror/lib/codemirror.css" />
+
+  <!-- Requires Mergely -->
+  <script type="text/javascript" src="res/bower-libs/mergely/mergely.js"></script>
+  <link type="text/css" rel="stylesheet" href="res/bower-libs/mergely/mergely.css" />
+
+  <script type="text/javascript">
+    $(document).ready(function()
+    {
+      $('#compare').mergely(
+      {
+        width: 'auto',
+        height: 800,
+        sidebar: false,
+        cmsettings:
+        {
+          readOnly: false,
+          lineWrapping: true
+        },
+        lhs: function(setValue)
+        {
+          setValue('the quick red fox\njumped over the hairy dog');
+        },
+        rhs: function(setValue)
+        {
+          setValue('the quick brown fox\njumped over the lazy dog');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <div id="mergely-resizer">
+    <div id="compare">
+    </div>
+  </div>
+
+</body>
+
+</html>

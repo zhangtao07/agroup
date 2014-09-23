@@ -10,7 +10,7 @@ define([
         path: '/socket.io-client'
       });
       var diff = new diff_match_patch();
-      var fileid = window.location.href.replace(/.*\/+/, '');
+      var fileid = window.location.href.replace(/.*\?file=([\w]+).*/,'$1');
 
 
       socket.on('server:clientJoin', function(user) {

@@ -2,14 +2,6 @@
 
 "header" : {
   "navbar" : {
-    "UPLOAD" : "Upload",
-    "new" : {
-      "NEW" : "New",
-      "PROJECT" : "Projects",
-      "TASK" : "Task",
-      "USER" : "User",
-      "EMAIL" : "Email"
-    },
     "NOTIFICATIONS" : "Notifications"
   }
 },
@@ -18,13 +10,10 @@
     "GROUPS" : "Groups",
     "components" : {
       "COMPONENTS" : "Components",
-      "DOCS" : "Docs",
-      "FILES" : "Files"
-    },
-    "your_stuff" : {
-      "YOUR_STUFF": "Your Stuff",
-      "PROFILE" : "Profile",
-      "DOCUMENTS" : "Documents"
+      "MDS" : "Markdowns",
+      "FILES" : "Files",
+      "TASKS": "Tasks",
+      "LINKS": "Links"
     }
   }
 }

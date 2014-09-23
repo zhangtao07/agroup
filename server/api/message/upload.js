@@ -128,7 +128,8 @@ module.exports = function(req, callback) {
         req.models.file.create({
           name:filename,
           group_id:req.body['groupId'],
-          user_id:req.session.user.id
+          user_id:req.session.user.id,
+          createDate:new Date()
         },function(err,file){
           upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id,req.body['groupId'], stat['size'], encoding, function(res) {
             result = res;
