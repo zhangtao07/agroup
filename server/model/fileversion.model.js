@@ -46,5 +46,14 @@ module.exports = function(orm, db) {
   Fileversion.hasOne('user', db.models.user, { required: true});
 
 
+  Fileversion.latestFile = function(cb){
+    //this.aggregate(['file_id']).groupBy('file_id').order('updateDate')
+      //.limit(3)
+      //.get(cb)
+    db.driver.execQuery("SELECT file_id FROM fileversion group by file_id order by updateDate DESC", function (err, data) {
+      cb(err,data);
+    })
+  };
+
 
 }

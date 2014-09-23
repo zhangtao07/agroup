@@ -6,7 +6,7 @@
         <div class="media">
           <span class="pull-left thumb-sm"><img ng-src="/api/user/avatar/{{ md.user }}" alt="..." class="img-circle"></span>
           <div class="media-body">
-            <div><a href="">Lauren Taylor</a></div>
+            <div><a href="">{{ md.user.name }}</a></div>
             <small class="text-muted">{{ md.updateDate | date: 'yyyy-MM-dd' }}</small>
           </div>
         </div>
