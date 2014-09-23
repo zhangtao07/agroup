@@ -62,7 +62,10 @@
     "temp": "latest",
     "underscore": "^1.7.0",
     "unirest": "^0.2.7",
-    "imagemagick":"latest"
+    "imagemagick":"latest",
+    "jsdom":"latest",
+    "iconv":"~2.1.4",
+    "request":"~2.44.0"
 
   },
   "devDependencies": {
