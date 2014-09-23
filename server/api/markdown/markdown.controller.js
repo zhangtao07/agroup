@@ -49,6 +49,7 @@ function getFile(ids, cb) {
     try {
       _.forEach(result, function(d, i) {
         content.push({
+          id: d.file_id,
           user_id: d.user_id,
           content: markdown.toHTML(fs.readFileSync(d.filepath, 'utf8')),
           updateDate: d.updateDate,
