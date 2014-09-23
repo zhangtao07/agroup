@@ -11,7 +11,6 @@ module.exports = function(orm, db) {
     encoding: String,
     width: {type: 'number'},
     height: {type: 'number'},
-    file_id: String,
     createDate: {type: 'date', time: true},
     updateDate: {type: 'date', time: true}
   }, {
@@ -44,7 +43,7 @@ module.exports = function(orm, db) {
   });
 
   Fileversion.hasOne('file', db.models.file, { required: true});
-
+  Fileversion.hasOne('user', db.models.user, { required: true});
 
 
 

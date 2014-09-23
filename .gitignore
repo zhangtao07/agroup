@@ -2,6 +2,7 @@ node_modules
 .tmp
 .sass-cache
 .idea
+.markdowns
 client/bower_components
 dist
 /server/config/local.env.js

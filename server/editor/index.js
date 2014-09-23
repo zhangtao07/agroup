@@ -32,26 +32,28 @@ router.get('/:group', function(req, res) {
 router.get('/:group/create',function(req,res){
   var group = req.params.group;
 
-  cache.createFile(group,function(err,fileid){
+  cache.createFile(group, req.session.user,function(err,fileid){
     if(err){
       res.send(err);
     }else{
       res.redirect('/editor/' + group + '?file=' + fileid);
     }
   });
+
 });
 
 router.post('/:group', function(req, res) {
   var group = req.params.group;
   var fileid = req.query.file;
+  var user = req.session.user;
 
-  cache.get(fileid, function(file) {
+  cache.get(fileid , function(file) {
     res.status(200).json({
       fileid: fileid,
       group: group,
       title: file.title || new Date().toLocaleDateString(),
       content: file || 'file not found',
-      user: req.session.user || {}
+      user: user || {}
     });
   });
 });

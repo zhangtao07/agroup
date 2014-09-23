@@ -1,58 +1,21 @@
-<style>
-  .markdown-list {
-    padding-top: 30px;
-  }
-</style>
-
+<button ng-click="create()" class="btn m-b-xs btn-sm btn-default btn-addon"><i class="fa fa-plus"></i></button>
 <div class="col-md-12 markdown-list">
-  <div class="panel panel-default col-md-4" draggable="true" style="display: block;">
-    <div class="panel-heading">
-      News <span class="badge">32</span>
+  <section class="col-md-4 animate-repeat" ng-repeat="md in markdowns">
+    <div class="panel panel-default" draggable=false >
+      <div class="panel-heading">
+        <div class="media">
+          <span class="pull-left thumb-sm"><img ng-src="/api/user/avatar/{{ md.user }}" alt="..." class="img-circle"></span>
+          <div class="media-body">
+            <div><a href="">Lauren Taylor</a></div>
+            <small class="text-muted">{{ md.updateDate | date: 'yyyy-MM-dd' }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body md-content">
+        <div class="md-content" ng-bind-html="md.content"></div>
+      </div>
     </div>
-    <div class="panel-body">
-      <article class="media">
-        <div class="pull-left">
-          <span class="fa-stack fa-lg">
-          <i class="fa fa-circle fa-stack-2x"></i>
-          <i class="fa fa-bold fa-stack-1x text-white"></i>
-        </span>
-        </div>
-        <div class="media-body">
-          <a href="" class="h4">Bootstrap 3: What you need to know</a>
-          <small class="block m-t-xs">Sleek, intuitive, and powerful mobile-first front-end framework for faster and easier web development.</small>
-          <em class="text-xs">Posted on <span class="text-danger">Feb 23, 2013</span></em>
-        </div>
-      </article>
-      <div class="line pull-in"></div>
-      <article class="media">
-        <div class="pull-left">
-          <span class="fa-stack fa-lg">
-          <i class="fa fa-circle fa-stack-2x text-info"></i>
-          <i class="fa fa-file-o fa-stack-1x text-white"></i>
-        </span>
-        </div>
-        <div class="media-body">
-          <a href="" class="h4">Bootstrap documents</a>
-          <small class="block m-t-xs">There are a few easy ways to quickly get started with Bootstrap, each one appealing to a different skill level and use case. Read through to see what suits your particular needs.</small>
-          <em class="text-xs">Posted on <span class="text-danger">Feb 12, 2013</span></em>
-        </div>
-      </article>
-      <div class="line pull-in"></div>
-      <article class="media">
-        <div class="pull-left">
-          <span class="fa-stack fa-lg">
-          <i class="fa fa-circle fa-stack-2x"></i>
-          <i class="fa fa-mobile fa-stack-1x text-white"></i>
-        </span>
-        </div>
-        <div class="media-body">
-          <a href="" class="h4 text-success">Mobile first html/css framework</a>
-          <small class="block m-t-xs">Bootstrap, Ratchet</small>
-          <em class="text-xs">Posted on <span class="text-danger">Feb 05, 2013</span></em>
-        </div>
-      </article>
-    </div>
-  </div>
+  </section>
 </div>
 
 
