@@ -40,7 +40,9 @@ body {
   top: 0;
   bottom: 0;
 }
-
+.match_parent{
+  @include match_parent();
+}
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -69,6 +71,7 @@ body {
 @import 'test/test.scss';
 @import 'group/creategroup/creategroup.scss';
 @import 'message/dropzone/dropzone.scss';
+@import 'message/fileicon/fileicon.scss';
 @import 'message/fileitem/fileitem.scss';
 @import 'message/msgitem/msgitem.scss';
 @import 'message/msglist/msglist.scss';

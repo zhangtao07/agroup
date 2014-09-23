@@ -6,6 +6,14 @@ var md5 = require('MD5');
 var cache = {};
 var pathdb = {};
 var database;
+var basepath = path.join(__dirname,'../../.markdowns/');
+
+fs.exists(basepath, function (exists) {
+  if(!exists){
+    fs.mkdir(basepath);
+  }
+});
+
 
 function getDB(cb) {
   if (database) {
@@ -24,7 +32,7 @@ function findPath(db, fileid, cb) {
     file_id: fileid
   }, 1, ['updateDate', 'Z'], function(err, file) {
     if (err) throw err;
-    var filepath = file[0] ? file[0].filepath : path.join(__dirname, '../../.tmp/'+ fileid + '.md');
+    var filepath = file[0] ? file[0].filepath : path.join(basepath + fileid + '.md');
     var exists = fs.existsSync(filepath);
     if (!exists) {
       fs.writeFileSync(filepath, '\n\nAGroup 一个伟大项目的开始 \n====');

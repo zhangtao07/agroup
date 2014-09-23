@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/markdown/markdown.socket').register(socket);
 
 }
 

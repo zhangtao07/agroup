@@ -10,11 +10,11 @@ exports.list = function(req, res) {
 
   var groupId = req.query.groupId;
 
-  var date = req.query.timestamp ? new Date(req.query.timestamp):new Date();
+  var date = req.query.timestamp ? new Date(parseInt(req.query.timestamp)):new Date();
 
-  var offset = req.query.offset|| 0;
+  var offset = parseInt(req.query.offset)|| 0;
 
-  var limit = req.query.limit || 10;
+  var limit = parseInt(req.query.limit) || 10;
 
   function getCount(){
     var result = Q.defer();
@@ -51,12 +51,13 @@ exports.list = function(req, res) {
     messages.forEach(function(message) {
       datas.push(message.getMessage());
     });
+    console.info(count,offset,limit);
     res.status(200).jsonp({
       err: 0,
       data: {
         list:datas,
         timestamp:date.getTime(),
-        hasMore:offset<count?true:false
+        hasMore:(offset+limit)<count?true:false
       }
     });
   },function(err1,err2){
@@ -100,17 +101,28 @@ exports.upload = function(req, res) {
 }
 
 
-exports.post = function(req, res) {
-  //todo:save mongodb
+function getURL(text){
+  var urlGroup;
+  if((urlGroup = /(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w\/#\%_\?=\.]+/.exec(text))){
+    return urlGroup[0];
+  }
+  return null;
+}
 
-  //get mime info
+exports.post = function(req, res) {
 
   var user = req.session.user;
 
   var groupId = req.body.groupId;
 
+  var message = req.body['message'];
+
+  var url = getLink()
+
+  
+
   req.models.message.create({
-    'content': req.body['message'],
+    'content':message,
     'type': req.body['type'],
     'user_id': user.id,
     'group_id': groupId,
