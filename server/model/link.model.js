@@ -1,13 +1,18 @@
 'use strict';
 
 
+
+
+
 module.exports = function(orm, db) {
-  var File = db.define('link', {
+  var Link = db.define('link', {
     id: { type: 'serial', key: true },
     url:String,
-    meta:{type:'object'}
+    title:String,
+    icon:String,
+    description:String
   });
-  File.hasOne('group', db.models.group, { required: true});
-  File.hasOne('user', db.models.user, { required: true});
+  Link.hasOne('group', db.models.group, { required: true});
+  Link.hasOne('user', db.models.user, { required: true});
 }
 

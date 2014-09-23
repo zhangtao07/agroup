@@ -26,7 +26,17 @@
     <div class="m-l-lg panel b-a">
         <div class="panel-heading pos-rlt b-b b-light">
             <span class="arrow left"></span>
-            <a href="">{{data.nickname}}</a>
+            <span >
+                {{data.nickname}}
+                <span>
+                    <span ng-if="data.type=='plain' && data.content.link != null">
+                        分享了一个链接
+                    </span>
+                    <span ng-if="data.type=='file'">
+                        分享了一个文件
+                    </span>
+                </span>
+            </span>
             <!--<label class="label bg-info m-l-xs">Editor</label>-->
               <span class="text-muted m-l-sm pull-right">
                 <i class="fa fa-clock-o"></i>

@@ -38,9 +38,20 @@ module.exports = function(orm, db) {
           if (this.type != "plain") {
             return false;
           }
+          var content = {
+            text:this.content
+          }
+          if(this.link != null){
+            content.link = {
+              url:this.link.url,
+              title:this.link.title,
+              icon:this.link.icon,
+              description:this.link.description
+            }
+          }
           return {
             type: "plain",
-            content: this.content
+            content: content
           }
         },
         getMessage: function(merge) {
@@ -52,6 +63,9 @@ module.exports = function(orm, db) {
             if (merge.user) {
               this.user = merge.user;
             }
+            if (merge.link) {
+              this.link = merge.link;
+            }
           }
 
 
@@ -59,7 +73,7 @@ module.exports = function(orm, db) {
 
 
           return {
-            id: this._id,
+            id: this.id,
             avartar: 'api/user/avatar/' + this.user.id,
             nickname: this.user.name,
             time: ago(this.date),
