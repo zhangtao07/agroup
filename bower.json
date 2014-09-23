@@ -17,8 +17,7 @@
     "angular-socket-io": "~0.6.0",
     "angular-ui-router": "~0.2.10",
     "ngstorage": "latest",
-    "angular-animate":"latest",
-    "ngInfiniteScroll":"~1.0.0"
+    "angular-animate":"latest"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

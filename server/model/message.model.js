@@ -29,7 +29,8 @@ module.exports = function(orm, db) {
             content:{
               "images":this.fileversion.getImages(),
               "filepath":this.fileversion.filepath,
-              "filename": this.fileversion.filename
+              "filename": this.fileversion.filename,
+              "mimetype":this.fileversion.mimetype
             }
           }
         },
@@ -75,5 +76,7 @@ module.exports = function(orm, db) {
   Message.hasOne('user', db.models.user, { required: true, autoFetch: true });
 
   Message.hasOne('group', db.models.group, { required: true, autoFetch: true });
+
+  Message.hasOne('link', db.models.link, { autoFetch: true });
 
 }
