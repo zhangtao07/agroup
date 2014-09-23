@@ -10,11 +10,11 @@ exports.list = function(req, res) {
 
   var groupId = req.query.groupId;
 
-  var date = req.query.timestamp ? new Date(req.query.timestamp):new Date();
+  var date = req.query.timestamp ? new Date(parseInt(req.query.timestamp)):new Date();
 
-  var offset = req.query.offset|| 0;
+  var offset = parseInt(req.query.offset)|| 0;
 
-  var limit = req.query.limit || 10;
+  var limit = parseInt(req.query.limit) || 10;
 
   function getCount(){
     var result = Q.defer();
@@ -51,12 +51,13 @@ exports.list = function(req, res) {
     messages.forEach(function(message) {
       datas.push(message.getMessage());
     });
+    console.info(count,offset,limit);
     res.status(200).jsonp({
       err: 0,
       data: {
         list:datas,
         timestamp:date.getTime(),
-        hasMore:offset<count?true:false
+        hasMore:(offset+limit)<count?true:false
       }
     });
   },function(err1,err2){
@@ -101,9 +102,6 @@ exports.upload = function(req, res) {
 
 
 exports.post = function(req, res) {
-  //todo:save mongodb
-
-  //get mime info
 
   var user = req.session.user;
 

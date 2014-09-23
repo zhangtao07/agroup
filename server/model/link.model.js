@@ -2,12 +2,12 @@
 
 
 module.exports = function(orm, db) {
-  var File = db.define('file', {
+  var File = db.define('link', {
     id: { type: 'serial', key: true },
-    name:String,
-    createDate: {type: 'date', time: true}
+    url:String,
+    meta:{type:'object'}
   });
-  File.hasOne('user', db.models.user, { required: true});
   File.hasOne('group', db.models.group, { required: true});
+  File.hasOne('user', db.models.user, { required: true});
 }
 

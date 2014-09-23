@@ -61,7 +61,8 @@
     "socketio-jwt": "^2.0.2",
     "temp": "latest",
     "underscore": "^1.7.0",
-    "unirest": "^0.2.7"
+    "unirest": "^0.2.7",
+    "imagemagick":"latest"
 
   },
   "devDependencies": {

@@ -19,6 +19,7 @@ function pdf2image(file,outputPath,cb){
   if(!fs.existsSync(outputPath)){
     fs.mkdirSync(outputPath);
   }
+
   exec("gm convert -density 300 -resize 50% pdf:"+file+" +adjoin jpeg:"+outputPath+"/%01d.jpg",function(){
     cb&&cb(outputPath);
   });
@@ -27,7 +28,7 @@ function pdf2image(file,outputPath,cb){
 function generateImages(mimetype,file,cb){
   if(mimetype == "application/pdf") {
     pdf2image(file,file+'.images', cb);
-  }else if(mimetype == "application/msword"){
+  }else if(/ms[-]*word|officedocument/.test(mimetype)){
     word2Pdf(file,function(pdf){
       pdf2image(pdf,file+'.images',cb);
     })
@@ -126,7 +127,8 @@ module.exports = function(req, callback) {
       if(!req.body['id']){
         req.models.file.create({
           name:filename,
-          group_id:req.body['groupId']
+          group_id:req.body['groupId'],
+          user_id:req.session.user.id
         },function(err,file){
           upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id,req.body['groupId'], stat['size'], encoding, function(res) {
             result = res;

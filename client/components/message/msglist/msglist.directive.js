@@ -9,16 +9,17 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
       templateUrl: 'components/message/msglist/msglist.html',
       restrict: 'EA',
       link: function(scope, element, attrs) {
+
         scope.msglist = [];
         scope.hasMore = false;
         var loadParams;
         scope.loadList = function(groupId,refresh) {
-          debugger;
 
           if (refresh) {
             loadParams = {
+              limit:20,
               offset: 0,
-              datastamp: null
+              timestamp: null
             }
           }
           if(!groupId){
@@ -26,39 +27,69 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
           }else{
             loadParams.groupId = groupId;
           }
-          messageAPI.getList(groupId,loadParams.offset, loadParams.datastamp).success(function(res) {
+          messageAPI.getList(groupId,loadParams.timestamp,loadParams.offset,loadParams.limit).success(function(res) {
+
             var data = res.data;
-            scope.msglist = scope.msglist.concat(scope.msglist, data.list);
+            data.list.forEach(function(row){
+              scope.msglist.push(row);
+            });
             scope.hasMore = data.hasMore;
-            loadParams.datastamp = data.datastamp;
-            loadParams.offset++;
+            loadParams.timestamp = data.timestamp;
+            loadParams.offset+=loadParams.limit;
+
           });
 
         }
 
         scope.uploadpanel = {}
         attrs.$observe('group', function(group) {
+
           try {
             group = JSON.parse(group);
           } catch (e) {
             return;
           }
-
-
-
-
           var groupId = group.id;
           scope.loadList(groupId,true);
-          scope.onDrop = function(files) {
-            files.forEach(function(file) {
-              scope.uploadpanel.addFile(file, function(file, send) {
-                var formData = new FormData();
-                formData.append('groupId', groupId);
-                formData.append('file', file);
-                send('api/message/upload', formData);
-              });
+
+          function sendFile(file){
+            scope.uploadpanel.addFile(file, function(file, send) {
+              var formData = new FormData();
+              formData.append('groupId', groupId);
+              formData.append('file', file);
+              send('api/message/upload', formData);
+
             });
           }
+          scope.onpaste = function(){
+            var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            if(items){
+              for(var i = 0;i<items.length;i++){
+                var item = items[i];
+                var file = item.getAsFile();
+                if(!file.name){
+                  file.name="未命名文件";
+                }
+                sendFile(file);
+              }
+
+            }
+          }
+          scope.onDrop = function(files) {
+            files.forEach(function(file) {
+              sendFile(file);
+            });
+          };
+          scope.onSelectFile = function(element) {
+
+            scope.$apply(function() {
+              var files = element.files;
+              for(var i = 0;i<files.length;i++){
+                sendFile(files[i]);
+              }
+            });
+          }
+
 
 
           socket.joinGroup(groupId, function(data) {
@@ -66,13 +97,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
             scope.msglist.unshift(JSON.parse(data));
           });
 
-          messageAPI.getList(groupId, null, 0, 20).
 
-            $http.get('api/message/list?groupId=' + groupId).success(function(data, status) {
-
-
-//            scope.$apply();
-            });
           scope.postText = '';
           scope.onPostMessage = function() {
             $http.post('api/message/post', {
@@ -80,10 +105,8 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
               'message': scope.postText,
               'type': 'plain'
             }).success(function(data) {
-              /*
-               if(data.err == 0){
-               scope.msglist.push(data.data);
-               }*/
+              scope.postText = "";
+
 
             });
           }
