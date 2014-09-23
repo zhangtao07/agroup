@@ -9,6 +9,7 @@ var config = require("./config/environment");
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/markdowns', require('./api/markdown'));
   app.use('/api/*',function(req,res,next){
     if(!req.session.user){
        errors[401](req,res);
