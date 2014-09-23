@@ -6,10 +6,10 @@ var md5 = require('MD5');
 var cache = {};
 var pathdb = {};
 var database;
-var basepath = path.join(__dirname,'../../.markdowns/');
+var basepath = path.join(__dirname, '../../.markdowns/');
 
-fs.exists(basepath, function (exists) {
-  if(!exists){
+fs.exists(basepath, function(exists) {
+  if (!exists) {
     fs.mkdir(basepath);
   }
 });
@@ -62,7 +62,7 @@ function getPath(fileid, cb) {
   }
 }
 
-function saveToDB(file, cb) {
+function saveToDB(file,cb) {
   getDB(function(err, db) {
     var fv = db.models.fileversion;
     fv.find({
@@ -94,7 +94,7 @@ exports.set = function(fileid, syncService) {
   return this;
 };
 
-exports.save = function(fileid) {
+exports.save = function(fileid,user) {
   var file = cache[fileid];
   if (file && file.content) {
     getPath(fileid, function(filepath) {
@@ -108,7 +108,8 @@ exports.save = function(fileid) {
             mimetype: 'text/markdown',
             size: 0,
             encoding: 'utf8',
-            file_id: fileid
+            file_id: fileid,
+            user_id: user.id
           };
           next(null, fv, file.content);
         },
@@ -138,20 +139,22 @@ exports.get = function(fileid, cb) {
 };
 
 
-exports.createFile = function(group, cb) {
-  async.waterfall(
-    [
-      getDB,
-      function(db, next) {
-        var file = db.models.file;
-        file.create([{
-          name: new Date().toLocaleDateString(),
-          group_id: group
-        }], function(err, items) {
-          cb(err,items[0].id);
-        });
-      }
-    ]);
+exports.createFile = function(group,user,cb) {
+  async.waterfall([
+    getDB,
+    function(db, next) {
+      var file = db.models.file;
+      var now = new Date();
+      file.create([{
+        name: now.toLocaleDateString(),
+        createDate: now,
+        user_id: user.id,
+        group_id: group
+      }], function(err, items) {
+        cb(err, items[0].id);
+      });
+    }
+  ]);
 };
 
 exports.checkFile = function(fileid, cb) {
@@ -163,7 +166,7 @@ exports.checkFile = function(fileid, cb) {
         file.exists({
           id: fileid
         }, function(err, exists) {
-          cb(err,exists);
+          cb(err, exists);
         });
       }
     ]);
