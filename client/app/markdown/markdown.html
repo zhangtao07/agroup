@@ -1,17 +1,21 @@
-<button ng-click="create()" class="btn m-b-xs btn-sm btn-default btn-addon"><i class="fa fa-plus"></i></button>
+<a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default btn-addon">
+  <i class="fa fa-plus"></i>
+  <span translate="markdown.create"></span>
+</a>
 <div class="col-md-12 markdown-list">
   <section class="col-md-4 animate-repeat" ng-repeat="md in markdowns">
     <div class="panel panel-default" draggable=false >
       <div class="panel-heading">
         <div class="media">
+          <a ng-href="/editor/{{group}}?file={{md.id}}" target="_blank" class="pull-right fa fa-edit"></a>
           <span class="pull-left thumb-sm"><img ng-src="/api/user/avatar/{{ md.user }}" alt="..." class="img-circle"></span>
           <div class="media-body">
-            <div><a href="">Lauren Taylor</a></div>
+            <div><a href="">{{ md.user.name }}</a></div>
             <small class="text-muted">{{ md.updateDate | date: 'yyyy-MM-dd' }}</small>
           </div>
         </div>
       </div>
-      <div class="panel-body md-content">
+      <div class="panel-body">
         <div class="md-content" ng-bind-html="md.content"></div>
       </div>
     </div>

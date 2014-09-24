@@ -8,13 +8,6 @@ angular.module('agroupApp')
     }
     $http.get('/api/markdowns').success(success);
 
-    var group = $stateParams.group;
-
-    function create(){
-      //$location.absUrl();
-      window.location.href = '/editor/' + group +'/create';
-    }
-    $scope.create = create;
-
+    $scope.group = $stateParams.group;
 
   });
