@@ -63,11 +63,11 @@
     "temp": "latest",
     "underscore": "^1.7.0",
     "unirest": "^0.2.7",
-    "imagemagick":"latest",
     "jsdom":"latest",
     "iconv":"~2.1.4",
     "request":"~2.44.0",
-    "imagemagick":"latest"
+    "npm-cache-filename":"~1.0.1",
+    "string":"~2.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

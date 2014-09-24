@@ -38,7 +38,7 @@ function generateImages(mimetype,file,cb){
 }
 
 
-function upload(fileModel, tempFile, sha1, filename, mimetype,fileId, group, size, encoding, cb) {
+function upload(fileModel, tempFile, sha1, filename, mimetype,fileId, group, size, encoding,user_id, cb) {
   var date = new Date();
   var upload_dir = config.upload_dir;
   var filePath = upload_dir + "/" + group + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -55,6 +55,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype,fileId, group, siz
 
 
   var file = {
+    user_id:user_id,
     filepath: filePath,
     filename: filename,
     mimetype: mimetype,
@@ -96,7 +97,7 @@ function upload(fileModel, tempFile, sha1, filename, mimetype,fileId, group, siz
 
 module.exports = function(req, callback) {
   var checkI = 0;
-
+  var user_id = req.session.user.id;
   function checkDone() {
     checkI++;
     if (checkI == 2) {
@@ -128,16 +129,16 @@ module.exports = function(req, callback) {
         req.models.file.create({
           name:filename,
           group_id:req.body['groupId'],
-          user_id:req.session.user.id,
+          user_id:user_id,
           createDate:new Date()
         },function(err,file){
-          upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id,req.body['groupId'], stat['size'], encoding, function(res) {
+          upload(req.models.fileversion, tempPath, d, filename, mimetype, file.id,req.body['groupId'], stat['size'], encoding,user_id, function(res) {
             result = res;
             checkDone();
           });
         });
       }else{
-        upload(req.models.fileversion, tempPath, d, filename, mimetype, req.body['id'],req.body['groupId'], stat['size'], encoding, function(res) {
+        upload(req.models.fileversion, tempPath, d, filename, mimetype, req.body['id'],req.body['groupId'], stat['size'], encoding,user_id, function(res) {
           result = res;
           checkDone();
         });

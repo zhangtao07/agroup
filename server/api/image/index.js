@@ -7,4 +7,6 @@ var router = express.Router();
 
 router.get('/upload/:id', controller.upload);
 
+router.get('/resize', controller.resize);
+
 module.exports = router;

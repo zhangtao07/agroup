@@ -18,7 +18,7 @@ module.exports = function(app) {
     }
 
   });
-  app.use('/api/image', require('./api/image'));
+  app.use('/static/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
   app.use('/api/things', require('./api/thing'));
