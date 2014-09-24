@@ -4,6 +4,21 @@ var _ = require('lodash');
 var fs = require('fs');
 var async = require('async');
 var markdown = require("markdown").markdown;
+var marked = require('marked');
+
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false,
+  highlight: function (code) {
+    return require('highlight.js').highlightAuto(code).value;
+  }
+});
 
 
 // Get list of markdowns
@@ -51,7 +66,7 @@ function getFile(ids, cb) {
         content.push({
           id: d.file_id,
           user_id: d.user_id,
-          content: markdown.toHTML(fs.readFileSync(d.filepath, 'utf8')),
+          content: marked(fs.readFileSync(d.filepath, 'utf8')),
           updateDate: d.updateDate,
           createDate: d.createDate
         });
