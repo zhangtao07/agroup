@@ -11,7 +11,10 @@
           <span class="pull-left thumb-sm"><img ng-src="/api/user/avatar/{{ md.user }}" alt="..." class="img-circle"></span>
           <div class="media-body">
             <div><a href="">{{ md.user.name }}</a></div>
-            <small class="text-muted">{{ md.updateDate | date: 'yyyy-MM-dd' }}</small>
+            <span class="text-muted ng-binding">
+              <i class="fa fa-clock-o"></i>
+              {{ md.updateDate | date: 'MM-dd HH:mm:ss' }}
+            </span>
           </div>
         </div>
       </div>
