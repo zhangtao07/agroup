@@ -1,7 +1,14 @@
-<a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default btn-addon">
-  <i class="fa fa-plus"></i>
-  <span translate="markdown.create"></span>
-</a>
+  <div class="btn-group">
+
+    <a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default" >
+      <i class="fa fa-plus"></i>
+      <!--<span translate="markdown.create"></span>-->
+    </a>
+    <a class="btn m-b-xs btn-sm btn-default " ng-click="sync()">
+      <i class="fa fa-refresh" ></i>
+      <!--<span translate="markdown.refresh"></span>-->
+    </a>
+  </div>
 <div class="col-md-12 markdown-list">
   <section class="col-md-4" ng-repeat="md in markdowns" ng-animate="{enter:'animate-enter',leave: 'animate-leave'}">
     <div class="panel panel-default" draggable=false >

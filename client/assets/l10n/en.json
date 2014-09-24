@@ -21,7 +21,8 @@
   "create" : "Create",
   "view" : "View",
   "edite": "Edite",
-  "delete": "Delete"
+  "delete": "Delete",
+  "refresh": "sync"
 }
 
 }

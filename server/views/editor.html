@@ -46,6 +46,9 @@
           }
         </style>
         <script>
+            window.onclose = function(){
+              parent.postMessage('sync','*');
+            }
             // Use ?debug to serve original JavaScript files instead of minified
             window.baseDir = 'res';
             /*
@@ -74,5 +77,6 @@
     </head>
 
     <body></body>
+
 
 </html>
