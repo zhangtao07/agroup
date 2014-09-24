@@ -20,6 +20,28 @@ marked.setOptions({
   }
 });
 
+exports.destroy = function(req, res){
+  var id = req.params.id;
+  req.models.fileversion.find({file_id:id},function(err,fvs){
+
+    if(err){
+      res.status(500).send(err);
+      return;
+    }
+
+    _.forEach(fvs,function(d,i){
+      fs.unlink(d.filepath);
+      d.remove();
+      d.getFile(function(err,file){
+        if(file){
+          file.remove();
+        }
+      });
+    });
+    res.status(200).send('success');
+  });
+};
+
 
 // Get list of markdowns
 exports.index = function(req, res) {
