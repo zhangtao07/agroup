@@ -43,17 +43,11 @@ define([
         console.log(arguments);
       });
 
-      eventMgr.addListener('onReady', function(file) {
-        if (fileid) {
-          var username = new Date();
-          socket.emit('editor-join', {
-            fileid: decodeURI(fileid),
-            user: {
-              name: username,
-              avatar: file.user.avatar ? file.user.avatar : '/assets/images/avatar.jpg'
-            }
-          });
+      eventMgr.addListener('onReady', function(data) {
+        if(!data || !data.fileid){
+          window.location.href = '/';
         }
+        socket.emit('editor-join', data);
       });
 
       return socket;

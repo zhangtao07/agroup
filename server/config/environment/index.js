@@ -52,6 +52,9 @@ var all = {
   upload_temp_dir: "/upload/.tmp",
 
   upload_dir: "/upload",
+
+  resize_dist_cache : '/.resize_cache',
+
   sessionStorage: {
     host: mysql.host,
     port: mysql.port || 3306,

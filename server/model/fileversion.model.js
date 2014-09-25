@@ -11,7 +11,6 @@ module.exports = function(orm, db) {
     encoding: String,
     width: {type: 'number'},
     height: {type: 'number'},
-    file_id: String,
     createDate: {type: 'date', time: true},
     updateDate: {type: 'date', time: true}
   }, {
@@ -44,8 +43,17 @@ module.exports = function(orm, db) {
   });
 
   Fileversion.hasOne('file', db.models.file, { required: true});
+  Fileversion.hasOne('user', db.models.user, { required: true});
 
 
+  Fileversion.latestFile = function(cb){
+    //this.aggregate(['file_id']).groupBy('file_id').order('updateDate')
+      //.limit(3)
+      //.get(cb)
+    db.driver.execQuery("SELECT file_id FROM fileversion group by file_id order by updateDate DESC", function (err, data) {
+      cb(err,data);
+    })
+  };
 
 
 }

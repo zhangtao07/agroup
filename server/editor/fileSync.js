@@ -7,7 +7,7 @@ function SyncService(content, msg) {
   this.content = content;
   this.fileid = msg.fileid;
   this.user = msg.user;
-  this.user.id = this.user.id || (id++).toString(36);
+  //this.user.id = this.user.id || (id++).toString(36);
 }
 
 SyncService.prototype.addClient = function(socket) {
@@ -18,7 +18,7 @@ SyncService.prototype.addClient = function(socket) {
   self.sendMessage(socket, 'server:clientJoin', self.user);
 
   socket.on('disconnect', function() {
-    cache.save(self.fileid);
+    cache.save(self.fileid,self.user);
     self.sendMessage(socket, 'server:clientLeave', self.user);
   });
 
