@@ -4,7 +4,6 @@ var _ = require('lodash');
 var fs = require('fs');
 var orm = require('orm');
 var observe = require('../../components/group.observe');
-var upload = require('./upload');
 var Q = require("q");
 exports.list = function(req, res) {
 
@@ -70,32 +69,27 @@ exports.list = function(req, res) {
 
 exports.upload = function(req, res) {
   var user = req.session.user;
-
-
-  upload(req, function(file) {
-    req.models.message.create({
-      'fileversion_id': file.id,
-      'type': file.mimetype,
+  require('./upload')(req).then(function(obj){
+    var fields = obj.fields,
+        fileversion = obj.fileversion;
+    Q.nfcall(req.models.message.create,{
+      'fileversion_id': fileversion.id,
+      'type': fileversion.mimetype,
       'user_id': user.id,
-      'group_id': req.body['groupId'],
+      'group_id': fields.groupId,
       'date': new Date
-    }, function(err, msg) {
-
-      if (err) {
-        return console.error(err);
-      }
+    }).then(function(msg){
+      console.info(msg);
       var data = msg.getMessage({
-        fileversion: file,
+        fileversion: fileversion,
         user: user
       });
-      observe.groupBroadcast(req.body.groupId, data);
+      observe.groupBroadcast(fields.groupId, data);
       res.writeHead(200, {
         'Connection': 'close'
       });
       res.end("ok");
     });
-
-
   });
 
 }
