@@ -16,12 +16,14 @@ router.get('/merge', function(req, res) {
 router.get('/:group', function(req, res) {
   var group = req.params.group;
   var fileid = req.query.file;
+  var view = req.query.view;
+
   if(!fileid){
     res.redirect('/');
   }else{
     cache.checkFile(fileid,function(err,exists){
       if(exists){
-        res.render('editor.html');
+        return view ? res.render('viewer.html') : res.render('editor.html');
       }else{
         res.render('no-file.html');
       }
