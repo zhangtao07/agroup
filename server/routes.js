@@ -10,10 +10,10 @@ module.exports = function(app) {
 
   // Insert routes below
   app.use('/api/markdowns', require('./api/markdown'));
-  app.use('/api/*',function(req,res,next){
-    if(!req.session.user){
-       errors[401](req,res);
-    }else{
+  app.use('/api/*', function(req, res, next) {
+    if (!req.session.user) {
+      errors[401](req, res);
+    } else {
       next();
     }
 
@@ -25,14 +25,13 @@ module.exports = function(app) {
   app.use('/api/user', require('./api/user'));
 
   app.use('/auth', require('./auth'));
-  app.use(new RegExp("(^"+config.upload_dir+"\/.*)"), function(req, res) {
+  app.use(new RegExp("(^" + config.upload_dir + "\/.*)"), function(req, res) {
     var filename = req.query.filename;
-    if(filename){
-      res.set({
-        "Content-Disposition": 'attachment; filename="'+filename+'"'
-      });
+    if (filename) {
+      res.download(config.root + req.params[0], filename);
+    } else {
+      res.sendFile(config.root + req.params[0]);
     }
-    res.sendFile(config.root+ req.params[0]);
   });
   app.use('/editor', require('./editor'));
   // All undefined asset or api routes should return a 404
