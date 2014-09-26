@@ -18,7 +18,11 @@
   }
 },
 "markdown" : {
-  "create" : "Create"
+  "create" : "Create",
+  "view" : "View",
+  "edite": "Edite",
+  "delete": "Delete",
+  "refresh": "sync"
 }
 
 }
