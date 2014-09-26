@@ -53,7 +53,8 @@ module.exports = function(orm, db) {
     //this.aggregate(['file_id']).groupBy('file_id').order('updateDate')
       //.limit(3)
       //.get(cb)
-    db.driver.execQuery("SELECT file_id FROM fileversion group by file_id order by updateDate DESC", function (err, data) {
+    var sql = 'SELECT file_id FROM fileversion where fileversion.mimetype = "text/markdown" GROUP BY file_id ORDER BY updateDate DESC';
+    db.driver.execQuery(sql, function (err, data) {
       cb(err,data);
     })
   };
