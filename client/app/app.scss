@@ -53,6 +53,9 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 .app-content.app-content-full{
   bottom:0;
 }
+.list-group-item.focus {
+background-color: #e4eaec!important;
+}
 // Component styles are injected through grunt
 // injector
 @import 'access/signin/signin.scss';
@@ -62,6 +65,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'block/commonHeader/commonHeader.scss';
 @import 'block/commonNav/commonNav.scss';
 @import 'block/commonSettings/commonSettings.scss';
+@import 'file/file.scss';
 @import 'group/group.scss';
 @import 'main/main.scss';
 @import 'markdown/markdown.scss';

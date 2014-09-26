@@ -1,0 +1,11 @@
+.m-l-none{
+  margin-left: 0 !important;
+}
+
+.hover:active .hover-action {
+  display: none;
+}
+
+.hover-anchor:hover>.hover-action, .hover-anchor:focus>.hover-action{
+  display: inherit;
+}
