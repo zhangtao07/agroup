@@ -35,6 +35,10 @@ module.exports = function(app) {
     res.sendFile(config.root+ req.params[0]);
   });
   app.use('/editor', require('./editor'));
+  app.route('/pdf').get(function(req,res){
+    res.render('pdf.html');
+  });
+
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
     .get(errors[404]);

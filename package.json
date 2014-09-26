@@ -4,19 +4,23 @@
   "main": "server/app.js",
   "contributors": [
     {
-      "name": "nwind",
+      "username":"chenxiao",
+      "nickname": "chenxiao",
       "email": "duoyi.wu@gmail.com"
     },
     {
-      "name": "Miller",
+      "username":"chenminliang01",
+      "nickname": "Miller",
       "email": "chen.minliang@gmail.com"
     },
     {
-      "name": "zzm",
+      "username":"zhangzimeng01",
+      "nickname": "zzm",
       "email": "30962088@qq.com"
     },
     {
-      "name": "zn",
+      "username":"zhangning",
+      "nickname": "zn",
       "email": "hunter.dding@gmail.com"
     }
   ],

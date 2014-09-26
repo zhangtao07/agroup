@@ -7,7 +7,7 @@ var contributors = require('../../../package.json').contributors;
 module.exports = function(req, res, next) {
   var randomIndex = Math.floor(Math.random() * contributors.length);
   req.session.user = contributors[randomIndex];
-  var name = contributors[randomIndex].name;
+  var name = contributors[randomIndex].username;
   var email = contributors[randomIndex].email;
 
   auth.addUser(req, res, name, email);

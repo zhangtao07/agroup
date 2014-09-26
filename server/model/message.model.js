@@ -24,14 +24,21 @@ module.exports = function(orm, db) {
 
         getFileContent:function(){
 
-          return {
-            type:"file",
-            content:{
-              "images":this.fileversion.getImages(),
-              "filepath":this.fileversion.filepath,
+          var content = {
+            "images":this.fileversion.getImages(),
+              "filepath":this.fileversion.getOnlinePath(),
               "filename": this.fileversion.filename,
               "mimetype":this.fileversion.mimetype
-            }
+          }
+          if(/pdf/.test(content.mimetype)){
+            content.pdf = content.filepath;
+          }
+          if(/ms[-]*word|officedocument/.test(content.mimetype)){
+            content.pdf = content.filepath+".pdf";
+          }
+          return {
+            type:"file",
+            content:content
           }
         },
         getPlainContent: function() {
@@ -74,8 +81,8 @@ module.exports = function(orm, db) {
 
           return {
             id: this.id,
-            avartar: 'api/user/avatar/' + this.user.id,
-            nickname: this.user.name,
+            avartar: 'api/user/avatar/' + this.user.username,
+            nickname: this.user.nickname,
             time: ago(this.date),
             content: contentObj.content,
             'type': contentObj.type
