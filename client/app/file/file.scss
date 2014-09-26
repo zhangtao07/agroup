@@ -1,6 +1,9 @@
 .m-l-none{
   margin-left: 0 !important;
 }
+.col.relative{
+  position:relative;
+}
 
 .hover:active .hover-action {
   display: none;
@@ -8,4 +11,21 @@
 
 .hover-anchor:hover>.hover-action, .hover-anchor:focus>.hover-action{
   display: inherit;
+}
+
+.msglist-drag {
+  @include match_parent();
+  width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  border: 2px dashed #333;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  .dragTip {
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-weight: bold;
+  }
 }

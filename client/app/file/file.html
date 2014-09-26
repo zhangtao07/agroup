@@ -9,7 +9,7 @@
 
 
   <!-- column -->
-  <div ng-repeat="folder in level" class="col w b-r">
+  <div ng-repeat="folder in level" class="col w b-r relative">
     <div class="vbox">
       <div class="row-row">
         <div class="cell scrollable hover" ng-click="clearSelect(folder)">
@@ -26,6 +26,7 @@
               </a>
             </div>
           </div>
+          <dropzone on-drop="onDrop(files)"></dropzone>
         </div>
       </div>
       <div class="wrapper b-t">
@@ -154,3 +155,5 @@
   </div>
   <!-- /column -->
 </div>
+
+<uploadpanel control="uploadpanel" style="display: none;"></uploadpanel>
