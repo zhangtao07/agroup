@@ -37,6 +37,9 @@ exports.resize = function(req, res) {
   var cacheOrginFile = null;
   try{
     cacheOrginFile = cf(config.root + config.resize_dist_cache, url);
+    if(fs.existsSync()){
+
+    }
   }catch(e){
     console.info(e);
     res.set('Content-Type', 'image/jpeg');

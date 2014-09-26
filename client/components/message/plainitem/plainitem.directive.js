@@ -10,7 +10,7 @@ angular.module('agroupApp')
       },
       link: function(scope, element, attrs) {
 
-        scope.data.text = scope.data.text.replace(/(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w\/#\%_\?=\.]*/g,function(match){
+        scope.data.text = scope.data.text.replace(/(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w#!:.?+=&%@!\-\/]*/g,function(match){
           var url = match;
           if(!/^http(s)?:\/\//.test(match)){
             url="http://"+match;

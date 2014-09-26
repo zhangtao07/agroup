@@ -12,7 +12,7 @@ router.get('/me', function(req, res) {
     res.jsonp({
       err:0,
       data:extend(user,{
-        avatar:"/api/user/avatar/"+user.id
+        avatar:"/api/user/avatar/"+user.username
       })
     });
   } else {
@@ -29,10 +29,10 @@ router.post('/me/email', function(req, res) {
   //     });
   // });
 });
-
-router.get('/avatar/:id', function(req, res) {
-  var uid = req.params.id;
-  res.sendFile(__dirname + '/photo.jpg', {maxAge: 10 * 365 * 24 * 60 * 60, headers: {
+var config = require('../../config/environment');
+router.get('/avatar/:name', function(req, res) {
+  var path = config.getAvatar(req.params.name);
+  res.sendFile(path, {maxAge: 30 * 60, headers: {
     'Content-Type': 'image/jpeg'
   }}, function(err) {
     if (err) {

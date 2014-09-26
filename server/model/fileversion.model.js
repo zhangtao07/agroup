@@ -25,15 +25,18 @@ module.exports = function(orm, db) {
       }
     },
     methods:{
+      getOnlinePath:function(){
+        return config.upload_dir+'/'+this.filepath;
+      },
       getRealpath:function(){
-        return config.root+this.filepath;
+        return config.root+config.upload_dir+'/'+this.filepath;
       },
       getImages: function() {
         if (/^image\//.test(this.mimetype)) {
-          return [this.filepath];
-        }else if(/msword|doc/.test(this.mimetype)){
+          return [this.getOnlinePath()];
+        }else if(/msword|doc|pdf/.test(this.mimetype)){
           var dir = this.getRealpath()+".images/";
-          var path = this.filepath+".images/";
+          var path = this.getOnlinePath()+'.images/';
           return fs.readdirSync(dir).map(function(filename){
             return path+filename;
           });

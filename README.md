@@ -14,12 +14,12 @@
 ### 后端
 
 1. express
-2. mongoDB
+2. MySQL
 2. socketIO
 
 ### 步骤
 
 1. bower install
 2. npm install
-3. 启动mongoDB服务
+3. 启动 MySQL 服务
 4. grunt serve启动项目服务

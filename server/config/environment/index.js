@@ -53,7 +53,13 @@ var all = {
 
   upload_dir: "/upload",
 
+  avatar_dir: "/images/avatar",
+
   resize_dist_cache : '/.resize_cache',
+
+  getAvatar:function(name){
+    return all.root+all.upload_dir+'/'+name+'.jpg';
+  },
 
   sessionStorage: {
     host: mysql.host,

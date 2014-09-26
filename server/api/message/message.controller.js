@@ -97,7 +97,7 @@ exports.upload = function(req, res) {
 
 function getURL(text) {
   return Q.fcall(function() {
-    var urlGroup = /(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w\/#\%_\?=\.]*/.exec(text);
+    var urlGroup = /(http[s]*:\/\/)*[\w_.]+\.(com|cn|io|cc|gov|org|net|int|edu|mil|jp|kr|us|uk)[\w#!:.?+=&%@!\-\/]*/.exec(text);
     if (urlGroup) {
       var url = urlGroup[0];
       if (!/^http[s]*:\/\//.test(url)) {

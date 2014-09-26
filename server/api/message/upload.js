@@ -145,7 +145,8 @@ module.exports = function(req, callback) {
     }).then(function(file_id) {
       return Q.Promise(function getFileversion(resolve) {
         var upload_dir = config.upload_dir;
-        var filePath = upload_dir + "/" + groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
+        var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
+        var filePath = upload_dir + "/" + databasepath;
         var saveFile = config.root + filePath;
         var saveDir = path.dirname(saveFile);
         if (!fs.existsSync(saveDir)) {
@@ -160,7 +161,7 @@ module.exports = function(req, callback) {
 
         var fileVersion = {
           user_id: user_id,
-          filepath: filePath,
+          filepath: databasepath,
           filename: filename,
           mimetype: mimetype,
           size: fileSize,
