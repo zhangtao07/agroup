@@ -49,11 +49,12 @@ module.exports = function(orm, db) {
   Fileversion.hasOne('user', db.models.user, { required: true});
 
 
-  Fileversion.latestFile = function(cb){
+  Fileversion.latestFile = function(gid,cb){
     //this.aggregate(['file_id']).groupBy('file_id').order('updateDate')
       //.limit(3)
       //.get(cb)
-    var sql = 'SELECT file_id FROM fileversion where fileversion.mimetype = "text/markdown" GROUP BY file_id ORDER BY updateDate DESC';
+    var sql = 'SELECT fileversion.file_id FROM fileversion,file WHERE fileversion.file_id = file.id AND fileversion.mimetype = "text/markdown" AND file.group_id ='+gid+'  GROUP BY fileversion.file_id ORDER BY updateDate DESC';
+
     db.driver.execQuery(sql, function (err, data) {
       cb(err,data);
     })

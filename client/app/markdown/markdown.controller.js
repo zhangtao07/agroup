@@ -24,7 +24,8 @@ angular.module('agroupApp')
     init();
 
     function init() {
-      $http.get('/api/markdowns').success(success);
+      var group = $stateParams.group;
+      $http.get('/api/markdowns/'+group).success(success);
     }
 
     window.addEventListener("message", receiveMessage, false);
