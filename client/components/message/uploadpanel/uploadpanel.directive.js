@@ -27,7 +27,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
     },
     link: function(scope, element, attrs) {
 
-      
+
 
       scope.fold = false;
       scope.uploadItems = [];
@@ -36,7 +36,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
       }
 //      scope.uploadItems = [];
       scope.methods = scope.control || {};
-      scope.methods.addFile = function(file,onprepare) {
+      scope.methods.addFile = function(file,onprepare,onfinish) {
         element.show();
         scope.close = false;
         scope.fold = false;
@@ -49,13 +49,13 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
           onprepare:onprepare
         };
         scope.uploadItems.push(item);
-        sendFile(item);
+        sendFile(item,onfinish);
         scope.$apply();
 
       };
 
 
-      function sendFile(item) {
+      function sendFile(item,onfinish) {
         var xhr = new XMLHttpRequest();
         item.status = "uploading";
         item.percent = 0;
@@ -66,10 +66,12 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
         }
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
-            if (xhr.responseText == "ok") {
+            var res = JSON.parse(xhr.responseText);
+            if (res.status == "ok") {
               item.percent = 100;
               item.status = "complete";
               scope.$apply();
+              return onfinish && onfinish(res)
             }
           }
         };

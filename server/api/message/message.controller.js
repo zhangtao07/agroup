@@ -79,16 +79,18 @@ exports.upload = function(req, res) {
       'group_id': fields.groupId,
       'date': new Date
     }).then(function(msg){
-      console.info(msg);
       var data = msg.getMessage({
         fileversion: fileversion,
         user: user
       });
       observe.groupBroadcast(fields.groupId, data);
-      res.writeHead(200, {
-        'Connection': 'close'
+      //res.writeHead(200, {
+        //'Connection': 'close'
+      //});
+      res.json(200,{
+        status: "ok",
+        file: data
       });
-      res.end("ok");
     });
   });
 

@@ -5,7 +5,8 @@ angular.module('agroupApp')
     $scope.message = 'Hello';
 
     var level = [{
-      files: []
+      files: [],
+      parent_id:0
     }];
     var db;
 
@@ -23,13 +24,10 @@ angular.module('agroupApp')
       var group = $stateParams.group;
       $http.get('api/files/' + group).success(function(data, status) {
         db = data;
-        window.db = db;
         level[0].files = level[0].files.concat(getChild(0));
         $scope.level = level;
       })
     }
-
-    window.level = level;
 
     function selectItem(folder, item) {
       if (folder.selectedItem) {
@@ -37,26 +35,21 @@ angular.module('agroupApp')
       }
       item.selected = true;
       folder.selectedItem = item;
-
       var index = level.indexOf(folder);
+
+      if(item.type !== 'folder'){
+        closeFolder(index+1,level.length-index);
+        return;
+      }
+
       var nextLevel = level[index + 1] = level[index + 1] || {};
       nextLevel.files = getChild(item.id);
-
-      //if(item.selected){ return }
-      //folder.selectedItem = item;
-      //nextFolder.selectedItem = item;
-
+      nextLevel.parent_id = item.id;
       level.splice(index + 2, level.length - index - 2);
+    }
 
-      //var selectedChild = _.filter(nextFolder.files,function(d){
-      //if(d.selected){
-      //return d;
-      //}
-      //});
-
-      //if(selectedChild.length){
-      //selectItem(nextFolder,selectedChild[0]);
-      //}
+    function closeFolder(index,end){
+        level.splice(index, end);
     }
 
     function clearSelect(folder) {
@@ -78,12 +71,14 @@ angular.module('agroupApp')
       }
     }
 
-    function createFolder(index) {
+    function addItem(index,fileid,content) {
       var files = level[index].files = level[index].files || [];
 
       var data = {
-        name: 'level' + index + '-folder' + level[index].files.length,
+        name: content && content.filename || 'level' + index + '-folder' + level[index].files.length,
         parent_id: index > 0 ? level[index - 1].selectedItem.id : 0,
+        type: content && content.mimetype || 'folder',
+        file_id: fileid && fileid || 0,
         group_id: $stateParams.group
       };
       $http.post('api/files/', data).success(function(d, status) {
@@ -93,16 +88,15 @@ angular.module('agroupApp')
       });
     }
 
-
     $scope.clearSelect = clearSelect;
     $scope.selectItem = selectItem;
     $scope.deleteItem = deleteItem;
-    $scope.createFolder = createFolder;
+    $scope.addItem = addItem;
 
 
     var panel = $scope.uploadpanel = {}
 
-    function sendFile(file) {
+    function sendFile(file,folder) {
       var groupId = $stateParams.group;
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
@@ -110,11 +104,14 @@ angular.module('agroupApp')
         formData.append('file', file);
         send('api/message/upload', formData);
 
+      },function(res){
+        var i = level.indexOf(folder);
+        addItem(i,res.file.id,res.file.content);
       });
     }
-    $scope.onDrop = function(files) {
+    $scope.onDrop = function(files,folder) {
       files.forEach(function(file) {
-        sendFile(file);
+        sendFile(file,folder);
       });
     };
   });

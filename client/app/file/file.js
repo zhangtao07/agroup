@@ -18,4 +18,9 @@ angular.module('agroupApp')
         });
       }
     };
+  })
+  .filter('fileicon',function(){
+    return function(input){
+      return input.replace(/\/.*/,'');
+    }
   });
