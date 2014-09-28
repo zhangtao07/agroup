@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.get('/preview/:id', controller.preview);
 router.post('/', controller.create);
 router.put('/:folder/:file', controller.update);
 router.patch('/:id', controller.update);

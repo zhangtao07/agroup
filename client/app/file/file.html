@@ -1,4 +1,4 @@
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light  ng-scope" ng-init="
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light no-selected" ng-init="
   app.settings.asideFixed = true;
   app.settings.asideDock = false;
   app.settings.container = false;
@@ -12,17 +12,16 @@
   <div ng-repeat="folder in level" class="col w b-r relative">
     <div class="vbox">
       <div class="row-row">
-        <div class="cell scrollable hover" ng-click="clearSelect(folder)">
+        <div class="cell scrollable hover">
           <div class="cell-inner">
             <div class="list-group no-radius no-border no-bg m-b-none">
               <!--<a class="list-group-item b-b focus" ng-class="{'focus': (filter == '')}" ng-click="selectFolder({name:''})">ALL Contacts</a>-->
-              <a stop-event ng-repeat="item in folder.files" ng-dblclick="editItem(item)" class="list-group-item m-l hover-anchor b-a no-select"
-              ng-class="{'focus m-l-none': item.selected}" ng-click="selectItem(folder,item)">
+              <a stop-event ng-repeat="item in folder.files"  ng-dblclick="editItem(item,folder)" class="list-group-item m-l hover-anchor b-a no-select"
+                ng-class="{'focus m-l-none': item.selected}" ng-click="selectItem(folder,item)">
                 <span stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
-                <span class="block m-l-n ng-binding" ng-class="{'m-n': item.selected }"> <span class="fa fa-{{ item.type | fileicon }}"></span> {{ item.name }}</span>
-                <input type="text" class="form-control pos-abt ng-pristine ng-valid ng-hide" ng-show="item.editing"
-                ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%"
-                ui-focus="item.editing">
+                <span class="block m-l-n ng-binding" ng-class="{'m-n': item.selected }"> <span class="fa fa-{{ item.type | fileicon }}"></span>
+                  <em  ng-blur="doneEditing(item)" class="file-ml">{{ item.name }}</em></span>
+                <input type="text" class="form-control pos-abt" ng-show="item.editing" ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%" >
               </a>
             </div>
           </div>
@@ -36,23 +35,7 @@
     </div>
   </div>
   <!-- column -->
-  <div class="col bg-white-only">
-    <div class="vbox">
-      <div class="wrapper-sm b-b">
-        <div class="m-t-n-xxs m-b-n-xxs m-l-xs">
-          <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
-          </a>
-          <a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)">Edit</a>
-          <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
-        </div>
-      </div>
-      <div class="row-row">
-        <div class="cell">
-          <div class="cell-inner">
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="col bg-white-only" preview-panel>
   </div>
   <!-- /column -->
 </div>

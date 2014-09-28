@@ -12,7 +12,7 @@ angular.module('agroupApp')
 
     function getChild(lel) {
       return db.filter(function(d) {
-        if (d.parent_id === lel) {
+        if (+d.parent_id === lel) {
           return d;
         }
       });
@@ -39,9 +39,10 @@ angular.module('agroupApp')
 
       if(item.type !== 'folder'){
         closeFolder(index+1,level.length-index);
+        $scope.preview(item);
         return;
       }
-
+      $scope.nopreview();
       var nextLevel = level[index + 1] = level[index + 1] || {};
       nextLevel.files = getChild(item.id);
       nextLevel.parent_id = item.id;
@@ -92,6 +93,17 @@ angular.module('agroupApp')
     $scope.selectItem = selectItem;
     $scope.deleteItem = deleteItem;
     $scope.addItem = addItem;
+    $scope.editItem = editItem;
+    $scope.doneEditing = doneEditing;
+
+    function editItem(item){
+      item.editing = true;
+    }
+
+    function doneEditing(item){
+      item.editing = false;
+      console.log(item);
+    }
 
 
     var panel = $scope.uploadpanel = {}
