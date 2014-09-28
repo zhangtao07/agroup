@@ -75,6 +75,49 @@ angular.module('agroupApp')
             });
           };
         }
+      },
+
+      dialog: function(ok){
+          ok = ok || angular.noop;
+
+          /**
+           * Open a delete confirmation modal
+           * @param  {String} name   - name or info to show on modal
+           * @param  {All}           - any additional args are passed staight to del callback
+           */
+          return function() {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              dialogModal;
+
+            dialogModal = openModal({
+              modal: {
+                dismissable: true,
+                title: 'Agroup',
+                html: name,
+                buttons: [
+                  //{
+                    //classes: 'btn-primary',
+                    //text: 'Edit',
+                    //click: function(e) {
+                      //dialogModal.close(e);
+                    //}
+                  //},
+                  {
+                    classes: 'btn-default',
+                    text: 'Close',
+                    click: function(e) {
+                      dialogModal.dismiss(e);
+                    }
+                  }
+                ]
+              }
+            }, 'modal-primary');
+
+            dialogModal.result.then(function(event) {
+              ok.apply(event, args);
+            });
+          };
       }
     };
   });

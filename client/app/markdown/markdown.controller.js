@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MarkdownCtrl', function($scope, $http, $stateParams, $location) {
+  .controller('MarkdownCtrl', function($scope, $http, $stateParams, Modal,$location) {
 
     function success(data, status) {
       $scope.markdowns = data.sort(function(a, b) {
@@ -11,11 +11,21 @@ angular.module('agroupApp')
 
     $scope.group = $stateParams.group;
 
+    var confirm = Modal.confirm.delete;
+    var dialog  = Modal.dialog;
+
     $scope.remove = function(md) {
-      $http.delete('/api/markdowns/' + md.id);
-      var i = $scope.markdowns.indexOf(md);
-      $scope.markdowns.splice(i, 1);
+      confirm(function(){
+        $http.delete('/api/markdowns/' + md.id);
+        var i = $scope.markdowns.indexOf(md);
+        $scope.markdowns.splice(i, 1);
+      })(md.content);
     };
+
+    $scope.view = function(md){
+      dialog(function(){
+      })(md.content);
+    }
 
     $scope.sync = function() {
       init();
