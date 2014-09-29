@@ -64,15 +64,15 @@ angular.module('agroupApp')
             element.addClass('editing');
             element.attr('contenteditable', true);
             select(element[0]);
-          } else if(!nv && ov) {
+          } else if (!nv && ov) {
             element.removeClass('editing');
             element.attr('contenteditable', false);
             scope.item.name = element.text();
           }
         });
 
-        scope.$watch('item.name',function(nv,ov){
-          if(nv && ov && nv !== ov){
+        scope.$watch('item.name', function(nv, ov) {
+          if (nv && ov && nv !== ov) {
             return scope.updateItem && scope.updateItem(scope.item);
           }
         });

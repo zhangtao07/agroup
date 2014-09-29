@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', function($scope, $stateParams, $http) {
+  .controller('FileCtrl', function($scope, $stateParams, $http,$localStorage) {
     $scope.message = 'Hello';
 
-    var level = [{
+    var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       files: [],
       parent_id: 0
     }];
@@ -24,7 +24,7 @@ angular.module('agroupApp')
       var group = $stateParams.group;
       $http.get('api/files/' + group).success(function(data, status) {
         db = data;
-        level[0].files = level[0].files.concat(getChild(0));
+        level[0].files = level[0].files = getChild(0);
         $scope.level = level;
       })
     }
