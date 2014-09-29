@@ -1,3 +1,17 @@
+.file-sys-panel{
+  position: absolute;
+  top: 0;
+  bottom: 45px;
+  left: 0;
+  right: 0;
+}
+.bread-nav{
+  margin-bottom: 7px;
+  box-shadow: 1px 1px 3px 1px #A0A39E;
+  a {
+    color: inherit;
+  }
+}
 .m-l-none{
   margin-left: 0 !important;
 }

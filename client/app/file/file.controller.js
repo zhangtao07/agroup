@@ -30,6 +30,10 @@ angular.module('agroupApp')
       })
     }
 
+    function home(){
+      level.splice(1,level.length-1);
+    }
+
     function selectItem(folder, item) {
       if (folder.selectedItem) {
         folder.selectedItem.selected = false;
@@ -99,6 +103,7 @@ angular.module('agroupApp')
     $scope.addItem = addItem;
     $scope.editItem = editItem;
     $scope.doneEditing = doneEditing;
+    $scope.home = home;
 
     $scope.updateItem = function(item) {
       $http.put('api/files/' + item.id, JSON.stringify({
@@ -113,6 +118,7 @@ angular.module('agroupApp')
     function doneEditing(item) {
       item.editing = false;
     }
+
 
 
     var panel = $scope.uploadpanel = {}
