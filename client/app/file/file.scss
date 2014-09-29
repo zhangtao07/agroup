@@ -44,6 +44,12 @@
 .hover-anchor:hover>.hover-action, .hover-anchor:focus>.hover-action{
   display: inherit;
 }
+.fa-folder{
+  color: #6798AF;
+}
+.fa-image{
+  color: #3F7E41;
+}
 
 .msglist-drag {
   @include match_parent();
