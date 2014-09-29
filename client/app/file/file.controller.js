@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', function($scope, $stateParams, $http,$localStorage) {
+  .controller('FileCtrl', function($scope, $stateParams, $http,Modal,$localStorage) {
     $scope.message = 'Hello';
 
     var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
@@ -9,6 +9,7 @@ angular.module('agroupApp')
       parent_id: 0
     }];
     var db;
+    var confirm = Modal.confirm.delete;
 
     function getChild(lel) {
       return db.filter(function(d) {
@@ -61,16 +62,18 @@ angular.module('agroupApp')
     }
 
     function deleteItem(folder, item) {
-      var i = folder.files.indexOf(item);
-      folder.files.splice(i, 1);
-      var j = level.indexOf(folder);
-      if (item.selected) {
-        level.splice(j + 1, level.length - j - 1);
-      }
-
-      if (!folder.files.length) {
-        level.splice(j, 1);
-      }
+      confirm(function(){
+        var i = folder.files.indexOf(item);
+        folder.files.splice(i, 1);
+        var j = level.indexOf(folder);
+        if (item.selected) {
+          level.splice(j + 1, level.length - j - 1);
+        }
+        if (!folder.files.length) {
+          level.splice(j, 1);
+        }
+        $http.delete('api/files/'+item.id);
+      })(item.name);
     }
 
     function addItem(index, fileid, content) {

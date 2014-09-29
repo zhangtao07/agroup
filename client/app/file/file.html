@@ -9,7 +9,7 @@
 
 
   <!-- column -->
-  <div ng-repeat="folder in level" class="col w b-r relative" ng-click="clearSelect(folder)">
+  <div ng-repeat="folder in level" ng-animate="'animate'" class="col w b-r relative fol" ng-click="clearSelect(folder)">
     <div class="vbox">
       <div class="row-row">
         <div class="cell scrollable hover">
@@ -18,7 +18,7 @@
               <!--<a class="list-group-item b-b focus" ng-class="{'focus': (filter == '')}" ng-click="selectFolder({name:''})">ALL Contacts</a>-->
               <a stop-event ng-repeat="item in folder.files"  ng-dblclick="editItem(item,folder)" class="list-group-item m-l hover-anchor b-a no-select m-l-none"
                 ng-class="{'focus ': item.selected}" ng-click="selectItem(folder,item)">
-                <span stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
+                <span tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
                 <span class="block" ng-class="{'m-n': item.selected }"> <span class="fa fa-{{ item.type | fileicon }}"></span>
                   <em class="text-eclipse" ng-blur="doneEditing(item)" file-editing class="file-ml" ng-blur="doneEditing(item)"></em></span>
                 <!--<input stop-event type="text" class="form-control pos-abt" ng-show="item.editing" file-editing ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%;padding-left:25px;" >-->

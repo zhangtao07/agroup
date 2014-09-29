@@ -84,7 +84,8 @@ exports.update = function(req, res) {
 
 // Deletes a file from the DB.
 exports.destroy = function(req, res) {
-  Folder.findById(req.params.id, function(err, file) {
+  var Folder = req.models.folder;
+  Folder.get(req.params.id, function(err, file) {
     if (err) {
       return handleError(res, err);
     }
