@@ -60,10 +60,11 @@ exports.create = function(req, res) {
 
 // Updates an existing file in the DB.
 exports.update = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  var Folder = req.models.folder;
+  if (req.body.id) {
+    delete req.body.id;
   }
-  Folder.findById(req.params.id, function(err, file) {
+  Folder.get(req.params.id, function(err, file) {
     if (err) {
       return handleError(res, err);
     }
@@ -71,6 +72,7 @@ exports.update = function(req, res) {
       return res.send(404);
     }
     var updated = _.merge(file, req.body);
+    //console.log(file);
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

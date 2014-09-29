@@ -5,6 +5,20 @@
   display: table;
   height: 100%;
 }
+.text-eclipse{
+  max-width: 110px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+.editing.text-eclipse{
+  overflow: visible;
+  word-wrap: break-word;
+  white-space: normal;
+}
 
 .no-selected{
   -moz-user-select: none;

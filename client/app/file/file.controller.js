@@ -6,7 +6,7 @@ angular.module('agroupApp')
 
     var level = [{
       files: [],
-      parent_id:0
+      parent_id: 0
     }];
     var db;
 
@@ -37,8 +37,8 @@ angular.module('agroupApp')
       folder.selectedItem = item;
       var index = level.indexOf(folder);
 
-      if(item.type !== 'folder'){
-        closeFolder(index+1,level.length-index);
+      if (item.type !== 'folder') {
+        closeFolder(index + 1, level.length - index);
         $scope.preview(item);
         return;
       }
@@ -49,13 +49,14 @@ angular.module('agroupApp')
       level.splice(index + 2, level.length - index - 2);
     }
 
-    function closeFolder(index,end){
-        level.splice(index, end);
+    function closeFolder(index, end) {
+      level.splice(index, end);
     }
 
     function clearSelect(folder) {
       if (folder.selectedItem) {
         folder.selectedItem.selected = false;
+        folder.selectedItem.editing = false;
       }
     }
 
@@ -72,7 +73,7 @@ angular.module('agroupApp')
       }
     }
 
-    function addItem(index,fileid,content) {
+    function addItem(index, fileid, content) {
       var files = level[index].files = level[index].files || [];
 
       var data = {
@@ -96,19 +97,24 @@ angular.module('agroupApp')
     $scope.editItem = editItem;
     $scope.doneEditing = doneEditing;
 
-    function editItem(item){
+    $scope.updateItem = function(item) {
+      $http.put('api/files/' + item.id, JSON.stringify({
+        name: item.name
+      }));
+    }
+
+    function editItem(item) {
       item.editing = true;
     }
 
-    function doneEditing(item){
+    function doneEditing(item) {
       item.editing = false;
-      console.log(item);
     }
 
 
     var panel = $scope.uploadpanel = {}
 
-    function sendFile(file,folder) {
+    function sendFile(file, folder) {
       var groupId = $stateParams.group;
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
@@ -116,14 +122,14 @@ angular.module('agroupApp')
         formData.append('file', file);
         send('api/message/upload', formData);
 
-      },function(res){
+      }, function(res) {
         var i = level.indexOf(folder);
-        addItem(i,res.file.id,res.file.content);
+        addItem(i, res.file.id, res.file.content);
       });
     }
-    $scope.onDrop = function(files,folder) {
+    $scope.onDrop = function(files, folder) {
       files.forEach(function(file) {
-        sendFile(file,folder);
+        sendFile(file, folder);
       });
     };
   });
