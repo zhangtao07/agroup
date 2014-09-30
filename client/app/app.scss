@@ -59,6 +59,13 @@ body {
 .list-group-item.focus {
 background-color: #e4eaec!important;
 }
+
+.ng-enter-stagger{
+  transition-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+
 // Component styles are injected through grunt
 // injector
 @import 'access/signin/signin.scss';
