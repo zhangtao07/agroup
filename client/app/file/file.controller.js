@@ -2,12 +2,16 @@
 
 angular.module('agroupApp')
   .controller('FileCtrl', function($scope, $stateParams, $http,Modal,$localStorage) {
-    $scope.message = 'Hello';
 
-    var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
+    var allFolder = [{
       files: [],
       parent_id: 0
     }];
+
+    if($localStorage['file.level'] && $localStorage['file.level'].length){
+      allFolder = $localStorage['file.level'];
+    }
+    var level = $localStorage['file.level'] = allFolder;
     var db;
     var confirm = Modal.confirm.delete;
 
