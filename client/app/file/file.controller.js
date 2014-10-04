@@ -137,7 +137,7 @@ angular.module('agroupApp')
 
       }, function(res) {
         var i = level.indexOf(folder);
-        addItem(i, res.file.id, res.file.content);
+        addItem(i, res.file.id, res.msg.content);
       });
     }
     $scope.onDrop = function(files, folder) {
