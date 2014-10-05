@@ -89,7 +89,8 @@ exports.upload = function(req, res) {
       //});
       res.json(200,{
         status: "ok",
-        file: data
+        msg: data,
+        file:{id:fileversion.file_id}
       });
     });
   });
