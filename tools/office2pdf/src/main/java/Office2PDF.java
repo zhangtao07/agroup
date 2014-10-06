@@ -11,6 +11,9 @@ import com.aspose.words.Document;
 import com.aspose.words.FontSettings;
 import com.aspose.words.FolderFontSource;
 import com.aspose.words.FontSourceBase;
+import com.aspose.email.MailMessage;
+import com.aspose.email.MessageFormat;
+import com.aspose.email.MailMessageSaveType;
 
 class Office2PDF {
   @Parameter
@@ -27,7 +30,7 @@ class Office2PDF {
     new JCommander(office2PDF, args);
 
     if (office2PDF.files.size() != 2) {
-      System.out.println("Usage: Office2PDF input.doc output.pdf");
+      System.out.println("Usage: java -jar office2pdf.jar input.doc output.pdf");
       return;
     }
 
@@ -42,7 +45,7 @@ class Office2PDF {
     }
 
     File outputFile = new File(output);
-    File outputFileDir = outputFile.getParentFile();
+    File outputFileDir = outputFile.getAbsoluteFile().getParentFile();
     if (!outputFileDir.exists()) {
       outputFileDir.mkdirs();
     }
@@ -89,6 +92,10 @@ class Office2PDF {
       || inputExt.equals("pps")
       || inputExt.equals("ppsx")) {
       office2PDF.convertPowerPoint(input, output);
+    } else if (inputExt.equals("msg")
+      || inputExt.equals("eml")
+      || inputExt.equals("emlx")) {
+      office2PDF.convertEmail(input, output);
     } else {
       System.out.println("don't support this extension");
     }
@@ -108,6 +115,19 @@ class Office2PDF {
     return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
   }
 
+  private void convertEmail(String input, String output) throws Exception {
+    if (!licenceFile.equals("")) {
+      com.aspose.email.License licence = new com.aspose.email.License();
+      licence.setLicense(licenceFile);
+    }
+
+    File tempFile = File.createTempFile("agroup", ".mhtml");
+    tempFile.deleteOnExit();
+    String tempFilePath = tempFile.getAbsolutePath();
+    MailMessage msg = MailMessage.load(input, MessageFormat.getEml());
+    msg.save(tempFilePath, MailMessageSaveType.getMHtmlFromat());
+    convertWord(tempFilePath, output);
+  }
 
   private void convertWord(String input, String output) throws Exception {
     if (!licenceFile.equals("")) {
