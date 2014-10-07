@@ -62,7 +62,6 @@ exports.index = function(req, res) {
 function getFileid(cb) {
   var group = this.params.group || 1;
   this.models.fileversion.latestFile(group,function(err,ids){
-    console.log(ids);
     cb(null, ids);
   });
 }

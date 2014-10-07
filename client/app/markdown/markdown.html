@@ -20,7 +20,7 @@
             <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
             <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
           </span>
-          <span class="pull-left thumb-sm"><img ng-src="/api/user/avatar/{{ md.user }}" alt="..." class="img-circle"></span>
+          <span class="pull-left thumb-sm"><img image-resize-width="40" image-resize-height="40" image-resize="/api/user/avatar/{{md.user.username}}" alt="..." class="img-circle"></span>
           <div class="media-body">
             <div><a href="">{{ md.user.name }}</a></div>
             <span class="text-muted ng-binding">
