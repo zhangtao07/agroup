@@ -367,6 +367,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/**/*',
+            'editor/**/*',
 //            'assets/fonts/**/*',
 //            'assets/l10n/*',
             'index.html'
