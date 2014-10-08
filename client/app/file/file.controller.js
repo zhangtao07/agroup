@@ -29,7 +29,10 @@ angular.module('agroupApp')
       var group = $stateParams.group;
       $http.get('api/files/' + group).success(function(data, status) {
         db = data;
-        level[0].files = level[0].files = getChild(0);
+        var folds = level[0].files = level[0].files = getChild(0);
+        if(!folds.length){
+          level[0].selectedItem = undefined;
+        }
         $scope.level = level;
       })
     }
