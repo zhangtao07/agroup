@@ -30,7 +30,8 @@ module.exports = {
         success = true;
         email = name + '@baidu.com'; //不完全准确，后续待优化
         req.session.user = {
-          'nickname': nickname,
+          'username':name,
+          'nickname': name,
           'email': email
         };
         auth.addUser(req, res, name, email);
