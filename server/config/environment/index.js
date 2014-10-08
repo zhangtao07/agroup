@@ -49,13 +49,7 @@ var all = {
   // Default auth is fake
   auth: 'fake',
 
-  upload_temp_dir: "/upload/.tmp",
 
-  upload_dir: "/upload",
-
-  avatar_dir: "/images/avatar",
-
-  resize_dist_cache : '/.resize_cache',
 
   getAvatar:function(name){
     return all.root+all.upload_dir+'/'+name+'.jpg';
