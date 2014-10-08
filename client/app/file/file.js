@@ -67,7 +67,12 @@ angular.module('agroupApp')
           } else if (!nv && ov) {
             element.removeClass('editing');
             element.attr('contenteditable', false);
-            scope.item.name = element.text();
+            var content = element.text();
+            if(content){
+              scope.item.name = content;
+            }else{
+              element.text(scope.item.name);
+            }
           }
         });
 
