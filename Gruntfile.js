@@ -173,7 +173,9 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/*',
             '!<%= yeoman.dist %>/.git*',
             '!<%= yeoman.dist %>/.openshift',
-            '!<%= yeoman.dist %>/Procfile'
+            '!<%= yeoman.dist %>/Procfile',
+            '!<%= yeoman.dist %>/upload',
+            '!<%= yeoman.dist %>/.resize_cache'
           ]
         }]
       },
@@ -365,6 +367,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/**/*',
+            'editor/**/*',
 //            'assets/fonts/**/*',
 //            'assets/l10n/*',
             'index.html'

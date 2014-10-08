@@ -16,12 +16,5 @@ module.exports = {
     user: "root",
     password: "",
     port: 3306
-  },
-  upload_temp_dir: "/upload/.tmp",
-
-  upload_dir: "/upload",
-
-  avatar_dir: "/images/avatar",
-
-  resize_dist_cache : '/.resize_cache',
+  }
 };
