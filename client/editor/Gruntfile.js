@@ -19,21 +19,21 @@ module.exports = function(grunt) {
                 jshintrc: true,
                 ignores: [
                     'node_modules/**/*.js',
-                    'public/libs/**/*.js',
-                    'public/res/libs/**/*.js',
-                    'public/res/bower-libs/**/*.js',
-                    'public/res-min/**/*.js'
+                    'libs/**/*.js',
+                    'res/libs/**/*.js',
+                    'res/bower-libs/**/*.js',
+                    'res-min/**/*.js'
                 ]
             },
-            client: ['public/**/*.js']
+            client: ['**/*.js']
         },
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: "public/res",
+                    baseUrl: "res",
                     name: "main",
-                    out: "public/res-min/main.js",
-                    mainConfigFile: 'public/res/main.js',
+                    out: "res-min/main.js",
+                    mainConfigFile: 'res/main.js',
                     optimize: "uglify2",
                     inlineText: true,
                     excludeShallow: [
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             }
         },
         jsbeautifier: {
-            files: ['public/res-min/main.js'],
+            files: ['res-min/main.js'],
             options: {
                 js: {
                     space_before_conditional: false,
@@ -62,16 +62,16 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'public/res/themes',
+                        cwd: 'res/themes',
                         src: [
                             '*.less'
                         ],
-                        dest: 'public/res-min/themes',
+                        dest: 'res-min/themes',
                         ext: '.css'
                     },
                     {
-                        src: 'public/res/styles/base.less',
-                        dest: 'public/res-min/themes/base.css'
+                        src: 'res/styles/base.less',
+                        dest: 'res-min/themes/base.css'
                     }
                 ]
             }
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
         'string-replace': {
             'constants': {
                 files: {
-                    'public/res/constants.js': 'public/res/constants.js'
+                    'res/constants.js': 'res/constants.js'
                 },
                 options: {
                     replacements: [
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
             },
             'cache-manifest': {
                 files: {
-                    'public/cache.manifest': 'public/cache.manifest'
+                    'cache.manifest': 'cache.manifest'
                 },
                 options: {
                     replacements: [
@@ -114,29 +114,29 @@ module.exports = function(grunt) {
                     // Fonts
                     {
                         expand: true,
-                        cwd: 'public/res/font',
+                        cwd: 'res/font',
                         src: [
                             '**'
                         ],
-                        dest: 'public/res-min/font/'
+                        dest: 'res-min/font/'
                     },
                     // Images
                     {
                         expand: true,
-                        cwd: 'public/res/img',
+                        cwd: 'res/img',
                         src: [
                             '**'
                         ],
-                        dest: 'public/res-min/img/'
+                        dest: 'res-min/img/'
                     },
                     // Libraries
                     {
                         expand: true,
-                        cwd: 'public/res/bower-libs/requirejs',
+                        cwd: 'res/bower-libs/requirejs',
                         src: [
                             'require.js'
                         ],
-                        dest: 'public/res-min/'
+                        dest: 'res-min/'
                     }
                 ]
             }
@@ -144,7 +144,7 @@ module.exports = function(grunt) {
         // Inject bower dependencies into RequireJS configuration
         bower: {
             target: {
-                rjsConfig: 'public/res/main.js'
+                rjsConfig: 'res/main.js'
             }
         },
         bump: {
@@ -170,7 +170,7 @@ module.exports = function(grunt) {
     grunt.registerTask('clean', function() {
 
         // Remove public/res-min folder
-        grunt.file['delete']('public/res-min');
+        grunt.file['delete']('res-min');
 
     });
 
@@ -210,13 +210,13 @@ module.exports = function(grunt) {
 
         // List resources and inject them in cache.manifest
         var resFolderList = [
-            'public/res-min',
-            'public/libs/MathJax/extensions',
-            'public/libs/MathJax/fonts/HTML-CSS/TeX/woff',
-            'public/libs/MathJax/jax/element',
-            'public/libs/MathJax/jax/output/HTML-CSS/autoload',
-            'public/libs/MathJax/jax/output/HTML-CSS/fonts/TeX',
-            'public/libs/MathJax/jax/output/HTML-CSS/fonts/STIX'
+            'res-min',
+            'libs/MathJax/extensions',
+            'libs/MathJax/fonts/HTML-CSS/TeX/woff',
+            'libs/MathJax/jax/element',
+            'libs/MathJax/jax/output/HTML-CSS/autoload',
+            'libs/MathJax/jax/output/HTML-CSS/fonts/TeX',
+            'libs/MathJax/jax/output/HTML-CSS/fonts/STIX'
         ];
         grunt.task.run('list-res:' + resFolderList.join(':'));
         grunt.task.run('string-replace:cache-manifest');
