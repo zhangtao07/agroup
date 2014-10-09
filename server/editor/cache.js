@@ -3,16 +3,21 @@ var path = require('path');
 var models = require('../model');
 var async = require('async');
 var md5 = require('MD5');
+var config = require("../config/environment");
 var cache = {};
 var pathdb = {};
 var database;
-var basepath = path.join(__dirname, '../../.markdowns/');
+var basepath = config.root + config.upload_dir + '/markdown';//path.join(__dirname, '../../upload/markdown/');
 
 fs.exists(basepath, function(exists) {
   if (!exists) {
     fs.mkdir(basepath);
   }
 });
+
+function getRealpath(filepath){
+  return path.join(config.root , config.upload_dir , '/' + filepath);
+}
 
 
 function getDB(cb) {
@@ -30,12 +35,12 @@ function findPath(db, fileid, cb) {
   var fv = db.models.fileversion;
   fv.find({
     file_id: fileid
-  }, 1, ['updateDate', 'Z'], function(err, file) {
+  }, ['updateDate', 'Z'], function(err, file) {
     if (err) throw err;
-    var filepath = file[0] ? file[0].filepath : path.join(basepath + fileid + '.md');
+    var filepath = file[0].getRealpath();//file[0] ? file[0].filepath : path.join(basepath + fileid + '.md');
     var exists = fs.existsSync(filepath);
     if (!exists) {
-      fs.writeFileSync(filepath, '\n\nAGroup 一个伟大项目的开始 \n====');
+      fs.writeFileSync(filepath, '');
     }
     pathdb[fileid] = filepath;
     return cb && cb(null, filepath);
@@ -81,8 +86,11 @@ function saveToDB(file,cb) {
 }
 
 function saveToDisk(file, content, cb) {
-  fs.writeFile(file.filepath, content, 'utf8', function(err) {
-    fs.stat(file.filepath, function(err, stat) {
+  var filepath = getRealpath(file.filepath);
+  fs.writeFile(filepath, content, 'utf8', function(err) {
+    console.log(err);
+    console.log(filepath);
+    fs.stat(filepath, function(err, stat) {
       file.size = stat.blksize;
       cb(null, file);
     });
@@ -103,7 +111,7 @@ exports.save = function(fileid,user) {
         function(next) {
           var filename = fileid + '-' + md5(file.content) + '.md';
           var fv = {
-            filepath: path.join(path.dirname(filepath), '/', filename),
+            filepath: path.join('markdown/', filename),
             filename: filename,
             mimetype: 'text/x-markdown',
             size: 0,
