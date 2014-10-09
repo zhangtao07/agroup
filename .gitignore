@@ -8,6 +8,7 @@ dist
 /server/config/local.env.js
 /.project
 /upload
+/import
 /__test
 res-min
 bower-libs
