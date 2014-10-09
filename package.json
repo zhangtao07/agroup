@@ -4,22 +4,22 @@
   "main": "server/app.js",
   "contributors": [
     {
-      "username":"chenxiao",
+      "username": "chenxiao",
       "nickname": "chenxiao",
       "email": "duoyi.wu@gmail.com"
     },
     {
-      "username":"chenminliang01",
+      "username": "chenminliang01",
       "nickname": "Miller",
       "email": "chen.minliang@gmail.com"
     },
     {
-      "username":"zhangzimeng01",
+      "username": "zhangzimeng01",
       "nickname": "zzm",
       "email": "30962088@qq.com"
     },
     {
-      "username":"zhangning",
+      "username": "zhangning",
       "nickname": "zn",
       "email": "hunter.dding@gmail.com"
     }
@@ -52,11 +52,13 @@
     "markdown": "^0.5.0",
     "marked": "^0.3.2",
     "method-override": "~1.0.0",
+    "mime": "^1.2.11",
     "mkdirp": "latest",
     "moment": "~2.8.3",
     "mongoose": "~3.8.8",
     "morgan": "~1.0.0",
     "mysql": "latest",
+    "npm-cache-filename": "~1.0.1",
     "orm": "latest",
     "passport": "~0.2.0",
     "passport-facebook": "latest",
@@ -70,14 +72,10 @@
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
     "socketio-jwt": "^2.0.2",
+    "string": "~2.1.0",
     "temp": "latest",
     "underscore": "^1.7.0",
-    "unirest": "^0.2.7",
-    "jsdom":"latest",
-    "iconv":"~2.1.4",
-    "request":"~2.44.0",
-    "npm-cache-filename":"~1.0.1",
-    "string":"~2.1.0"
+    "unirest": "^0.2.7"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

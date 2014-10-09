@@ -15,25 +15,27 @@ marked.setOptions({
   sanitize: true,
   smartLists: true,
   smartypants: false,
-  highlight: function (code) {
+  highlight: function(code) {
     return require('highlight.js').highlightAuto(code).value;
   }
 });
 
-exports.destroy = function(req, res){
+exports.destroy = function(req, res) {
   var id = req.params.id;
-  req.models.fileversion.find({file_id:id},function(err,fvs){
+  req.models.fileversion.find({
+    file_id: id
+  }, function(err, fvs) {
 
-    if(err){
+    if (err) {
       res.status(500).send(err);
       return;
     }
 
-    _.forEach(fvs,function(d,i){
+    _.forEach(fvs, function(d, i) {
       fs.unlink(d.filepath);
       d.remove();
-      d.getFile(function(err,file){
-        if(file){
+      d.getFile(function(err, file) {
+        if (file) {
           file.remove();
         }
       });
@@ -61,7 +63,7 @@ exports.index = function(req, res) {
 
 function getFileid(cb) {
   var group = this.params.group || 1;
-  this.models.fileversion.latestFile(group,function(err,ids){
+  this.models.fileversion.latestFile(group, function(err, ids) {
     cb(null, ids);
   });
 }
@@ -89,12 +91,12 @@ function getFile(ids, cb) {
         content.push({
           id: d.file_id,
           user_id: d.user_id,
-          content: marked(fs.readFileSync(d.filepath, 'utf8')),
+          content: marked(fs.readFileSync(d.getRealpath(), 'utf8')),
           updateDate: d.updateDate,
           createDate: d.createDate
         });
       });
-      cb(null,content);
+      cb(null, content);
     } catch (e) {
       cb(e);
     }
@@ -102,20 +104,24 @@ function getFile(ids, cb) {
 }
 
 function getUser(files, cb) {
-  var ids = _.map(files,function(d,i){
-    return { id: d.user_id };
+  var ids = _.map(files, function(d, i) {
+    return {
+      id: d.user_id
+    };
   });
-  this.models.user.find({or:ids},function(err,user){
-    if(err){
+  this.models.user.find({
+    or: ids
+  }, function(err, user) {
+    if (err) {
       return cb(err)
     }
     var users = {};
-    _.forEach(user,function(d,i){
+    _.forEach(user, function(d, i) {
       users[d.id] = d;
     });
-    var result = _.map(files,function(f,i){
-        f.user = users[f.user_id];
-        return f;
+    var result = _.map(files, function(f, i) {
+      f.user = users[f.user_id];
+      return f;
     });
     cb(null, result);
   });
