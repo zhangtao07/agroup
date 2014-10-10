@@ -6,6 +6,7 @@ var async = require('async');
 var markdown = require("markdown").markdown;
 var marked = require('marked');
 
+
 marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
@@ -48,81 +49,37 @@ exports.destroy = function(req, res) {
 // Get list of markdowns
 exports.index = function(req, res) {
 
-  async.waterfall([
-    getFileid.bind(req),
-    getFile.bind(req),
-    getUser.bind(req)
-  ], function(err, result) {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      return res.status(200).json(result);
-    }
-  });
-}
+  var offset = parseInt(req.query.offset) || 0;
+  var limit = parseInt(req.query.limit) || 9;
 
-function getFileid(cb) {
-  var group = this.params.group || 1;
-  this.models.fileversion.latestFile(group, function(err, ids) {
-    cb(null, ids);
-  });
-}
+  var group = req.params.group || 1;
+  var user = req.session.user;
 
-function getFile(ids, cb) {
-
-  this.models.fileversion.find({
-    or: ids
-  }, function(err, markdowns) {
-    if (err) {
-      return cb(err);
-    }
-    var result = {};
-    _.forEach(markdowns, function(d, i) {
-      var file = result[d.file_id];
-      if (!file) {
-        result[d.file_id] = d;
-      } else if (file.updateDate < d.updateDate) {
-        result[d.file_id] = d;
-      }
+  req.models.file.find({
+      group_id: group,
+      mimetype: 'text/x-markdown'
+    }).order('-createDate').limit(limit).offset(offset)
+    .run(function(err, files) {
+      getFileversion(user, files, res);
     });
-    var content = [];
-    try {
-      _.forEach(result, function(d, i) {
-        content.push({
-          id: d.file_id,
-          user_id: d.user_id,
-          content: marked(fs.readFileSync(d.getRealpath(), 'utf8')),
-          updateDate: d.updateDate,
-          createDate: d.createDate
-        });
+}
+
+
+function getFileversion(user, files, res) {
+  var completeQueue = [];
+  _.each(files, function(file, i) {
+    file.getFileversion(function(err, versions) {
+      var latestVersion = _.max(versions, function(version) {
+        return version.createDate;
       });
-      cb(null, content);
-    } catch (e) {
-      cb(e);
-    }
-  });
-}
+      latestVersion.get(user, function data(err, result) {
+        result.content = marked(result.content);
+        completeQueue.push(result);
 
-function getUser(files, cb) {
-  var ids = _.map(files, function(d, i) {
-    return {
-      id: d.user_id
-    };
-  });
-  this.models.user.find({
-    or: ids
-  }, function(err, user) {
-    if (err) {
-      return cb(err)
-    }
-    var users = {};
-    _.forEach(user, function(d, i) {
-      users[d.id] = d;
+        if (completeQueue.length === files.length) {
+          return res.status(200).json(completeQueue);
+        }
+      });
     });
-    var result = _.map(files, function(f, i) {
-      f.user = users[f.user_id];
-      return f;
-    });
-    cb(null, result);
   });
 }

@@ -155,6 +155,7 @@ exports.createFile = function(group,user,cb) {
       var now = new Date();
       file.create([{
         name: now.toLocaleDateString(),
+        mimetype: 'text/x-markdown',
         createDate: now,
         user_id: user.id,
         group_id: group

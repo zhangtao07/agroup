@@ -65,9 +65,11 @@ function writeFile(filename,realname, buf, stats, parentID) {
 
   fs.writeFile(destpath, buf, function(err) {
     if (err) throw err;
+    var mimetype = mime.lookup(filename);
     db.writeFile({
         name: realname,
         createDate: new Date(),
+        mimetype: mimetype,
         user_id: user.id,
         group_id: group.id
       }, {
@@ -85,12 +87,11 @@ db.writeFile = function(file, data, parentID) {
   database.file.create([file], function(err, item) {
     if (err) throw err;
     var fileid = item[0].id;
-    var mimetype = mime.lookup(data.filepath);
 
     var version = {
       filepath: data.filepath,
       filename: file.name,
-      mimetype: mimetype,
+      mimetype: file.mimetype,
       encoding: 'utf8',
       size: data.size,
       createDate: file.createDate,
@@ -103,7 +104,7 @@ db.writeFile = function(file, data, parentID) {
       name: file.name,
       parent_id: parentID,
       file_id: fileid,
-      type: mimetype,
+      type: file.mimetype,
       group_id: data.groupid
     };
 
