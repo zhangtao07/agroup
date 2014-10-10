@@ -33,6 +33,19 @@
                 baseUrl: window.baseDir,
                 deps: ['main']
             };
+
+
+            function imgresize(url,width,height){
+              width = width || 30;
+              height = height || 30;
+              if(!/^http(s)?:\/\//.test(url)){
+                url = url.replace(/^\//,function(s0,s1){
+                  return ''
+                });
+                url = location.protocol+'//'+location.hostname+':'+location.port+'/'+url;
+              }
+              return '/static/image/resize?url=' + url + '&width=' + width + '&height='+ height +'&gravity=center&type=resize'
+            }
         </script>
         <script src="res/require.js"></script>
     </head>
