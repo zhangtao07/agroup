@@ -3,14 +3,14 @@
 angular.module('agroupApp')
   .controller('MarkdownCtrl', function($scope, $http, $stateParams, Modal,$location) {
 
-    var markdowns = $scope.markdowns = [];
+    $scope.markdowns = [];
     function success(data, status) {
       //$scope.markdowns = data.sort(function(a, b) {
         //return a.updateDate < b.updateDate;
       //});
       $scope.hasMore= data.hasMore;
       data.list.forEach(function(md){
-        markdowns.push(md);
+        $scope.markdowns.push(md);
       });
     }
 
@@ -33,6 +33,7 @@ angular.module('agroupApp')
     }
 
     $scope.sync = function() {
+      $scope.markdowns = [];
       init();
     };
 

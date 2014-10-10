@@ -491,7 +491,7 @@ define([
     })).appendTo($inputElt);
     usr.$avatarElt = $(crel('img', {
       class: 'avatar-helper',
-      src: user.avatar
+      src: user.avatar || '/assets/images/avatar.jpg'
     })).appendTo($inputElt);
   }
 
