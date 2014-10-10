@@ -8,8 +8,8 @@ angular.module('agroupApp')
       //$scope.markdowns = data.sort(function(a, b) {
         //return a.updateDate < b.updateDate;
       //});
-      //$scope.hasMore= false;
-      data.forEach(function(md){
+      $scope.hasMore= data.hasMore;
+      data.list.forEach(function(md){
         markdowns.push(md);
       });
     }
