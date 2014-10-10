@@ -19,6 +19,13 @@ module.exports = function(app) {
     }
 
   });
+  app.use('/editor/*', function(req, res, next) {
+    if (!req.session.user) {
+      res.render('401.html');
+    } else {
+      next();
+    }
+  });
   app.use('/static/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
