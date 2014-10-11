@@ -809,7 +809,7 @@ module.exports = function(grunt) {
   /***************************************************************************
    * Clean
    */
-  grunt.registerTask('editorclean', function() {
+  grunt.registerTask('editor-clean', function() {
     // Remove editor/res-min folder
     grunt.file['delete']('client/editor/res-min');
   });
@@ -828,26 +828,28 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerTask('build-css', function() {
+  grunt.registerTask('editor-build-css', function() {
     // Compile less files
     grunt.task.run('less:editor');
   });
 
 
-  grunt.registerTask('build-res', function() {
+  grunt.registerTask('editor-build-res', function() {
 
     // Copy some resources (images, fonts...)
     grunt.task.run('copy:editor');
 
+    var yeoman = grunt.config.get('yeoman');
+
     // List resources and inject them in cache.manifest
     var resFolderList = [
-      '<%= yeoman.client %>/editor/res-min',
-      '<%= yeoman.client %>/editor/libs/MathJax/extensions',
-      '<%= yeoman.client %>/editor/libs/MathJax/fonts/HTML-CSS/TeX/woff',
-      '<%= yeoman.client %>/editor/libs/MathJax/jax/element',
-      '<%= yeoman.client %>/editor/libs/MathJax/jax/output/HTML-CSS/autoload',
-      '<%= yeoman.client %>/editor/libs/MathJax/jax/output/HTML-CSS/fonts/TeX',
-      '<%= yeoman.client %>/editor/libs/MathJax/jax/output/HTML-CSS/fonts/STIX'
+      yeoman.client + '/editor/res-min',
+      yeoman.client + '/editor/libs/MathJax/extensions',
+      yeoman.client + '/editor/libs/MathJax/fonts/HTML-CSS/TeX/woff',
+      yeoman.client + '/editor/libs/MathJax/jax/element',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/autoload',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/fonts/TeX',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/fonts/STIX'
     ];
     grunt.task.run('list-res:' + resFolderList.join(':'));
     grunt.task.run('string-replace:cache-manifest');
@@ -860,18 +862,17 @@ module.exports = function(grunt) {
     grunt.util.recurse(arguments, function(arg) {
       grunt.log.writeln('Listing resources: ' + arg);
       grunt.file.recurse(arg, function(abspath) {
-        resourceList.push(abspath.replace(/^public\//, ''));
+        resourceList.push(abspath.replace(/^client\/editor\//, ''));
       });
     });
     grunt.config.set('resources', resourceList.join('\n'));
   });
 
   grunt.registerTask('editor', [
-    'editorclean'
+    'editor-clean',
+    'editor-build-js',
+    'editor-build-css',
+    'editor-build-res'
   ]);
-
-
-
-
 
 };
