@@ -23,23 +23,30 @@ module.exports = function(orm, db) {
 
 
         getFileContent: function() {
+          if (this.type != "file") {
+            return false;
+          }
+          var list = [];
+          this.fileversions.forEach(function(fileversion) {
+            var content = {
+              "cover": fileversion.getCover(),
+              "filepath": fileversion.getOnlinePath(),
+              "filename": fileversion.filename,
+              "mimetype": fileversion.mimetype
+            }
+            if (/pdf/.test(content.mimetype)) {
+              content.pdf = content.filepath;
+            }
+            if (/ms[-]*word|officedocument/.test(content.mimetype)) {
+              content.pdf = content.filepath + ".pdf";
+            }
+            list.push({
+              type: "file",
+              content: content
+            });
+          });
+          return list;
 
-          var content = {
-            "cover": this.fileversion.getCover(),
-            "filepath": this.fileversion.getOnlinePath(),
-            "filename": this.fileversion.filename,
-            "mimetype": this.fileversion.mimetype
-          }
-          if (/pdf/.test(content.mimetype)) {
-            content.pdf = content.filepath;
-          }
-          if (/ms[-]*word|officedocument/.test(content.mimetype)) {
-            content.pdf = content.filepath + ".pdf";
-          }
-          return {
-            type: "file",
-            content: content
-          }
         },
         getPlainContent: function() {
           if (this.type != "plain") {
@@ -61,38 +68,25 @@ module.exports = function(orm, db) {
             content: content
           }
         },
-        getMessage: function(merge) {
-          if (merge) {
-            if (merge.fileversion) {
-              this.fileversion = merge.fileversion;
-            }
+        getMessage: function(callback) {
+          var self = this;
+          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getLink)]).then(function(result) {
+            console.info(result);
+            var contentObj = self.getPlainContent() || self.getFileContent();
+            callback(null,{
+              id: this.id,
+              avartar: 'api/user/avatar/' + this.user.username,
+              nickname: this.user.nickname,
+              time: ago(this.date),
+              content: contentObj.content,
+              'type': contentObj.type
+            });
 
-            if (merge.user) {
-              this.user = merge.user;
-            }
-            if (merge.link) {
-              this.link = merge.link;
-            }
-          }
-
-
-          var contentObj = this.getPlainContent() || this.getFileContent();
-
-
-          return {
-            id: this.id,
-            avartar: 'api/user/avatar/' + this.user.username,
-            nickname: this.user.nickname,
-            time: ago(this.date),
-            content: contentObj.content,
-            'type': contentObj.type
-          }
+          });
         }
       }
 
     });
-
-  Message.hasOne('fileversion', db.models.fileversion, { required: false, autoFetch: true });
 
   Message.hasOne('user', db.models.user, { required: true, autoFetch: true });
 

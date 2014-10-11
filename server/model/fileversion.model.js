@@ -54,7 +54,8 @@ module.exports = function(orm, db) {
     }
   });
 
-  Fileversion.hasOne('file', db.models.file, { required: true});
+  Fileversion.hasOne('file', db.models.file, { required: true,reverse : "fileversions"});
+  Fileversion.hasOne('message', db.models.message, { required: false});
   Fileversion.hasOne('user', db.models.user, { required: true});
 
 

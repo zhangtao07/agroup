@@ -134,15 +134,16 @@ function extractPlainFileText(file){
  */
 
 module.exports=function(models,args){
-  var fileId = args.fileId,
-    userId = args.userId,
-    groupId = args.groupId,
-    sha1 = args.sha1,
-    filepath = args.filepath,
-    mimetype = args.mimetype,
-    filename = args.filename,
-    fileSize = args.size,
-    encoding = args.encoding;
+  var fileId = args.fileId,//not required
+    userId = args.userId,//required
+    groupId = args.groupId,//required
+    sha1 = args.sha1,//required
+    filepath = args.filepath,//required
+    mimetype = args.mimetype,//required
+    filename = args.filename,//required
+    fileSize = args.size,//required
+    encoding = args.encoding,//required
+    messageId = args.messageId; //not required
 
   return Q.Promise(function getFileId(resolve) {
     if (fileId) {
@@ -182,7 +183,8 @@ module.exports=function(models,args){
         file_id: file_id,
         encoding: encoding,
         createDate: new Date,
-        updateDate: new Date
+        updateDate: new Date,
+        messageId:messageId
       };
       Q.Promise(function imageSizeOf(resolve) {
         if (/^image\//.test(mimetype)) {

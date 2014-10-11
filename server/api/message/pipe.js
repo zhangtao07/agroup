@@ -14,7 +14,7 @@ var importFile = require('./import');
  *
  * @param req
  * @returns {Object} res
- * @returns {Object} res.file
+ * @returns {Array} res.files
  * @returns {String} res.file.filename
  * @returns {String} res.file.mimetype
  * @returns {Number} res.file.size
@@ -32,10 +32,13 @@ function pipe(req) {
     });
 
     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
-      fields[fieldname] = val;
+      result.fields[fieldname] = val;
 
     });
-    var result = {};
+    var result = {
+      fileds:{},
+      files:[]
+    };
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       file.on('data', function(data) {
         shasum.update(data);
@@ -45,15 +48,14 @@ function pipe(req) {
         var d = shasum.digest('hex');
 
         var stat = fs.statSync(tempPath);
-        result.file = {
+        result.files.push({
           filename: filename,
           mimetype: mimetype,
           size: stat['size'],
           encoding: encoding,
           filepath: tempPath,
           sha1: d
-        };
-        result.fields = fields;
+        });
       });
       var tempDir = config.root + config.upload_temp_dir;
       if (!fs.existsSync(tempDir)) {
@@ -77,8 +79,9 @@ function pipe(req) {
     req.pipe(busboy);
   })
 }
+module.exports = pipe;
 
-
+/*
 module.exports = function(req, callback) {
   var user_id = req.session.user.id;
 
@@ -108,3 +111,4 @@ module.exports = function(req, callback) {
 
 
 }
+*/

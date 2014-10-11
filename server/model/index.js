@@ -8,9 +8,10 @@ function setup(db, cb) {
   require('./group.model')(orm, db);
   require('./link.model')(orm, db);
   require('./file.model')(orm, db);
+  require('./message.model')(orm, db);
   require('./fileversion.model')(orm, db);
   require('./filefulltext.model')(orm, db);
-  require('./message.model')(orm, db);
+
   require('./folder.model')(orm, db);
   return cb(null, db);
 }
@@ -19,8 +20,13 @@ module.exports = function(cb) {
   if (connection) return cb(null, connection);
 
   orm.connect(settings.mysql, function(err, db) {
-    if (err) return cb(err);
 
+    if (err){
+      console.info(err);
+      return cb(err);
+    }
+
+    console.info('connected！！！！！！！！！！');
     connection = db;
     db.settings.set('instance.returnAllErrors', true);
     setup(db, cb);
