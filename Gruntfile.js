@@ -9,15 +9,7 @@ module.exports = function(grunt) {
     localConfig = {};
   }
 
-  // 不要删除这里，没用jit-grunt 懒加载,build editor 需要
-  //grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
-  //grunt.loadNpmTasks('grunt-contrib-less');
-  //grunt.loadNpmTasks('grunt-jsbeautifier');
-  //grunt.loadNpmTasks('grunt-string-replace');
-  //grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-bower-requirejs');
-  grunt.loadNpmTasks('grunt-bump');
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
@@ -82,7 +74,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '<%= yeoman.client %>/editor/res/themes',
           src: [
-            '<%= yeoman.client %>/editor/*.less'
+            '*.less'
           ],
           dest: '<%= yeoman.client %>/editor/res-min/themes',
           ext: '.css'
@@ -685,8 +677,28 @@ module.exports = function(grunt) {
           }]
         }
       }
+    },
+    // Inject bower dependencies into RequireJS configuration
+    bower: {
+      target: {
+        rjsConfig: '<%= yeoman.client %>/editor/res/main.js'
+      }
+    },
+    bump: {
+      options: {
+        files: [
+          'package.json',
+          'bower.json'
+        ],
+        updateConfigs: [
+          'pkg'
+        ],
+        commitFiles: [
+          '-a'
+        ],
+        pushTo: 'origin'
+      }
     }
-
   });
 
   // Used for delaying livereload until after server has restarted
