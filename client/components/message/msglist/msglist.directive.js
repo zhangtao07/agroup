@@ -106,6 +106,8 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
               'type': 'plain'
             }).success(function(data) {
               scope.postText = "";
+//              debugger;
+              element.find(".list-container").get(0).scrollTop=0;
 
 
             });

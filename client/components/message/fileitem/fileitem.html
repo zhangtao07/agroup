@@ -1,4 +1,4 @@
-<img ng-click="onimgclick()" ng-if="data.images" class="imageitem-img img-thumbnail" image-resize="{{data.images[0]}}" image-resize-width="200" image-resize-height="200" title="{{data.filename}}"/>
+<img ng-click="onimgclick()" ng-if="data.cover" class="imageitem-img img-thumbnail" image-resize="{{data.cover}}" image-resize-width="200" image-resize-height="200" title="{{data.filename}}"/>
 <p style="margin-top: 10px;font-weight: bold;">
     <a ng-href="{{data.filepath}}?filename={{data.filename}}" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
         <fileicon style="font-size: 26px;" mimetype="{{data.mimetype}}" filename="{{data.filename}}"></fileicon>

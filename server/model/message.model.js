@@ -22,23 +22,23 @@ module.exports = function(orm, db) {
       methods: {
 
 
-        getFileContent:function(){
+        getFileContent: function() {
 
           var content = {
-            "images":this.fileversion.getImages(),
-              "filepath":this.fileversion.getOnlinePath(),
-              "filename": this.fileversion.filename,
-              "mimetype":this.fileversion.mimetype
+            "cover": this.fileversion.getCover(),
+            "filepath": this.fileversion.getOnlinePath(),
+            "filename": this.fileversion.filename,
+            "mimetype": this.fileversion.mimetype
           }
-          if(/pdf/.test(content.mimetype)){
+          if (/pdf/.test(content.mimetype)) {
             content.pdf = content.filepath;
           }
-          if(/ms[-]*word|officedocument/.test(content.mimetype)){
-            content.pdf = content.filepath+".pdf";
+          if (/ms[-]*word|officedocument/.test(content.mimetype)) {
+            content.pdf = content.filepath + ".pdf";
           }
           return {
-            type:"file",
-            content:content
+            type: "file",
+            content: content
           }
         },
         getPlainContent: function() {
@@ -46,14 +46,14 @@ module.exports = function(orm, db) {
             return false;
           }
           var content = {
-            text:this.content
+            text: this.content
           }
-          if(this.link != null){
+          if (this.link != null) {
             content.link = {
-              url:this.link.url,
-              title:this.link.title,
-              icon:this.link.icon,
-              description:this.link.description
+              url: this.link.url,
+              title: this.link.title,
+              icon: this.link.icon,
+              description: this.link.description
             }
           }
           return {

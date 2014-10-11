@@ -5,46 +5,9 @@ var mkdirp = require('mkdirp');
 var crypto = require('crypto');
 var config = require("../../config/environment/index");
 var fs = require("fs");
-var sizeOf = require('image-size');
 var exec = require('child_process').exec;
 var Q = require('q');
-
-function word2Pdf(file) {
-  return Q.Promise(function(resolve) {
-    var output = file + ".pdf";
-    exec("java -jar " + __dirname + "/convert.jar -i " + file + " -o " + output, function(error, stdout, stderr) {
-      resolve(output);
-    });
-  });
-
-}
-
-function pdf2image(file, outputPath) {
-  return Q.Promise(function(resolve) {
-    if (!fs.existsSync(outputPath)) {
-      fs.mkdirSync(outputPath);
-    }
-    exec("gm convert -density 300 -resize 50% pdf:" + file + " +adjoin jpeg:" + outputPath + "/%01d.jpg", function() {
-      resolve(outputPath);
-    });
-  });
-
-
-}
-
-function generateImages(mimetype, file) {
-
-  if (mimetype == "application/pdf") {
-    return pdf2image(file, file + '.images');
-  } else if (/ms[-]*word|officedocument/.test(mimetype)) {
-    return word2Pdf(file).then(function(pdf) {
-      return pdf2image(pdf, file + '.images');
-    });
-  } else {
-    return Q.fcall(function() {
-    });
-  }
-}
+var importFile = require('./import');
 
 
 /**
@@ -115,91 +78,32 @@ function pipe(req) {
   })
 }
 
+
 module.exports = function(req, callback) {
   var user_id = req.session.user.id;
 
   return pipe(req).then(function(result) {
-
-    var pipeFile = result.file,
-      fields = result.fields,
-      groupId = fields.groupId,
-      sha1 = pipeFile.sha1,
-      tempFile = pipeFile.filepath,
-      mimetype = pipeFile.mimetype,
-      filename = pipeFile.filename,
-      fileSize = pipeFile.size,
-      encoding = pipeFile.encoding;
-
-    return Q.Promise(function getFileId(resolve) {
-      if (fields.id) {
-        resolve(fields.id);
-      } else {
-        req.models.file.create({
-          name: filename,
-          group_id: groupId,
-          user_id: user_id
-        },function(err,file){
-          resolve(file.id);
-        });
-      }
-    }).then(function(file_id) {
-      return Q.Promise(function getFileversion(resolve) {
-        var upload_dir = config.upload_dir;
-        var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
-        var filePath = upload_dir + "/" + databasepath;
-        var saveFile = config.root + filePath;
-        var saveDir = path.dirname(saveFile);
-        if (!fs.existsSync(saveDir)) {
-          mkdirp.sync(saveDir);
-        }
-        if (!fs.existsSync(saveFile)) {
-          fs.renameSync(tempFile, saveFile);
-        } else {
-          fs.unlinkSync(tempFile);
-        }
-
-
-        var fileVersion = {
-          user_id: user_id,
-          filepath: databasepath,
-          filename: filename,
-          mimetype: mimetype,
-          size: fileSize,
-          file_id: file_id,
-          encoding: encoding,
-          createDate: new Date,
-          updateDate: new Date
-        };
-        Q.Promise(function imageSizeOf(resolve) {
-          if (/^image\//.test(mimetype)) {
-            sizeOf(saveFile, function(err, dimensions) {
-              resolve(dimensions)
-            });
-          } else {
-            resolve(null);
-          }
-        }).then(function(dimen) {
-
-          if (dimen) {
-            fileVersion.width = dimen.width;
-            fileVersion.height = dimen.height;
-          }
-          generateImages(mimetype, saveFile).then(function() {
-            req.models.fileversion.create(fileVersion, function(err, fileversion) {
-              if (err) {
-                console.info(err);
-              }
-              console.info("3333");
-              resolve({
-                fields:fields,
-                fileversion:fileversion
-              });
-            });
-          });
-
-        });
+    var file = result.file,
+      fields = result.fields;
+    return importFile(req.models,{
+      userId:user_id,
+      groupId:fields.groupId,
+      fileId:fields.fileId,
+      filename:file.filename,
+      mimetype:file.mimetype,
+      size:file.size,
+      encoding:file.encoding,
+      filepath:file.filepath,
+      sha1:file.sha1
+    }).then(function(fileversion){
+      return Q.promise(function(resovle){
+        resovle({
+          fileversion:fileversion,
+          fields:fields
+        })
       });
-    });
+    })
+
   });
 
 

@@ -14,7 +14,7 @@ module.exports = {
     host: "127.0.0.1",
     database: "agroup",
     user: "root",
-    password: "",
+    password: "root",
     port: 3306
   }
 };

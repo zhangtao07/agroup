@@ -77,7 +77,10 @@
     "iconv":"~2.1.4",
     "request":"~2.44.0",
     "npm-cache-filename":"~1.0.1",
-    "string":"~2.1.0"
+    "string":"~2.1.0",
+    "istextorbinary":"~1.0.0",
+    "jschardet":"~1.1.0",
+    "segment":"~0.0.5"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

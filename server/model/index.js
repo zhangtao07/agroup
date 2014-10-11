@@ -9,6 +9,7 @@ function setup(db, cb) {
   require('./link.model')(orm, db);
   require('./file.model')(orm, db);
   require('./fileversion.model')(orm, db);
+  require('./filefulltext.model')(orm, db);
   require('./message.model')(orm, db);
   require('./folder.model')(orm, db);
   return cb(null, db);
