@@ -79,7 +79,7 @@ function getFileversion(user, files, res, models, group, limit, offset) {
         completeQueue.push(result);
         if (count && completeQueue.length === files.length) {
           return res.status(200).json({
-            list: completeQueue,
+            list: _.sortBy(completeQueue,function(d){ return d.id }),
             hasMore: limit + offset < count ? true : false
           });
         }
