@@ -53,10 +53,10 @@
             window.baseDir = 'res';
             /*
               res-min 是编译目录，从源码中祛除,请执行 gulp 进行编译
+            */
             if (!/(\?|&)debug($|&)/.test(location.search)) {
                 window.baseDir += '-min';
             }
-            */
 
             function getParam(param){
                 var reg = new RegExp('.*'+param+'=([^&]+).*');
