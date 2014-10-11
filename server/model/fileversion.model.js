@@ -62,7 +62,7 @@ module.exports = function(orm, db) {
       get: function(user,cb) {
         var self = this;
         var result = {
-          id: self.id,
+          id: self.file_id,
           filename: self.filename,
           user: {
             avatar: '/api/user/avatar/' + user.username,
