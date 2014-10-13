@@ -95,6 +95,32 @@ angular.module('agroupApp')
   })
   .filter('fileicon', function() {
     return function(input) {
-      return input.replace(/\/.*/, '');
+      var icon = input.replace(/\/.*/, '');
+      switch (input) {
+        case 'text/x-markdown':
+          icon = 'file-text';
+          break;
+        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+          icon = 'file-o';
+          break;
+        case 'application/x-rar-compressed':
+          icon = 'file-zip-o';
+          break;
+        case 'application/msword':
+          icon = 'file-word-o';
+          break;
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          icon = 'file-word-o';
+          break;
+        case 'application/pdf':
+          icon = 'file-pdf-o';
+          break;
+        case 'application/octet-stream':
+          icon = 'file';
+          break;
+        default:
+          //icon = 'file';
+      }
+      return icon;
     }
   });
