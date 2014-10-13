@@ -49,6 +49,7 @@ angular.module('agroupApp')
       folder.selectedItem = item;
       var index = level.indexOf(folder);
 
+      $scope.scrollLeft();
       if (item.type !== 'folder') {
         closeFolder(index + 1, level.length - index);
         $scope.preview(item);

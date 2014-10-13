@@ -44,6 +44,15 @@ angular.module('agroupApp')
       });
     };
   })
+  .directive('scrollTo', function() {
+    return function(scope, element, attrs) {
+      //window.element = element;
+      scope.scrollLeft = function(){
+        element.scrollLeft(1000);
+      };
+      //element.scrollLeft(1000);
+    };
+  })
   .directive('fileEditing', function() {
     return {
       restrict: 'A',
