@@ -9,6 +9,7 @@ var config = require("./config/environment");
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/search', require('./api/search'));
   app.use('/api/files', require('./api/file'));
   app.use('/api/markdowns', require('./api/markdown'));
   app.use('/api/*', function(req, res, next) {

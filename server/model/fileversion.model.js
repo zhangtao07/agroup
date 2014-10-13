@@ -48,6 +48,15 @@ module.exports = function(orm, db) {
       getRealpath: function() {
         return config.root + config.upload_dir + '/' + this.filepath;
       },
+      getCover:function(){
+        if (/^image\//.test(this.mimetype)) {
+          return this.getOnlinePath();
+        }else if(/pdf/.test(this.mimetype)){
+          return this.getOnlinePath()+".cover.jpg";
+        }else if(/msword|doc/.test(this.mimetype)){
+          return this.getOnlinePath()+".pdf.cover.jpg";
+        }
+      },
       getImages: function() {
         if (/^image\//.test(this.mimetype)) {
           return [this.getOnlinePath()];
@@ -79,6 +88,7 @@ module.exports = function(orm, db) {
     }
   });
 
+  Fileversion.hasOne('message', db.models.message, { required: false,reverse : "fileversions"});
   Fileversion.hasOne('file', db.models.file, {
     required: true,
     autoFetch: true,

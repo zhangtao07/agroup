@@ -22,38 +22,48 @@ module.exports = function(orm, db) {
       methods: {
 
 
-        getFileContent:function(){
-
-          var content = {
-            "images":this.fileversion.getImages(),
-              "filepath":this.fileversion.getOnlinePath(),
-              "filename": this.fileversion.filename,
-              "mimetype":this.fileversion.mimetype
+        getFileContent: function(fileversions) {
+          if (this.type != "file" ) {
+            return false;
           }
-          if(/pdf/.test(content.mimetype)){
-            content.pdf = content.filepath;
+          if(!fileversions){
+            return [];
           }
-          if(/ms[-]*word|officedocument/.test(content.mimetype)){
-            content.pdf = content.filepath+".pdf";
-          }
+          var list = [];
+          fileversions.forEach(function(fileversion) {
+            var content = {
+              "cover": fileversion.getCover(),
+              "filepath": fileversion.getOnlinePath(),
+              "filename": fileversion.filename,
+              "mimetype": fileversion.mimetype
+            }
+            if (/pdf/.test(content.mimetype)) {
+              content.pdf = content.filepath;
+            }
+            if (/ms[-]*word|officedocument/.test(content.mimetype)) {
+              content.pdf = content.filepath + ".pdf";
+            }
+            list.push(content);
+          });
           return {
-            type:"file",
-            content:content
-          }
+            type: "file",
+            content: list
+          };
+
         },
         getPlainContent: function() {
           if (this.type != "plain") {
             return false;
           }
           var content = {
-            text:this.content
+            text: this.content
           }
-          if(this.link != null){
+          if (this.link != null) {
             content.link = {
-              url:this.link.url,
-              title:this.link.title,
-              icon:this.link.icon,
-              description:this.link.description
+              url: this.link.url,
+              title: this.link.title,
+              icon: this.link.icon,
+              description: this.link.description
             }
           }
           return {
@@ -61,38 +71,25 @@ module.exports = function(orm, db) {
             content: content
           }
         },
-        getMessage: function(merge) {
-          if (merge) {
-            if (merge.fileversion) {
-              this.fileversion = merge.fileversion;
-            }
+        getMessage: function(callback) {
+          var self = this;
+          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getLink), Q.nfcall(this.getFileversions)]).then(function(result) {
 
-            if (merge.user) {
-              this.user = merge.user;
-            }
-            if (merge.link) {
-              this.link = merge.link;
-            }
-          }
+            var contentObj = self.getPlainContent() || self.getFileContent(result[2]);
+            callback(null,{
+              id: self.id,
+              avartar: 'api/user/avatar/' + self.user.username,
+              nickname: self.user.nickname,
+              time: ago(self.date),
+              content: contentObj.content,
+              'type': contentObj.type
+            });
 
-
-          var contentObj = this.getPlainContent() || this.getFileContent();
-
-
-          return {
-            id: this.id,
-            avartar: 'api/user/avatar/' + this.user.username,
-            nickname: this.user.nickname,
-            time: ago(this.date),
-            content: contentObj.content,
-            'type': contentObj.type
-          }
+          });
         }
       }
 
     });
-
-  Message.hasOne('fileversion', db.models.fileversion, { required: false, autoFetch: true });
 
   Message.hasOne('user', db.models.user, { required: true, autoFetch: true });
 

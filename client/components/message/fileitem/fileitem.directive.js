@@ -9,9 +9,7 @@ angular.module('agroupApp')
         'data': '=data'
       },
       link: function(scope, element, attrs) {
-        scope.onimgclick = function(){
-          debugger;
-          var data = this.data;
+        scope.onimgclick = function(data){
           if(data.pdf){
             if(!/pdf/.test(data.mimetype)){
               debugger;

@@ -8,6 +8,8 @@ router.get("/list", controller.list);
 router.get('/', controller.list);
 router.post("/post", controller.post);
 router.post("/upload", controller.upload);
+router.post("/uploadStart", controller.uploadStart);
+router.post("/uploadEnd", controller.uploadEnd);
 
 
 module.exports = router;
