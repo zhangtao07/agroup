@@ -11,6 +11,14 @@
   overflow: auto;
   height: 100%;
 }
+.md-filename{
+  overflow: hidden;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  display: inline-block;
+  white-space: nowrap;
+}
 
 
 .markdown-list{

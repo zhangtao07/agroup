@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http) {
+  .directive('previewPanel', function($http,$state) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
@@ -52,19 +52,41 @@ angular.module('agroupApp')
             element.find('.preview-stage').html('<h1>Coming soon...</h1>');
           } else {
             prview[type].call(prview, file);
+            scope.previewitem = file;
           }
         };
 
         scope.nopreview = function(files) {
-          var readme = _.find(files,function(file){
+          var readme = _.find(files, function(file) {
             return file.type === 'text/x-markdown' && file.name.toLocaleLowerCase() === 'readme.md'
           });
-          if(readme){
+          if (readme) {
             prview[readme.type].call(prview, readme);
-          }else{
+            scope.previewitem = readme;
+          } else {
             element.find('.preview-stage').html('');
+            scope.previewitem = null;
           }
         };
+
+        scope.previewFile = function(item) {
+          switch (item.type) {
+            case 'text/x-markdown':
+              window.open('/editor/' + $state.params.group + '?file='+item['file_id']+'&view=true', '_blank');
+              break;
+            default:
+          }
+        };
+
+        scope.editFile = function(item) {
+          switch (item.type) {
+            case 'text/x-markdown':
+              window.open('/editor/' + $state.params.group + '?file='+item['file_id'], '_blank');
+              break;
+            default:
+          }
+        };
+
       }
     };
   });
