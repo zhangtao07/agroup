@@ -54,10 +54,10 @@ angular.module('agroupApp')
         closeFolder(index + 1, level.length - index);
         $scope.preview(item);
       }else{
-        $scope.nopreview();
         var nextLevel = level[index + 1] = level[index + 1] || {};
         nextLevel.files = getChild(item.id);
         nextLevel.parent_id = item.id;
+        $scope.nopreview(nextLevel.files);
         level.splice(index + 2, level.length - index - 2);
       }
     }

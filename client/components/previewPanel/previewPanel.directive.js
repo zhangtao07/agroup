@@ -49,14 +49,21 @@ angular.module('agroupApp')
         scope.preview = function(file) {
           var type = file.type.replace(/\/\w+$/, '')
           if (!prview[type]) {
-            element.find('.preview-stage').html('<h1>Comeing soon...</h1>');
+            element.find('.preview-stage').html('<h1>Coming soon...</h1>');
           } else {
             prview[type].call(prview, file);
           }
         };
 
-        scope.nopreview = function() {
-          element.find('.preview-stage .area').hide();
+        scope.nopreview = function(files) {
+          var readme = _.find(files,function(file){
+            return file.type === 'text/x-markdown' && file.name.toLocaleLowerCase() === 'readme.md'
+          });
+          if(readme){
+            prview[readme.type].call(prview, readme);
+          }else{
+            element.find('.preview-stage').html('');
+          }
         };
       }
     };
