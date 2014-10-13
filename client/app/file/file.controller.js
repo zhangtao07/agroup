@@ -52,13 +52,13 @@ angular.module('agroupApp')
       if (item.type !== 'folder') {
         closeFolder(index + 1, level.length - index);
         $scope.preview(item);
-        return;
+      }else{
+        $scope.nopreview();
+        var nextLevel = level[index + 1] = level[index + 1] || {};
+        nextLevel.files = getChild(item.id);
+        nextLevel.parent_id = item.id;
+        level.splice(index + 2, level.length - index - 2);
       }
-      $scope.nopreview();
-      var nextLevel = level[index + 1] = level[index + 1] || {};
-      nextLevel.files = getChild(item.id);
-      nextLevel.parent_id = item.id;
-      level.splice(index + 2, level.length - index - 2);
     }
 
     function closeFolder(index, end) {
@@ -72,6 +72,12 @@ angular.module('agroupApp')
       }
     }
 
+    function deleteFile(foldid){
+      _.remove(db, function(item){
+        return item.id === foldid;
+      });
+    }
+
     function deleteItem(folder, item) {
       confirm(function(){
         var i = folder.files.indexOf(item);
@@ -83,6 +89,7 @@ angular.module('agroupApp')
         if (!folder.files.length) {
           level.splice(j, 1);
         }
+        deleteFile(item.id);
         $http.delete('api/files/'+item.id);
       })(item.name);
     }
