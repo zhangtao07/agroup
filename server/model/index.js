@@ -20,7 +20,6 @@ module.exports = function(cb) {
   if (connection) return cb(null, connection);
 
   orm.connect(settings.mysql, function(err, db) {
-
     if (err){
       console.info(err);
       return cb(err);

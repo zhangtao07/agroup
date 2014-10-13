@@ -22,12 +22,15 @@ module.exports = function(orm, db) {
       methods: {
 
 
-        getFileContent: function() {
-          if (this.type != "file") {
+        getFileContent: function(fileversions) {
+          if (this.type != "file" ) {
             return false;
           }
+          if(!fileversions){
+            return [];
+          }
           var list = [];
-          this.fileversions.forEach(function(fileversion) {
+          fileversions.forEach(function(fileversion) {
             var content = {
               "cover": fileversion.getCover(),
               "filepath": fileversion.getOnlinePath(),
@@ -40,12 +43,12 @@ module.exports = function(orm, db) {
             if (/ms[-]*word|officedocument/.test(content.mimetype)) {
               content.pdf = content.filepath + ".pdf";
             }
-            list.push({
-              type: "file",
-              content: content
-            });
+            list.push(content);
           });
-          return list;
+          return {
+            type: "file",
+            content: list
+          };
 
         },
         getPlainContent: function() {
@@ -70,14 +73,14 @@ module.exports = function(orm, db) {
         },
         getMessage: function(callback) {
           var self = this;
-          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getLink)]).then(function(result) {
-            console.info(result);
-            var contentObj = self.getPlainContent() || self.getFileContent();
+          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getLink), Q.nfcall(this.getFileversions)]).then(function(result) {
+
+            var contentObj = self.getPlainContent() || self.getFileContent(result[2]);
             callback(null,{
-              id: this.id,
-              avartar: 'api/user/avatar/' + this.user.username,
-              nickname: this.user.nickname,
-              time: ago(this.date),
+              id: self.id,
+              avartar: 'api/user/avatar/' + self.user.username,
+              nickname: self.user.nickname,
+              time: ago(self.date),
               content: contentObj.content,
               'type': contentObj.type
             });

@@ -6,7 +6,6 @@ var orm = require('orm');
 var observe = require('../../components/group.observe');
 var Q = require("q");
 exports.list = function(req, res) {
-
   var groupId = req.query.groupId;
 
   var date = req.query.timestamp ? new Date(parseInt(req.query.timestamp)) : new Date();
@@ -50,7 +49,7 @@ exports.list = function(req, res) {
     messages.forEach(function(message) {
       promises.push(Q.nfcall(message.getMessage));
     });
-    Q.all(promises).then(function(datas){
+    Q.all(promises).then(function(datas) {
       res.status(200).jsonp({
         err: 0,
         data: {
@@ -59,7 +58,7 @@ exports.list = function(req, res) {
           hasMore: (offset + limit) < count ? true : false
         }
       });
-    }).fail(function(err){
+    }).fail(function(err) {
       console.info(err);
     });
 
@@ -71,54 +70,67 @@ exports.list = function(req, res) {
 
 };
 
+exports.uploadStart = function(req, res) {
+  var groupId = req.body.groupId;
+  var user = req.session.user;
+  Q.nfcall(req.models.message.create, {
+    'type': 'file',
+    'user_id': user.id,
+    'group_id': groupId,
+    'date': new Date
+  }).then(function(message) {
+    res.json({
+      err: 0,
+      data: message.id
+    })
+  });
+}
+
+
 var pipe = require('./pipe');
 var importFile = require('./import');
 exports.upload = function(req, res) {
   var user = req.session.user;
-  pipe(req).then(function(result){
+  pipe(req).then(function(result) {
 
-    var fields = result.fileds;
+    var fields = result.fields;
     var files = result.files;
-    Q.nfcall(req.models.message.create, {
-      'type': 'file',
-      'user_id': user.id,
-      'group_id': fields['groupId'],
-      'date': new Date
-    }).then(function(message){
-      var promies = [];
-      files.forEach(function(file){
-        promies.push(importFile(req.models,{
-          userId:user.id,
-          groupId:fields['groupId'],
-          sha1:file.sha1,
-          filepath:file.filepath,
-          mimetype:file.mimetype,
-          filename:file.filename,
-          fileSize:file.fileSize,
-          encoding:file.encoding,
-          messageId:message.id
-        }));
-      });
-      Q.all(promies).then(function(){
-        Q.nfcall(msg.getMessage).then(function(msg){
-          observe.groupBroadcast(fields.groupId, msg);
-          res.json(200,{
-            status: "ok",
-            msg: msg,
-            file:{id:fileversion.file_id}
-          });
-        });
-
-
-      });
-
-
+    var promies = [];
+    files.forEach(function(file) {
+      promies.push(importFile(req.models, {
+        userId: user.id,
+        groupId: fields['groupId'],
+        sha1: file.sha1,
+        filepath: file.filepath,
+        mimetype: file.mimetype,
+        filename: file.filename,
+        fileSize: file.fileSize,
+        encoding: file.encoding,
+        messageId: fields['messageId']
+      }));
     });
+    Q.all(promies).then(function() {
+      res.json(200, {
+        status: "ok"
+      });
+    });
+
+  });
+}
+
+exports.uploadEnd = function(req, res) {
+  var messageId = req.body.messageId;
+  var groupId = req.body.groupId;
+  Q.nfcall(req.models.message.get, messageId).then(function(msg) {
+     Q.nfcall(msg.getMessage).then(function(data){
+       observe.groupBroadcast(groupId, data);
+       res.json({
+         err:0
+       })
+     });
   });
 
-
-
-}
+};
 
 
 function getURL(text) {
@@ -259,14 +271,14 @@ exports.post = function(req, res) {
             throw new Error(err);
           } else {
             resolve({
-              message:message,
-              link:link
+              message: message,
+              link: link
             });
           }
         });
       });
-    }).then(function(result,link) {
-      Q.nfcall(result.message.getMessage).then(function(data){
+    }).then(function(result, link) {
+      Q.nfcall(result.message.getMessage).then(function(data) {
         observe.groupBroadcast(groupId, data);
         return res.jsonp({
           err: 0

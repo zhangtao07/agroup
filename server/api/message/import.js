@@ -184,7 +184,7 @@ module.exports=function(models,args){
         encoding: encoding,
         createDate: new Date,
         updateDate: new Date,
-        messageId:messageId
+        message_id:messageId
       };
       Q.Promise(function imageSizeOf(resolve) {
         if (/^image\//.test(mimetype)) {

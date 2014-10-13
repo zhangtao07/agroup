@@ -13,6 +13,30 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
         scope.msglist = [];
         scope.hasMore = false;
         var loadParams;
+        function uploadFiles(files){
+          var groupId = loadParams.groupId;
+          messageAPI.uploadStart(groupId).success(function(res){
+            var messageId = res.data;
+            files.forEach(function(file){
+              scope.uploadpanel.addFile(file, function(file, send) {
+                var formData = new FormData();
+                formData.append('groupId', groupId);
+                formData.append('file', file);
+                formData.append('messageId', messageId);
+                send('api/message/upload', formData);
+              },function(){
+                checkUploadDone();
+              });
+            });
+            var i = 0;
+            function checkUploadDone(){
+              i++;
+              if(i == files.length){
+                messageAPI.uploadEnd(groupId,messageId);
+              }
+            }
+          });
+        }
         scope.loadList = function(groupId,refresh) {
 
           if (refresh) {
@@ -52,17 +76,12 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
           var groupId = group.id;
           scope.loadList(groupId,true);
 
-          function sendFile(file){
-            scope.uploadpanel.addFile(file, function(file, send) {
-              var formData = new FormData();
-              formData.append('groupId', groupId);
-              formData.append('file', file);
-              send('api/message/upload', formData);
 
-            });
-          }
+
+
           scope.onpaste = function(){
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            var files = [];
             if(items){
               for(var i = 0;i<items.length;i++){
                 var item = items[i];
@@ -70,23 +89,23 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
                 if(!file.name){
                   file.name="未命名文件";
                 }
-                sendFile(file);
+                files.push(file);
               }
-
+              uploadFiles(files);
             }
           }
           scope.onDrop = function(files) {
-            files.forEach(function(file) {
-              sendFile(file);
-            });
+            uploadFiles(files);
           };
           scope.onSelectFile = function(element) {
 
             scope.$apply(function() {
-              var files = element.files;
-              for(var i = 0;i<files.length;i++){
-                sendFile(files[i]);
+              var list = element.files;
+              var files = [];
+              for(var i = 0;i<list.length;i++){
+                files.push(list[i]);
               }
+              uploadFiles(files);
             });
           }
 

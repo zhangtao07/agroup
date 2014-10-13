@@ -71,7 +71,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
               item.percent = 100;
               item.status = "complete";
               scope.$apply();
-              return onfinish && onfinish(res)
+              onfinish && onfinish();
             }
           }
         };
@@ -96,68 +96,10 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
           item.cancel = function(){
             xhr.abort();
             item.status="cancel";
+            onfinish && onfinish()
           }
         });
       }
-
-//      var prepareArr = [];
-//      scope.files = [];
-//      scope.onmethods({
-//        methods: {
-//          addFile: function(file) {
-//            var file = {
-//              filename: file.filename,
-//              file: file,
-//              percent: 0
-//            };
-//            scope.files.push(file);
-//            sendFile(file);
-//          },
-//          onprepare: function(cb) {
-//            prepareArr.push(cb);
-//          }
-//        }
-//      });
-//
-//      function prepare(xhr, file) {
-//        prepareArr.forEach(function(cb) {
-//          cb && cb(xhr, file);
-//        });
-//      }
-//
-//      function sendFile(file) {
-//
-//
-//
-////        var uri = "api/message/upload";
-//        var xhr = new XMLHttpRequest();
-////        var formData = new FormData();
-////        formData.append('groupId', groupId);
-////        formData.append('file', file);
-////        xhr.open("POST", uri, true);
-//        file.percent = 0;
-//        xhr.onreadystatechange = function() {
-//          if (xhr.readyState == 4 && xhr.status == 200) {
-//            if (xhr.responseText == "ok") {
-//              file.percent = 100;
-//
-//
-//            }
-//
-//          }
-//        };
-//
-//        xhr.upload.addEventListener("progress", function(e) {
-//          if (e.lengthComputable) {
-//            var percentage = Math.round((e.loaded * 100) / e.total);
-//            file.percent = percentage;
-//
-//          }
-//        }, false);
-//
-////        xhr.send(formData);
-//        prepare(xhr, file);
-//      }
 
     }
   };

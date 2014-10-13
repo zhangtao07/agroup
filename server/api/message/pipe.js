@@ -25,8 +25,11 @@ var importFile = require('./import');
  */
 function pipe(req) {
   return Q.Promise(function(resolve, reject) {
-    var shasum = crypto.createHash('sha1');
-    var fields = {};
+
+    var result = {
+      fields:{},
+      files:[]
+    };
     var busboy = new Busboy({
       headers: req.headers
     });
@@ -35,28 +38,29 @@ function pipe(req) {
       result.fields[fieldname] = val;
 
     });
-    var result = {
-      fileds:{},
-      files:[]
-    };
+
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-      file.on('data', function(data) {
-        shasum.update(data);
-      });
-
-      file.on('end', function() {
-        var d = shasum.digest('hex');
-
-        var stat = fs.statSync(tempPath);
-        result.files.push({
-          filename: filename,
-          mimetype: mimetype,
-          size: stat['size'],
-          encoding: encoding,
-          filepath: tempPath,
-          sha1: d
+      (function(f){
+        var shasum = crypto.createHash('sha1');
+        f.on('data', function(data) {
+          shasum.update(data);
         });
-      });
+
+        f.on('end', function() {
+          var d = shasum.digest('hex');
+
+          var stat = fs.statSync(tempPath);
+          result.files.push({
+            filename: filename,
+            mimetype: mimetype,
+            size: stat['size'],
+            encoding: encoding,
+            filepath: tempPath,
+            sha1: d
+          });
+        });
+      })(file);
+
       var tempDir = config.root + config.upload_temp_dir;
       if (!fs.existsSync(tempDir)) {
         mkdirp.sync(tempDir);
