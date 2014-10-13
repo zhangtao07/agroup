@@ -4,6 +4,12 @@
 .md-content {
   height: 280px;
   overflow: auto;
+  overflow-x: hidden;
+}
+
+.md-container{
+  overflow: auto;
+  height: 100%;
 }
 
 
@@ -11,16 +17,15 @@
   .ng-enter {
     -webkit-transition: .4s; /* Chrome */
     transition: .4s;
-    -webkit-transform: translateX(-100%);
+    /*-webkit-transform: translateX(-100%);*/
     opacity:0;
     z-index:0;
   }
 
   .ng-enter.ng-enter-active {
     opacity:1;
-    -webkit-transform: translateX(0);
+    /*-webkit-transform: translateX(0);*/
   }
-
 }
 
 

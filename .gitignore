@@ -8,6 +8,7 @@ dist
 /server/config/local.env.js
 /.project
 /upload
+/import
 /__test
 res-min
 bower-libs
@@ -15,3 +16,4 @@ bower_components
 test.html
 .DS_Store
 /.resize_cache
+cache.manifest

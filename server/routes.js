@@ -20,6 +20,15 @@ module.exports = function(app) {
     }
 
   });
+
+  app.use('/editor/*', function(req, res, next) {
+    if (!req.session.user) {
+      res.redirect('/auth/login?url=' + req.originalUrl);
+    } else {
+      next();
+    }
+  });
+
   app.use('/static/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
@@ -27,6 +36,8 @@ module.exports = function(app) {
   app.use('/api/user', require('./api/user'));
 
   app.use('/auth', require('./auth'));
+
+
   app.use(new RegExp("(^" + config.upload_dir + "\/.*)"), function(req, res) {
     var filename = req.query.filename;
     if (filename) {
@@ -36,7 +47,7 @@ module.exports = function(app) {
     }
   });
   app.use('/editor', require('./editor'));
-  app.route('/pdf').get(function(req,res){
+  app.route('/pdf').get(function(req, res) {
     res.render('pdf.html');
   });
 

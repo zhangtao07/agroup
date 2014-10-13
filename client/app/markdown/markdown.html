@@ -1,40 +1,56 @@
+<div ng-init="
+  app.settings.asideFixed = true;
+  app.settings.asideDock = false;
+  app.settings.container = false;
+  app.hideAside = false;
+  app.hideFooter = true;
+  app.content.classname = 'app-content-full';
+  " class="md-container" infinite-scroll="loadList(pageno)" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
+
+
   <div class="btn-group">
 
-    <a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default" >
+    <a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default">
       <i class="fa fa-plus"></i>
       <!--<span translate="markdown.create"></span>-->
     </a>
     <a class="btn m-b-xs btn-sm btn-default " ng-click="sync()">
-      <i class="fa fa-refresh" ></i>
+      <i class="fa fa-refresh"></i>
       <!--<span translate="markdown.refresh"></span>-->
     </a>
   </div>
-<div class="col-md-12 markdown-list">
-  <section class="col-md-4" ng-repeat="md in markdowns" ng-animate="{enter:'animate-enter',leave: 'animate-leave'}">
-    <div class="panel panel-default" draggable=false >
-      <div class="panel-heading">
-        <div class="media">
-          <span class="pull-right">
-            <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
-            <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
-            <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
-            <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
-          </span>
-          <span class="pull-left thumb-sm"><img image-resize-width="40" image-resize-height="40" image-resize="/api/user/avatar/{{md.user.username}}" alt="..." class="img-circle"></span>
-          <div class="media-body">
-            <div><a href="">{{ md.user.name }}</a></div>
-            <span class="text-muted ng-binding">
-              <i class="fa fa-clock-o"></i>
-              {{ md.updateDate | date: 'MM-dd HH:mm:ss' }}
+  <div class="col-md-12 markdown-list" >
+    <section class="col-md-4" ng-repeat="md in markdowns" ng-animate="{enter:'animate-enter',leave: 'animate-leave'}">
+      <div class="panel panel-default" draggable=false>
+        <div class="panel-heading">
+          <div class="media">
+            <span class="pull-right">
+              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
+              <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
+              <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
+              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
+            <span class="pull-left thumb-sm"><img image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
+            <div class="media-body">
+              <div><a href="">{{ md.user.nickname }}</a>
+              </div>
+              <span class="text-muted ng-binding">
+                <i class="fa fa-clock-o"></i>
+                {{ md.time }}
+              </span>
+            </div>
           </div>
         </div>
+        <div class="panel-body">
+          <div class="md-content" ng-bind-html="md.content"></div>
+        </div>
       </div>
-      <div class="panel-body">
-        <div class="md-content" ng-bind-html="md.content"></div>
-      </div>
+    </section>
+
+    <div style="clear:both;font-size: 30px;text-align: center;" ng-show="hasMore">
+      <i class="fa fa-spinner fa-spin"></i>
     </div>
-  </section>
+  </div>
+
 </div>
-
-

@@ -1,13 +1,15 @@
 // Generated on 2014-09-05 using generator-angular-fullstack 2.0.13
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
   var localConfig;
   try {
     localConfig = require('./server/config/local.env');
-  } catch(e) {
+  } catch (e) {
     localConfig = {};
   }
+
+  grunt.loadNpmTasks('grunt-bower-requirejs');
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
@@ -54,15 +56,32 @@ module.exports = function (grunt) {
         url: 'http://localhost:<%= express.options.port %>'
       }
     },
-    less:{
+    less: {
       development: {
         options: {
 
         },
-        files:{
-          "<%= yeoman.client %>/assets/less/less.scss":"<%= yeoman.client %>/assets/less/app.less"
+        files: {
+          "<%= yeoman.client %>/assets/less/less.scss": "<%= yeoman.client %>/assets/less/app.less"
         }
 
+      },
+      editor: {
+        options: {
+          compress: true
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.client %>/editor/res/themes',
+          src: [
+            '*.less'
+          ],
+          dest: '<%= yeoman.client %>/editor/res-min/themes',
+          ext: '.css'
+        }, {
+          src: '<%= yeoman.client %>/editor/res/styles/base.less',
+          dest: '<%= yeoman.client %>/editor/res-min/themes/base.css'
+        }]
       }
     },
     watch: {
@@ -71,7 +90,8 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.js',
           '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
-          '!<%= yeoman.client %>/app/app.js'],
+          '!<%= yeoman.client %>/app/app.js'
+        ],
         tasks: ['injector:scripts']
       },
       injectCss: {
@@ -93,12 +113,14 @@ module.exports = function (grunt) {
       },
       injectSass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'
+        ],
         tasks: ['injector:sass']
       },
       sass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'
+        ],
         tasks: ['sass', 'autoprefixer']
       },
       gruntfile: {
@@ -215,14 +237,14 @@ module.exports = function (grunt) {
           env: {
             PORT: process.env.PORT || 9000
           },
-          callback: function (nodemon) {
-            nodemon.on('log', function (event) {
+          callback: function(nodemon) {
+            nodemon.on('log', function(event) {
               console.log(event.colour);
             });
 
             // opens browser on initial server start
-            nodemon.on('config:update', function () {
-              setTimeout(function () {
+            nodemon.on('config:update', function() {
+              setTimeout(function() {
                 require('open')('http://localhost:8080/debug?port=5858');
               }, 500);
             });
@@ -236,7 +258,7 @@ module.exports = function (grunt) {
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
+        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
       }
     },
 
@@ -368,8 +390,8 @@ module.exports = function (grunt) {
             'bower_components/**/*',
             'assets/**/*',
             'editor/**/*',
-//            'assets/fonts/**/*',
-//            'assets/l10n/*',
+            //            'assets/fonts/**/*',
+            //            'assets/l10n/*',
             'index.html'
           ]
         }, {
@@ -392,17 +414,47 @@ module.exports = function (grunt) {
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
       },
-      static:{
+      static: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.client %>',
+          dest: '<%= yeoman.dist %>/public',
+          src: [
+            'assets/fonts/**/*'
+          ]
+        }]
+      },
+      editor: {
         files: [
+          // Fonts
           {
             expand: true,
-            dot: true,
-            cwd: '<%= yeoman.client %>',
-            dest: '<%= yeoman.dist %>/public',
+            cwd: '<%= yeoman.client %>/editor/res/font',
             src: [
-              'assets/fonts/**/*'
-            ]
-          }]
+              '**'
+            ],
+            dest: '<%= yeoman.client %>/editor/res-min/font/'
+          },
+          // Images
+          {
+            expand: true,
+            cwd: '<%= yeoman.client %>/editor/res/img',
+            src: [
+              '**'
+            ],
+            dest: '<%= yeoman.client %>/editor/res-min/img/'
+          },
+          // Libraries
+          {
+            expand: true,
+            cwd: '<%= yeoman.client %>/editor/res/bower-libs/requirejs',
+            src: [
+              'require.js'
+            ],
+            dest: '<%= yeoman.client %>/editor/res-min/'
+          }
+        ]
       }
     },
 
@@ -502,7 +554,7 @@ module.exports = function (grunt) {
           compass: false
         },
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
+          '.tmp/app/app.css': '<%= yeoman.client %>/app/app.scss'
         }
       }
     },
@@ -524,11 +576,12 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-              ['{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-               '!{.tmp,<%= yeoman.client %>}/app/app.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.spec.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js']
+            ['{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
+              '!{.tmp,<%= yeoman.client %>}/app/app.js',
+              '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.spec.js',
+              '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js'
             ]
+          ]
         }
       },
 
@@ -568,16 +621,93 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+
+    //editor
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: '<%= yeoman.client %>/editor/res',
+          name: 'main',
+          out: '<%= yeoman.client %>/editor/res-min/main.js',
+          mainConfigFile: '<%= yeoman.client %>/editor/res/main.js',
+          optimize: 'uglify2',
+          inlineText: true,
+          excludeShallow: [
+            '<%= yeoman.client %>/editor/css/css-builder',
+            '<%= yeoman.client %>/editor/less/lessc-server',
+            '<%= yeoman.client %>/editor/less/lessc'
+          ]
+        }
+      }
+    },
+    jsbeautifier: {
+      files: ['<%= yeoman.client %>/editor/res-min/main.js'],
+      options: {
+        js: {
+          space_before_conditional: false,
+          keep_array_indentation: true,
+          indentWithTabs: true
+        }
+      }
+    },
+    'string-replace': {
+      'constants': {
+        files: {
+          '<%= yeoman.client %>/editor/res/constants.js': '<%= yeoman.client %>/editor/res/constants.js'
+        },
+        options: {
+          replacements: [{
+            pattern: /constants\.VERSION = .*/,
+            replacement: 'constants.VERSION = "<%= pkg.version %>";'
+          }]
+        }
+      },
+      'cache-manifest': {
+        files: {
+          '<%= yeoman.client %>/editor/cache.manifest': '<%= yeoman.client %>/editor/cache.manifest'
+        },
+        options: {
+          replacements: [{
+            pattern: /(#Date ).*/,
+            replacement: '$1<%= grunt.template.today() %>'
+          }, {
+            pattern: /(#DynamicResourcesBegin\n)[\s\S]*(\n#DynamicResourcesEnd)/,
+            replacement: '$1<%= resources %>$2'
+          }]
+        }
+      }
+    },
+    // Inject bower dependencies into RequireJS configuration
+    bower: {
+      target: {
+        rjsConfig: '<%= yeoman.client %>/editor/res/main.js'
+      }
+    },
+    bump: {
+      options: {
+        files: [
+          'package.json',
+          'bower.json'
+        ],
+        updateConfigs: [
+          'pkg'
+        ],
+        commitFiles: [
+          '-a'
+        ],
+        pushTo: 'origin'
+      }
     }
   });
 
   // Used for delaying livereload until after server has restarted
-  grunt.registerTask('wait', function () {
+  grunt.registerTask('wait', function() {
     grunt.log.ok('Waiting for server reload...');
 
     var done = this.async();
 
-    setTimeout(function () {
+    setTimeout(function() {
       grunt.log.writeln('Done waiting!');
       done();
     }, 1500);
@@ -587,7 +717,7 @@ module.exports = function (grunt) {
     this.async();
   });
 
-  grunt.registerTask('serve', function (target) {
+  grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
     }
@@ -596,7 +726,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:server',
         'injector',
         'wiredep',
@@ -608,7 +738,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'injector:sass', 
+      'injector:sass',
       'concurrent:server',
       'injector',
       'wiredep',
@@ -620,7 +750,7 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('server', function () {
+  grunt.registerTask('server', function() {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve']);
   });
@@ -632,26 +762,22 @@ module.exports = function (grunt) {
         'env:test',
         'mochaTest'
       ]);
-    }
-
-    else if (target === 'client') {
+    } else if (target === 'client') {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'autoprefixer',
         'karma'
       ]);
-    }
-
-    else if (target === 'e2e') {
+    } else if (target === 'e2e') {
       return grunt.task.run([
         'clean:server',
         'env:all',
         'env:test',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'wiredep',
@@ -659,9 +785,7 @@ module.exports = function (grunt) {
         'express:dev',
         'protractor'
       ]);
-    }
-
-    else grunt.task.run([
+    } else grunt.task.run([
       'test:server',
       'test:client'
     ]);
@@ -669,9 +793,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'injector:sass', 
+    'injector:sass',
     'concurrent:dist',
-//    'injector',
+    //    'injector',
     'wiredep',
     'useminPrepare',
     'autoprefixer',
@@ -693,5 +817,74 @@ module.exports = function (grunt) {
     'build'
   ]);
 
+
+  /***************************************************************************
+   * Clean
+   */
+  grunt.registerTask('editor-clean', function() {
+    // Remove editor/res-min folder
+    grunt.file['delete']('client/editor/res-min');
+  });
+
+
+  grunt.registerTask('editor-build-js', function() {
+
+    // JSHint validation
+    //grunt.task.run('jshint');
+
+    // Run r.js optimization
+    grunt.task.run('requirejs');
+
+    // Beautify uglified JS for site error analysis
+    grunt.task.run('jsbeautifier');
+
+  });
+
+  grunt.registerTask('editor-build-css', function() {
+    // Compile less files
+    grunt.task.run('less:editor');
+  });
+
+
+  grunt.registerTask('editor-build-res', function() {
+
+    // Copy some resources (images, fonts...)
+    grunt.task.run('copy:editor');
+
+    var yeoman = grunt.config.get('yeoman');
+
+    // List resources and inject them in cache.manifest
+    var resFolderList = [
+      yeoman.client + '/editor/res-min',
+      yeoman.client + '/editor/libs/MathJax/extensions',
+      yeoman.client + '/editor/libs/MathJax/fonts/HTML-CSS/TeX/woff',
+      yeoman.client + '/editor/libs/MathJax/jax/element',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/autoload',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/fonts/TeX',
+      yeoman.client + '/editor/libs/MathJax/jax/output/HTML-CSS/fonts/STIX'
+    ];
+    grunt.task.run('list-res:' + resFolderList.join(':'));
+    grunt.task.run('string-replace:cache-manifest');
+
+  });
+
+
+  grunt.registerTask('list-res', function() {
+    var resourceList = [];
+    grunt.util.recurse(arguments, function(arg) {
+      grunt.log.writeln('Listing resources: ' + arg);
+      grunt.file.recurse(arg, function(abspath) {
+        resourceList.push(abspath.replace(/^client\/editor\//, ''));
+      });
+    });
+    grunt.config.set('resources', resourceList.join('\n'));
+  });
+
+  grunt.registerTask('editor', [
+    'editor-clean',
+    'editor-build-js',
+    'editor-build-css',
+    'editor-build-res'
+  ]);
 
 };

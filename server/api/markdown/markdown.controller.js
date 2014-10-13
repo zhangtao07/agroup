@@ -6,6 +6,7 @@ var async = require('async');
 var markdown = require("markdown").markdown;
 var marked = require('marked');
 
+
 marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
@@ -15,25 +16,27 @@ marked.setOptions({
   sanitize: true,
   smartLists: true,
   smartypants: false,
-  highlight: function (code) {
+  highlight: function(code) {
     return require('highlight.js').highlightAuto(code).value;
   }
 });
 
-exports.destroy = function(req, res){
+exports.destroy = function(req, res) {
   var id = req.params.id;
-  req.models.fileversion.find({file_id:id},function(err,fvs){
+  req.models.fileversion.find({
+    file_id: id
+  }, function(err, fvs) {
 
-    if(err){
+    if (err) {
       res.status(500).send(err);
       return;
     }
 
-    _.forEach(fvs,function(d,i){
+    _.forEach(fvs, function(d, i) {
       fs.unlink(d.filepath);
       d.remove();
-      d.getFile(function(err,file){
-        if(file){
+      d.getFile(function(err, file) {
+        if (file) {
           file.remove();
         }
       });
@@ -46,77 +49,53 @@ exports.destroy = function(req, res){
 // Get list of markdowns
 exports.index = function(req, res) {
 
-  async.waterfall([
-    getFileid.bind(req),
-    getFile.bind(req),
-    getUser.bind(req)
-  ], function(err, result) {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      return res.status(200).json(result);
-    }
-  });
-}
+  var offset = parseInt(req.query.offset) || 0;
+  var limit = parseInt(req.query.limit) || 9;
+  var group = req.params.group || 1;
+  var user = req.session.user;
 
-function getFileid(cb) {
-  var group = this.params.group || 1;
-  this.models.fileversion.latestFile(group,function(err,ids){
-    cb(null, ids);
-  });
-}
-
-function getFile(ids, cb) {
-
-  this.models.fileversion.find({
-    or: ids
-  }, function(err, markdowns) {
-    if (err) {
-      return cb(err);
-    }
-    var result = {};
-    _.forEach(markdowns, function(d, i) {
-      var file = result[d.file_id];
-      if (!file) {
-        result[d.file_id] = d;
-      } else if (file.updateDate < d.updateDate) {
-        result[d.file_id] = d;
-      }
+  req.models.file.find({
+      group_id: group,
+      mimetype: 'text/x-markdown'
+    }).order('-createDate').limit(limit).offset(offset)
+    .run(function(err, files) {
+      getFileversion(user, files, res, req.models, group, limit, offset);
     });
-    var content = [];
-    try {
-      _.forEach(result, function(d, i) {
-        content.push({
-          id: d.file_id,
-          user_id: d.user_id,
-          content: marked(fs.readFileSync(d.filepath, 'utf8')),
-          updateDate: d.updateDate,
-          createDate: d.createDate
-        });
+}
+
+function getFileversion(user, files, res, models, group, limit, offset) {
+  var completeQueue = [],
+    count;
+
+  _.each(files, function(file, i) {
+    file.getFileversion(function(err, versions) {
+      if (err) return errorHandler(res, err);
+      var latestVersion = _.max(versions, function(version) {
+        return version.createDate;
       });
-      cb(null,content);
-    } catch (e) {
-      cb(e);
-    }
+      latestVersion.get(user, function data(err, result) {
+        if (err) return errorHandler(res, err);
+        result.content = marked(result.content);
+        completeQueue.push(result);
+        if (count && completeQueue.length === files.length) {
+          return res.status(200).json({
+            list: _.sortBy(completeQueue,function(d){ return d.id }),
+            hasMore: limit + offset < count ? true : false
+          });
+        }
+      });
+    });
+  });
+
+  models.file.count({
+    group_id: group,
+    mimetype: 'text/x-markdown'
+  }, function(err, num) {
+    if (err) return errorHandler(res, err);
+    count = num;
   });
 }
 
-function getUser(files, cb) {
-  var ids = _.map(files,function(d,i){
-    return { id: d.user_id };
-  });
-  this.models.user.find({or:ids},function(err,user){
-    if(err){
-      return cb(err)
-    }
-    var users = {};
-    _.forEach(user,function(d,i){
-      users[d.id] = d;
-    });
-    var result = _.map(files,function(f,i){
-        f.user = users[f.user_id];
-        return f;
-    });
-    cb(null, result);
-  });
+function errorHandler(res, err) {
+  res.status(500).json(err);
 }

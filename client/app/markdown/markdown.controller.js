@@ -3,9 +3,14 @@
 angular.module('agroupApp')
   .controller('MarkdownCtrl', function($scope, $http, $stateParams, Modal,$location) {
 
+    $scope.markdowns = [];
     function success(data, status) {
-      $scope.markdowns = data.sort(function(a, b) {
-        return a.updateDate < b.updateDate;
+      //$scope.markdowns = data.sort(function(a, b) {
+        //return a.updateDate < b.updateDate;
+      //});
+      $scope.hasMore= data.hasMore;
+      data.list.forEach(function(md){
+        $scope.markdowns.push(md);
       });
     }
 
@@ -28,8 +33,26 @@ angular.module('agroupApp')
     }
 
     $scope.sync = function() {
+      $scope.markdowns = [];
       init();
     };
+
+    var pagenation={
+      offset:0,
+      limit:6
+    }
+
+    $scope.pageno = 1;
+
+    $scope.loadList = function(pageno){
+      $scope.hasMore = true;
+      var group = $stateParams.group;
+      pagenation.offset = pageno * pagenation.limit;
+      $scope.pageno++;
+      $http.get('/api/markdowns/'+group,{ params:pagenation}).success(success);
+    }
+
+    $scope.hasMore = true;
 
     init();
 
