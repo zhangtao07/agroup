@@ -4,7 +4,7 @@ var models = require('../model');
 var md5 = require('MD5');
 var mime = require('mime');
 
-var basepath = path.join(__dirname, '../../import/');
+var basepath = path.join(__dirname, '../../import/internal-master/');
 var dest = path.join(__dirname, '../../upload/');
 
 

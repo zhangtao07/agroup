@@ -1,10 +1,13 @@
 <!--<div>this is the previewPanel directive</div>-->
-<div class="vbox">
+<div class="vbox bg-white-only">
   <div class="wrapper-sm b-b">
     <div class="m-t-n-xxs m-b-n-xxs m-l-xs">
       <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
       </a>
-      <a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)">Edit</a>
+      <div>
+        <a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)">Preview</a>
+        <a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)">Edit</a>
+      </div>
       <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
     </div>
   </div>

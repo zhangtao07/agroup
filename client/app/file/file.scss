@@ -1,9 +1,20 @@
 .file-sys-panel{
   position: absolute;
-  top: 0;
-  bottom: 45px;
+  top: 38px;
+  bottom: 0px;
   left: 0;
   right: 0;
+
+  width: 100%;
+  overflow: hidden;
+
+  .vbox{
+    min-width: 200px;
+  }
+}
+.preview-stage{
+  text-align: left !important;
+  padding: 10px 20px;
 }
 .bread-nav{
   margin-bottom: 7px;
@@ -62,7 +73,7 @@
   color: #6798AF;
 }
 .fa-image{
-  color: #727A43;
+  /*color: #727A43;*/
 }
 
 .hbox{
@@ -77,7 +88,7 @@
     opacity:0;
     z-index:0;
   }
-  .ng-leave{
+  .ng-leave-m{
     -webkit-transition: .4s; /* Chrome */
     transition: .4s;
     opacity:1;

@@ -1,4 +1,9 @@
-<div class="file-sys-panel" ng-init="
+<ul class="breadcrumb bg-white b-a bread-nav">
+  <li ng-click="home()"><a href=""><i class="fa fa-home"></i> AGroup</a></li>
+  <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)"><a href="">{{ folder.selectedItem.name }}</a></li>
+</ul>
+
+<div class="file-sys-panel scrollable hover" scroll-to ng-init="
   app.settings.asideFixed = true;
   app.settings.asideDock = false;
   app.settings.container = false;
@@ -6,10 +11,6 @@
   app.hideFooter = true;
   app.content.classname = 'app-content-full';
   ">
-  <ul class="breadcrumb bg-white b-a bread-nav">
-    <li ng-click="home()"><a href=""><i class="fa fa-home"></i> AGroup</a></li>
-    <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)"><a href="">{{ folder.selectedItem.name }}</a></li>
-  </ul>
 
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light no-selected">
   <!-- column -->
@@ -39,7 +40,7 @@
     </div>
   </div>
   <!-- column -->
-  <div class="col bg-white-only" preview-panel>
+  <div class="col " preview-panel>
   </div>
   <!-- /column -->
 </div>
