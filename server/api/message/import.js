@@ -122,19 +122,30 @@ module.exports=function(models,args){
     filename = args.filename,//required
     fileSize = args.size,//required
     encoding = args.encoding,//required
-    messageId = args.messageId; //not required
+    messageId = args.messageId, //not required
+    folderId = args.folderId;//not required
 
   return Q.Promise(function getFileId(resolve) {
     if (fileId) {
       resolve(fileId);
     } else {
-      models.file.create({
+      Q.nfcall(models.file.create,{
         name: filename,
         group_id: groupId,
         user_id: userId
-      }, function(err, file) {
-        resolve(file.id);
+      }).then(function(file){
+        Q.nfcall(models.folder.create,{
+          name:filename,
+          file_id:file.id,
+          parent_id:folderId,
+          type:'file',
+          group_id:groupId
+        }).then(function(){
+          resolve(file.id);
+        });
+
       });
+
     }
   }).then(function(file_id) {
     return Q.Promise(function getFileversion(resolve) {
