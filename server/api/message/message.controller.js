@@ -104,23 +104,23 @@ exports.upload = function(req, res) {
       if (fields['folderId']) {
         resolve(fields['folderId']);
       } else {
-        Q.nfcall(req.models.folder.find,{
+        Q.nfcall(req.models.folder.find, {
           name: '聊天',
           parent_id: 0,
           type: 'folder',
           group_id: fields['groupId']
         }).then(function(folder) {
-          if (folder.length>0) {
+          if (folder.length > 0) {
             resolve(folder[0].id);
           } else {
-            Q.nfcall(req.models.folder.create,{
+            Q.nfcall(req.models.folder.create, {
               name: '聊天',
               parent_id: 0,
               type: 'folder',
               group_id: fields['groupId']
             }).then(function(folder) {
               resolve(folder.id);
-            }).fail(function(err){
+            }).fail(function(err) {
               console.info(err);
             });
           }
@@ -139,11 +139,13 @@ exports.upload = function(req, res) {
           fileSize: file.fileSize,
           encoding: file.encoding,
           messageId: fields['messageId'],
-          folderId:folderId
+          folderId: folderId
         }));
       });
-      Q.all(promies).then(function() {
+      Q.all(promies).then(function(result) {
+        var fileId = result[0].id;
         res.json(200, {
+          fileId: fileId,
           status: "ok"
         });
       });
@@ -152,17 +154,17 @@ exports.upload = function(req, res) {
 }
 
 exports.uploadEnd = function(req, res) {
-  var messageId = req.body.messageId;
+
   var groupId = req.body.groupId;
-  Q.nfcall(req.models.message.get, messageId).then(function(msg) {
-    Q.nfcall(msg.getMessage).then(function(data) {
-      observe.groupBroadcast(groupId, data);
-      res.json({
-        err: 0
-      })
+  var user = req.session.user;
+  var fileIds = req.body.fileids;
+
+  Q.nfcall(req.models.message.createFileMessage, user.id, groupId, 'create', fileIds.split(',')).then(function(message) {
+    observe.messageBroadcast(groupId, message);
+    res.jsonp({
+      err: 0
     });
   });
-
 };
 
 
@@ -288,37 +290,21 @@ exports.post = function(req, res) {
       });
     }).then(function(link) {
       return Q.Promise(function(resolve, reject) {
-        var obj = {
-          'content': message,
-          'type': req.body['type'],
-          'user_id': user.id,
-          'group_id': groupId,
-          'date': new Date
+        var promise;
+        if(link){
+          promise=Q.nfcall(req.models.message.createLinkMessage, user.id, groupId, message, link.id);
+        }else{
+          promise=Q.nfcall(req.models.message.createPlainMessage, user.id, groupId, message);
         }
-        if (link) {
-          obj.link_id = link.id;
-        }
-        req.models.message.create(obj, function(err, message) {
-          if (err) {
-            console.info(err);
-            throw new Error(err);
-          } else {
-            resolve({
-              message: message,
-              link: link
-            });
-          }
+        promise.then(function(msg) {
+          resolve(msg);
         });
       });
-    }).then(function(result, link) {
-      Q.nfcall(result.message.getMessage).then(function(data) {
-        observe.groupBroadcast(groupId, data);
-        return res.jsonp({
-          err: 0
-        });
+    }).then(function(msg) {
+      observe.messageBroadcast(groupId, msg);
+      res.jsonp({
+        err: 0
       });
-
-
     }).fin(function() {
       console.info(JSON.parse(arguments));
     });

@@ -15,15 +15,10 @@ angular.module('agroupApp').factory('messageAPI', ['apiRoot','$http',function(ap
         params:params
       });
     },
-    uploadStart:function(groupId){
-      return $http.post(apiRoot+"api/message/uploadStart",{
-        groupId:groupId
-      });
-    },
-    uploadEnd:function(groupId,messageId){
+    uploadEnd:function(groupId,fileids){
       return $http.post(apiRoot+"api/message/uploadEnd",{
         groupId:groupId,
-        messageId:messageId
+        fileids:fileids
       });
     }
   };

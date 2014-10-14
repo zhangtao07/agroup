@@ -1,0 +1,19 @@
+<p ng-bind-html="data.content" class="plain"></p>
+<div>
+    <p>
+        <a ng-href="{{data.link.url}}" target="_blank" ng-switch on="data.link.title!=null">
+            <i class="fa fa-external-link"></i>
+            <span ng-switch-when="true">{{data.link.title}}</span>
+            <span ng-switch-default>{{data.link.url}}</span>
+        </a>
+    </p>
+
+    <p ng-if="data.link.description != null">
+        {{data.link.description}}
+    </p>
+
+    <p ng-if="data.link.icon != null" style="text-align: right;">
+        <img image-resize-width="100" image-resize-height="100" image-resize="{{data.link.icon}}"/>
+    </p>
+
+</div>

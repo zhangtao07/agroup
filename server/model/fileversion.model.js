@@ -88,7 +88,6 @@ module.exports = function(orm, db) {
     }
   });
 
-  Fileversion.hasOne('message', db.models.message, { required: false,reverse : "fileversions"});
   Fileversion.hasOne('file', db.models.file, {
     required: true,
     autoFetch: true,

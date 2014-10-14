@@ -21,62 +21,120 @@ module.exports = function(orm, db) {
       },
       methods: {
 
-
-        getFileContent: function(fileversions) {
-          if (this.type != "file" ) {
-            return false;
+        getMkContent:function(callback){
+          if (this.type != "mk") {
+            callback(null, false);
           }
-          if(!fileversions){
-            return [];
-          }
+          var obj = JSON.parse(this.content);
           var list = [];
-          fileversions.forEach(function(fileversion) {
-            var content = {
-              "cover": fileversion.getCover(),
-              "filepath": fileversion.getOnlinePath(),
-              "filename": fileversion.filename,
-              "mimetype": fileversion.mimetype
-            }
-            if (/pdf/.test(content.mimetype)) {
-              content.pdf = content.filepath;
-            }
-            if (/ms[-]*word|officedocument/.test(content.mimetype)) {
-              content.pdf = content.filepath + ".pdf";
-            }
-            list.push(content);
+//          var list = obj.list;
+          var promiseFileversions = [];
+          obj.fileIds.forEach(function(fileversionId) {
+            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
+
           });
-          return {
-            type: "file",
-            content: list
-          };
+
+          Q.all(promiseFileversions).then(function(fileversions) {
+            fileversions.forEach(function(fileversion) {
+              if (fileversion) {
+                var content = {
+                  "fileid":fileversion.id,
+                  "filepath": fileversion.getOnlinePath(),
+                  "filename": fileversion.filename
+                }
+                list.push(content);
+              }
+            });
+
+            callback(null, {
+              type: "mk",
+              content: {
+                action: obj.action,
+                list: list
+              }
+            });
+          });
+        },
+
+        getFileContent: function(callback) {
+          if (this.type != "file") {
+            callback(null, false);
+          }
+          var obj = JSON.parse(this.content);
+          var list = [];
+//          var list = obj.list;
+          var promiseFileversions = [];
+          obj.fileIds.forEach(function(fileversionId) {
+            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
+
+          });
+
+          Q.all(promiseFileversions).then(function(fileversions) {
+            fileversions.forEach(function(fileversion) {
+              if (fileversion) {
+                var content = {
+                  "cover": fileversion.getCover(),
+                  "filepath": fileversion.getOnlinePath(),
+                  "filename": fileversion.filename,
+                  "mimetype": fileversion.mimetype
+                }
+                if (/pdf/.test(content.mimetype)) {
+                  content.pdf = content.filepath;
+                }
+                if (/ms[-]*word|officedocument/.test(content.mimetype)) {
+                  content.pdf = content.filepath + ".pdf";
+                }
+                list.push(content);
+              }
+            });
+
+            callback(null, {
+              type: "file",
+              content: {
+                action: obj.action,
+                list: list
+              }
+            });
+          });
 
         },
-        getPlainContent: function() {
+        getLinkContent: function(callback) {
+          if (this.type != "link") {
+            callback(null, false);
+          }
+
+          var obj = JSON.parse(this.content);
+
+          Q.nfcall(db.models.link.get, obj.link_id).then(function(link) {
+            callback(null, {
+              type: 'link',
+              content: {
+                content:obj.content,
+                link: {
+                  url: link.url,
+                  title: link.title,
+                  icon: link.icon,
+                  description: link.description
+                }}
+            });
+          });
+        },
+        getPlainContent: function(callback) {
           if (this.type != "plain") {
-            return false;
+            callback(null, false);
           }
-          var content = {
-            text: this.content
-          }
-          if (this.link != null) {
-            content.link = {
-              url: this.link.url,
-              title: this.link.title,
-              icon: this.link.icon,
-              description: this.link.description
-            }
-          }
-          return {
+
+          callback(null, {
             type: "plain",
-            content: content
-          }
+            content: this.content
+          });
         },
         getMessage: function(callback) {
           var self = this;
-          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getLink), Q.nfcall(this.getFileversions)]).then(function(result) {
-
-            var contentObj = self.getPlainContent() || self.getFileContent(result[2]);
-            callback(null,{
+          Q.all([Q.nfcall(this.getUser), Q.nfcall(this.getFileContent), Q.nfcall(this.getLinkContent), Q.nfcall(this.getPlainContent), Q.nfcall(this.getMkContent)]).then(function(result) {
+            var user = result[0];
+            var contentObj = result[1] || result[2] || result[3] || result[4];
+            callback(null, {
               id: self.id,
               avartar: 'api/user/avatar/' + self.user.username,
               nickname: self.user.nickname,
@@ -95,6 +153,78 @@ module.exports = function(orm, db) {
 
   Message.hasOne('group', db.models.group, { required: true, autoFetch: true });
 
-  Message.hasOne('link', db.models.link, { autoFetch: true });
+  /**
+   *
+   * @param {String} userId
+   * @param {String} groupId
+   * @param {String} action
+   * @param {Array} files
+   */
+
+  function createFileMessage(userId, groupId, action,type, fileIds, callback){
+    db.models.message.create({
+      user_id: userId,
+      group_id: groupId,
+      type: type,
+      date: new Date,
+      content: JSON.stringify({
+        action: action,
+        fileIds: fileIds
+      })
+    }, function(err, message) {
+      if (err) {
+        console.info(err);
+        callback(err);
+      } else {
+        callback(null, message);
+      }
+    })
+
+  }
+
+  Message.createFileMessage = function(userId, groupId, action, fileIds, callback) {
+    createFileMessage(userId, groupId, action,'file', fileIds, callback)
+  }
+
+  Message.createMkMessage = function(userId, groupId, action, fileIds, callback) {
+    createFileMessage(userId, groupId, action,'mk', fileIds, callback)
+  }
+
+  Message.createLinkMessage = function(userId, groupId, content, linkId, callback) {
+    db.models.message.create({
+      user_id: userId,
+      group_id: groupId,
+      type: 'link',
+      date: new Date,
+      content: JSON.stringify({
+        link_id: linkId,
+        content: content
+      })
+    }, function(err, message) {
+      if (err) {
+        console.info(err);
+        callback(err);
+      } else {
+        callback(null, message);
+      }
+    })
+  }
+
+  Message.createPlainMessage = function(userId, groupId, content, callback) {
+    db.models.message.create({
+      user_id: userId,
+      group_id: groupId,
+      type: 'plain',
+      date: new Date,
+      content: content
+    }, function(err, message) {
+      if (err) {
+        console.info(err);
+        callback(err);
+      } else {
+        callback(null, message);
+      }
+    })
+  }
 
 }

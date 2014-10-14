@@ -122,7 +122,6 @@ module.exports=function(models,args){
     filename = args.filename,//required
     fileSize = args.size,//required
     encoding = args.encoding,//required
-    messageId = args.messageId, //not required
     folderId = args.folderId;//not required
 
   return Q.Promise(function getFileId(resolve) {
@@ -173,8 +172,7 @@ module.exports=function(models,args){
         file_id: file_id,
         encoding: encoding,
         createDate: new Date,
-        updateDate: new Date,
-        message_id:messageId
+        updateDate: new Date
       };
       Q.Promise(function imageSizeOf(resolve) {
         if (/^image\//.test(mimetype)) {
