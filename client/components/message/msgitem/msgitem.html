@@ -1,24 +1,3 @@
-<!--
-<div class="plainitem-box">
-  <div class="msg-avatar">
-    <img ng-src="{{data.avartar}}"/>
-  </div>
-  <div class="msg-commonbox">
-    <div class="msg-hd">
-      <div class="msg-hd-title">
-        {{data.nickname}}
-      </div>
-      <div class="msg-item-time">
-        {{data.time}}
-      </div>
-      <div class="msg-item-toolbar"></div>
-    </div>
-    <div class="plainitem">
-      <plainitem data="data.content" ng-if="data.type=='plain'"></plainitem>
-      <fileitem data="data.content" ng-if="data.type=='file'"></fileitem>
-    </div>
-  </div>
-</div>-->
 <div>
     <a class="pull-left thumb-sm avatar m-l-n-md">
         <img image-resize-width="40" image-resize-height="40" image-resize="{{data.avartar}}" class="img-circle" alt="...">
@@ -29,12 +8,7 @@
             <span >
                 {{data.nickname}}
                 <span>
-                    <span ng-if="data.type=='plain' && data.content.link != null">
-                        分享了一个链接
-                    </span>
-                    <span ng-if="data.type=='file'">
-                        分享了一个文件
-                    </span>
+                    {{title}}
                 </span>
             </span>
             <!--<label class="label bg-info m-l-xs">Editor</label>-->
@@ -44,6 +18,8 @@
               </span>
         </div>
         <div class="panel-body">
+            <mkitem data="data.content" ng-if="data.type=='mk'"></mkitem>
+            <linkitem data="data.content" ng-if="data.type=='link'"></linkitem>
             <plainitem data="data.content" ng-if="data.type=='plain'"></plainitem>
             <fileitem data="data.content" ng-if="data.type=='file'"></fileitem>
         </div>

@@ -1,9 +1,9 @@
 
 
-<div ng-repeat="item in data">
+<div ng-repeat="item in data.list">
     <img ng-click="onimgclick(item)" ng-if="item.cover" class="imageitem-img img-thumbnail" image-resize="{{item.cover}}" image-resize-width="200" image-resize-height="200" title="{{item.filename}}"/>
     <p style="margin-top: 10px;font-weight: bold;">
-        <a ng-href="{{item.filepath}}?filename={{item.filename}}" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
+        <a ng-href="{{item.filepath}}" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
             <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
             <span>{{item.filename}}</span>
         </a>

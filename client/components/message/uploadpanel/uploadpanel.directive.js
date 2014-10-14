@@ -71,7 +71,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
               item.percent = 100;
               item.status = "complete";
               scope.$apply();
-              onfinish && onfinish();
+              onfinish && onfinish(res.fileId);
             }
           }
         };
@@ -96,7 +96,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
           item.cancel = function(){
             xhr.abort();
             item.status="cancel";
-            onfinish && onfinish()
+            onfinish && onfinish(null)
           }
         });
       }
