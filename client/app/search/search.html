@@ -10,15 +10,15 @@
       </span>
         </div>
     </form>
-    <p class="m-b-md">一共找到<strong>23</strong>结果: <strong>{{_keyword}}</strong></p>
+   <!-- <p class="m-b-md">一共找到<strong>23</strong>结果: <strong>{{_keyword}}</strong></p>-->
     <tabset class="tab-container">
         <tab>
             <tab-heading>
-                All <span class="badge badge-sm m-l-xs">16</span>
+                文件 <span class="badge badge-sm m-l-xs" ng-if="searchFileTotal>0">{{searchFileTotal}}</span>
             </tab-heading>
             <search-file-list keyword="{{keyword}}"></search-file-list>
             </tab>
-        <tab>
+        <!--<tab>
             <tab-heading>
                 Users <span class="badge bg-danger badge-sm m-l-xs">6</span>
             </tab-heading>
@@ -130,6 +130,6 @@
                         Vestibulum ullamcorper sodales nisi nec condimentum</p>
                 </li>
             </ul>
-        </tab>
+        </tab>-->
     </tabset>
 </div>

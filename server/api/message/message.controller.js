@@ -91,30 +91,63 @@ var pipe = require('./pipe');
 var importFile = require('./import');
 exports.upload = function(req, res) {
   var user = req.session.user;
+
+
   pipe(req).then(function(result) {
 
     var fields = result.fields;
     var files = result.files;
-    var promies = [];
-    files.forEach(function(file) {
-      promies.push(importFile(req.models, {
-        userId: user.id,
-        groupId: fields['groupId'],
-        sha1: file.sha1,
-        filepath: file.filepath,
-        mimetype: file.mimetype,
-        filename: file.filename,
-        fileSize: file.fileSize,
-        encoding: file.encoding,
-        messageId: fields['messageId']
-      }));
-    });
-    Q.all(promies).then(function() {
-      res.json(200, {
-        status: "ok"
+
+
+    Q.promise(function getFolerId(resolve) {
+
+      if (fields['folderId']) {
+        resolve(fields['folderId']);
+      } else {
+        Q.nfcall(req.models.folder.find,{
+          name: '聊天',
+          parent_id: 0,
+          type: 'folder',
+          group_id: fields['groupId']
+        }).then(function(folder) {
+          if (folder.length>0) {
+            resolve(folder[0].id);
+          } else {
+            Q.nfcall(req.models.folder.create,{
+              name: '聊天',
+              parent_id: 0,
+              type: 'folder',
+              group_id: fields['groupId']
+            }).then(function(folder) {
+              resolve(folder.id);
+            }).fail(function(err){
+              console.info(err);
+            });
+          }
+        });
+      }
+    }).then(function(folderId) {
+      var promies = [];
+      files.forEach(function(file) {
+        promies.push(importFile(req.models, {
+          userId: user.id,
+          groupId: fields['groupId'],
+          sha1: file.sha1,
+          filepath: file.filepath,
+          mimetype: file.mimetype,
+          filename: file.filename,
+          fileSize: file.fileSize,
+          encoding: file.encoding,
+          messageId: fields['messageId'],
+          folderId:folderId
+        }));
+      });
+      Q.all(promies).then(function() {
+        res.json(200, {
+          status: "ok"
+        });
       });
     });
-
   });
 }
 
@@ -122,12 +155,12 @@ exports.uploadEnd = function(req, res) {
   var messageId = req.body.messageId;
   var groupId = req.body.groupId;
   Q.nfcall(req.models.message.get, messageId).then(function(msg) {
-     Q.nfcall(msg.getMessage).then(function(data){
-       observe.groupBroadcast(groupId, data);
-       res.json({
-         err:0
-       })
-     });
+    Q.nfcall(msg.getMessage).then(function(data) {
+      observe.groupBroadcast(groupId, data);
+      res.json({
+        err: 0
+      })
+    });
   });
 
 };

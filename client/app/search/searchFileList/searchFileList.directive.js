@@ -39,9 +39,11 @@ angular.module('agroupApp').directive('searchFileList', function(searchAPI) {
               pagesize = res.data.pagesize,
               list = res.data.list;
 
+            scope.$emit('searchFileTotal',total);
             if (total == 0) {
 //              alert('没有数据');
             } else {
+
               scope.totalItems = total;
               scope.list.splice(0,scope.list.length);
               list.forEach(function(item){

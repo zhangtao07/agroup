@@ -1,11 +1,10 @@
 var path = require('path');
-var temp = require("temp");
 var mkdirp = require('mkdirp');
 var config = require("../../config/environment/index");
 var fs = require("fs");
 var sizeOf = require('image-size');
-var exec = require('child_process').exec;
 var Q = require('q');
+var tool = require('../../tools/tool');
 var Segment = require('segment').Segment;
 // 创建实例
 var segment = new Segment();
@@ -13,7 +12,7 @@ var segment = new Segment();
 segment.useDefault();
 
 
-function word2Pdf(file) {
+/*function word2Pdf(file) {
   return Q.Promise(function(resolve) {
     var output = file + ".pdf";
     exec("java -jar " + __dirname + "/convert.jar -i " + file + " -o " + output, function(error, stdout, stderr) {
@@ -21,33 +20,11 @@ function word2Pdf(file) {
     });
   });
 
-}
+}*/
 
 function pdf2image(pdf) {
 
-  return Q.all([Q.promise(function extractText(resolve){
-    var tempDir = config.root + config.upload_temp_dir;
-    if (!fs.existsSync(tempDir)) {
-      mkdirp.sync(tempDir);
-    }
-    var dir = temp.openSync({
-      dir: tempDir,
-      suffix: ".tmp"
-    });
-
-    var tempPath = dir.path;
-    exec('java -jar '+__dirname+'/pdfbox.jar ExtractText -encoding utf-8 '+pdf+' '+tempPath,function(error, stdout, stderr){
-      fs.readFile(tempPath,function(err,data){
-        resolve(data.toString('UTF-8'));
-        fs.unlink(tempPath);
-      });
-    });
-  }),Q.promise(function toCover(resolve){
-    exec('gm convert -density 300 ' + pdf + '[0] -resize 25% ' + pdf + '.cover.jpg', function() {
-      resolve(pdf)
-    });
-
-  })]).then(function(result){
+  return Q.all([Q.nfcall(tool.getPDFText,pdf), Q.nfcall(tool.pdfToConver,pdf,300,25,pdf+'.cover.jpg')]).then(function(result){
     return Q.promise(function(resolve){
 
       resolve(result[0]);
@@ -57,7 +34,9 @@ function pdf2image(pdf) {
       if (!fs.existsSync(imagesPath)) {
         fs.mkdirSync(imagesPath);
       }
-      exec("gm convert -density 300 -resize 50% pdf:" + pdf + " +adjoin jpeg:" + imagesPath + "/%01d.jpg");
+
+      pdfToImages(pdf,300,50,imagesPath);
+//      exec("gm convert -density 300 -resize 50% pdf:" + pdf + " +adjoin jpeg:" + imagesPath + "/%01d.jpg");
     });
   });
 }
@@ -72,10 +51,10 @@ function generatePreview(mimetype, file) {
         })
       });
     });
-  } else if (/ms[-]*word|officedocument/.test(mimetype)) {
+  } else if (/ms[-]*word|officedocument|ms[-]*excel|spreadsheetml|ms[-]*powerpoint|presentationml/.test(mimetype)) {
     return Q.promise(function(resolve){
-      word2Pdf(file).then(function(pdf) {
-        return pdf2image(pdf);
+      Q.nfcall(tool.office2pdf,file,file+'.pdf').then(function() {
+        return pdf2image(file+'.pdf');
       }).then(function(text){
         resolve({
           text:text
@@ -143,19 +122,30 @@ module.exports=function(models,args){
     filename = args.filename,//required
     fileSize = args.size,//required
     encoding = args.encoding,//required
-    messageId = args.messageId; //not required
+    messageId = args.messageId, //not required
+    folderId = args.folderId;//not required
 
   return Q.Promise(function getFileId(resolve) {
     if (fileId) {
       resolve(fileId);
     } else {
-      models.file.create({
+      Q.nfcall(models.file.create,{
         name: filename,
         group_id: groupId,
         user_id: userId
-      }, function(err, file) {
-        resolve(file.id);
+      }).then(function(file){
+        Q.nfcall(models.folder.create,{
+          name:filename,
+          file_id:file.id,
+          parent_id:folderId,
+          type:'file',
+          group_id:groupId
+        }).then(function(){
+          resolve(file.id);
+        });
+
       });
+
     }
   }).then(function(file_id) {
     return Q.Promise(function getFileversion(resolve) {
