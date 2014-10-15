@@ -5,6 +5,7 @@ var fs = require('fs');
 var async = require('async');
 var markdown = require("markdown").markdown;
 var marked = require('marked');
+var ed = require('../../editor/dataCenter');
 
 
 marked.setOptions({
@@ -56,7 +57,8 @@ exports.index = function(req, res) {
 
   req.models.file.find({
       group_id: group,
-      mimetype: 'text/x-markdown'
+      mimetype: 'text/x-markdown',
+      status: 'vision',
     }).order('-createDate').limit(limit).offset(offset)
     .run(function(err, files) {
       getFileversion(user, files, res, req.models, group, limit, offset);
@@ -75,11 +77,17 @@ function getFileversion(user, files, res, models, group, limit, offset) {
       });
       latestVersion.get(user, function data(err, result) {
         if (err) return errorHandler(res, err);
+        //当前正在编辑的内容
+        var cached = ed.getCache(result.id);
+        if(cached){
+          result.content = cached.content;
+          result.writers = cached.writers;
+        }
         result.content = marked(result.content);
         completeQueue.push(result);
         if (count && completeQueue.length === files.length) {
           return res.status(200).json({
-            list: _.sortBy(completeQueue,function(d){ return d.id }),
+            list: _.sortBy(completeQueue,function(d){ return -d.id }),
             hasMore: limit + offset < count ? true : false
           });
         }

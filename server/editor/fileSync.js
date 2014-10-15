@@ -1,51 +1,45 @@
-var cache = require('./cache');
+var dc = require('./dataCenter');
 var diff_match_patch = require('googlediff');
 var diff = new diff_match_patch();
 var id = 1000;
 
-function SyncService(content, msg) {
-  this.content = content;
+function Client(msg) {
   this.fileid = msg.fileid;
   this.user = msg.user;
-  //this.user.id = this.user.id || (id++).toString(36);
 }
 
-SyncService.prototype.addClient = function(socket) {
-
+Client.prototype.add = function(socket) {
   var self = this;
   socket.join(this.fileid);
-
+  dc.userJoin(self);
   self.sendMessage(socket, 'server:clientJoin', self.user);
 
   socket.on('disconnect', function() {
-    cache.save(self.fileid,self.user);
+    dc.userLeave(self);
     self.sendMessage(socket, 'server:clientLeave', self.user);
   });
 
   socket.on('patch', function(message) {
     var patch = message.patch;
     var patches = diff.patch_fromText(patch);
-    var results = diff.patch_apply(patches, self.content);
-    var content = results[0];
-    self.content = content;
+    var results = diff.patch_apply(patches, dc.getContent(self.fileid));
+    dc.setContent(self.fileid,results[0]);
     message.user = self.user;
     self.onPatch(socket, message);
   });
 };
 
-SyncService.prototype.onPatch = function(socket, message) {
+Client.prototype.onPatch = function(socket, message) {
   this.sendMessage(socket, 'server:patch', message);
 };
 
-SyncService.prototype.sendMessage = function(socket, messageName, message) {
+Client.prototype.sendMessage = function(socket, messageName, message) {
   socket.broadcast['in'](this.fileid).emit(messageName, message);
 };
 
 function startSync(msg, socket) {
-  cache.get(msg.fileid, function(file) {
-    var syncService = new SyncService(file, msg);
-    syncService.addClient(socket);
-    cache.set(msg.fileid, syncService);
+  dc.readFile(msg.fileid, function() {
+    new Client(msg).add(socket);
   });
 }
 

@@ -7,6 +7,21 @@
   overflow-x: hidden;
 }
 
+.panel-body.relative{
+  position: relative;
+}
+.writer-pannel{
+  position: absolute;
+  width: 100%;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  /*text-align: right;*/
+  .w-a {
+    width: 20px;
+  }
+}
+
 .md-container{
   overflow: auto;
   height: 100%;

@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var cache = require('./cache');
+var dataCenter = require('./dataCenter');
 
 
 router.get('/viewer', function(req, res) {
@@ -21,7 +21,7 @@ router.get('/:group', function(req, res) {
   if(!fileid){
     res.redirect('/');
   }else{
-    cache.checkFile(fileid,function(err,exists){
+    dataCenter.checkFile(fileid,function(err,exists){
       if(exists){
         return view ? res.render('viewer.html') : res.render('editor.html');
       }else{
@@ -34,14 +34,13 @@ router.get('/:group', function(req, res) {
 router.get('/:group/create',function(req,res){
   var group = req.params.group;
 
-  cache.createFile(group, req.session.user,function(err,fileid){
+  dataCenter.createFile(group, req.session.user,function(err,fileid){
     if(err){
       res.send(err);
     }else{
       res.redirect('/editor/' + group + '?file=' + fileid);
     }
   });
-
 });
 
 router.post('/:group', function(req, res) {
@@ -49,13 +48,13 @@ router.post('/:group', function(req, res) {
   var fileid = req.query.file;
   var user = req.session.user;
 
-  cache.get(fileid , function(file) {
+  dataCenter.readFile(fileid , function(file) {
     res.status(200).json({
       fileid: fileid,
       group: group,
-      title: file.title || new Date().toLocaleDateString(),
-      content: file || 'file not found',
-      user: user || {}
+      title: file.name,
+      content: file.content || '',
+      user: user
     });
   });
 });

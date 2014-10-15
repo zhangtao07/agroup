@@ -42,8 +42,16 @@
             </div>
           </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body relative">
           <div class="md-content" ng-bind-html="md.content"></div>
+          <div class="m-b m-t writer-pannel">
+            <a ng-repeat="writer in md.writers" href="" class="avatar thumb-xs m-r-xs">
+              <img class="w-a" image-resize-width="20" image-resize-height="20" image-resize="{{ writer.avatar }}" alt="...">
+              <!--<i class="on b-white left"></i>-->
+            </a>
+            <!--<span ng-show="{{md.writers}}" class="h5 m-l-sm">Editting</span>-->
+          </div>
+
         </div>
       </div>
     </section>
