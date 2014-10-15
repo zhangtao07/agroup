@@ -43,6 +43,15 @@ define([
         console.log(arguments);
       });
 
+      eventMgr.addListener('onTitleChanged', function(fileDesc) {
+        socket.emit('changeFilename',fileDesc);
+      });
+
+      socket.on('server:changeFilename', function(fileDesc) {
+        //eventMgr.onTitleChanged(fileDesc);
+        console.log(fileDesc);
+      });
+
       eventMgr.addListener('onReady', function(data) {
         if(!data || !data.fileid){
           window.location.href = '/';

@@ -31,9 +31,14 @@ exports.userLeave = function(client) {
 
   if (!writers.length) {
     createFileversion(file);
-    updateFileStatus(file,'vision');
+    updateFile(file);
     delete cache[file.id];
   }
+}
+
+exports.setTitle = function(fileid, fileDesc) {
+  //console.log(fileDesc);
+  cache[fileid].name = fileDesc._title;
 }
 
 exports.setContent = function(fileid, content) {
@@ -61,12 +66,13 @@ exports.readFile = function(fileid, cb) {
   });
 };
 
-function updateFileStatus(file,status){
+function updateFile(file){
   getDB(function(err, db) {
-    db.models.file.get(file.id, function(err, file) {
+    db.models.file.get(file.id, function(err, f) {
       //TBD
-      file.status = status;
-      file.save();
+      f.status = file.status;
+      f.name = file.name || defaultFileName({nickname:'agroup'});
+      f.save();
     });
   });
 }

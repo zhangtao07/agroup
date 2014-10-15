@@ -80,6 +80,7 @@ function getFileversion(user, files, res, models, group, limit, offset) {
         //当前正在编辑的内容
         var cached = ed.getCache(result.id);
         if(cached){
+          result.filename = cached.name;
           result.content = cached.content;
           result.writers = cached.writers;
         }

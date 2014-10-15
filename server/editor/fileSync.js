@@ -27,10 +27,19 @@ Client.prototype.add = function(socket) {
     message.user = self.user;
     self.onPatch(socket, message);
   });
+
+  socket.on('changeFilename', function(fileDesc) {
+    dc.setTitle(self.fileid,fileDesc)
+    self.changeFilename(socket, fileDesc);
+  });
 };
 
 Client.prototype.onPatch = function(socket, message) {
   this.sendMessage(socket, 'server:patch', message);
+};
+
+Client.prototype.changeFilename = function(socket, message) {
+  this.sendMessage(socket, 'server:changeFilename', message);
 };
 
 Client.prototype.sendMessage = function(socket, messageName, message) {
