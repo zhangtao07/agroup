@@ -143,9 +143,11 @@ exports.upload = function(req, res) {
         }));
       });
       Q.all(promies).then(function(result) {
-        var fileId = result[0].id;
+        var fileId = result[0].fv.id;
+        var folder = result[0].folder;
         res.json(200, {
           fileId: fileId,
+          folder: folder,
           status: "ok"
         });
       });

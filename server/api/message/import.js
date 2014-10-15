@@ -139,14 +139,15 @@ module.exports=function(models,args){
           parent_id:folderId,
           type:mimetype,
           group_id:groupId
-        }).then(function(){
-          resolve(file.id);
+        }).then(function(folder){
+          resolve({file_id : file.id,folder:folder});
         });
 
       });
 
     }
-  }).then(function(file_id) {
+  }).then(function(data) {
+    var file_id = data.file_id;
     return Q.Promise(function getFileversion(resolve) {
       var upload_dir = config.upload_dir;
       var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -197,12 +198,12 @@ module.exports=function(models,args){
                 text:filetext,
                 fileversion_id:fileversion.id
               }).then(function(){
-                resolve(fileversion);
+                resolve({fv :fileversion,folder:data.folder});
               }).fail(function(err){
                 console.info(err);
               });
             }else{
-              resolve(fileversion);
+              resolve({fv : fileversion,folder:data.folder});
             }
 
           })
