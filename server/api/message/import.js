@@ -137,7 +137,7 @@ module.exports=function(models,args){
           name:filename,
           file_id:file.id,
           parent_id:folderId,
-          type:'file',
+          type:mimetype,
           group_id:groupId
         }).then(function(){
           resolve(file.id);

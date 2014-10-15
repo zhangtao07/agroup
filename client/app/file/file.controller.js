@@ -138,22 +138,25 @@ angular.module('agroupApp')
 
     var panel = $scope.uploadpanel = {}
 
-    function sendFile(file, folder) {
+    function sendFile(file, folder,folderId) {
       var groupId = $stateParams.group;
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
         formData.append('groupId', groupId);
         formData.append('file', file);
+        formData.append('folderId', folderId);
         send('api/message/upload', formData);
 
-      }, function(res) {
-        var i = level.indexOf(folder);
-        addItem(i, res.file.id, res.msg.content);
+      }, function(fileID) {
+        console.log(fileID);
+        //addItem(i, fileID, res.msg.content);
       });
     }
     $scope.onDrop = function(files, folder) {
+      var index = level.indexOf(folder);
+      var folderId = index > 0 ? level[index - 1].selectedItem.id : 0;
       files.forEach(function(file) {
-        sendFile(file, folder);
+        sendFile(file, folder, folderId);
       });
     };
   });
