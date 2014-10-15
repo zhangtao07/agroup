@@ -190,11 +190,12 @@ var Iconv = require('iconv').Iconv;
 
 function getMetaFromUrl(url) {
 
-  return Q.Promise(function(resolve) {
+  return Q.Promise(function(resolve,reject) {
 
     request({
       url: url,
       encoding: null,
+      timeout:5*1000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36'
       }
@@ -231,6 +232,8 @@ function getMetaFromUrl(url) {
 //        console.info(result);
         resolve(result);
 
+      }else{
+        reject();
       }
     })
   });
@@ -246,67 +249,64 @@ exports.post = function(req, res) {
 
   getURL(message).
     then(function(url) {
-      return Q.Promise(function(resolve, reject) {
+      var promise;
+      if (url) {
+        promise = Q.nfcall(req.models.message.createLinkMessage, user.id, groupId, message, null);
+      } else {
+        promise = Q.nfcall(req.models.message.createPlainMessage, user.id, groupId, message);
+      }
+      promise.then(function(msg) {
+        if (msg.type == 'link') {
 
-        if (!url) {
-          resolve(null);
-          return;
-        }
-
-        Q.Promise(function(resolve) {
-          req.models.link.one({
-            url: url
-          }, function(err, link) {
-            if (err) {
-              console.info(err);
-              throw new Error(err);
-            } else {
-              resolve(link);
-            }
-          });
-        }).then(function(link) {
-          if (link) {
-            resolve(link);
-          } else {
-            getMetaFromUrl(url).then(function(meta) {
-              req.models.link.create({
-                url: url,
-                title: meta.title,
-                icon: meta.image,
-                description: meta.desc,
-                group_id: groupId,
-                user_id: user.id
-              }, function(err, link) {
-                if (err) {
-                  console.info(err);
-                  throw new Error(err);
-                } else {
-                  resolve(link);
+          Q.promise(function getMeta(resolve){
+            getMetaFromUrl(url).then(function(meta){
+              resolve(meta);
+            }).fail(function(){
+              resolve(null)
+            });
+          }).then(function(meta){
+            req.models.link.one({
+              url:url
+            },function(err,link){
+              var promise = null;
+              if(meta == null){
+                meta = {
+                  title:url
                 }
-              })
-            })
-          }
-        });
-      });
-    }).then(function(link) {
-      return Q.Promise(function(resolve, reject) {
-        var promise;
-        if(link){
-          promise=Q.nfcall(req.models.message.createLinkMessage, user.id, groupId, message, link.id);
-        }else{
-          promise=Q.nfcall(req.models.message.createPlainMessage, user.id, groupId, message);
+              }
+              if (link) {
+                link.url = url;
+                link.title = meta.title;
+                link.icon = meta.image;
+                link.description = meta.description;
+                link.group_id = groupId;
+                link.user_id = user.id;
+                promise = Q.nfcall(link.save);
+              } else {
+                promise = Q.nfcall(req.models.link.create, {
+                  url: url,
+                  title: meta.title,
+                  icon: meta.image,
+                  description: meta.desc,
+                  group_id: groupId,
+                  user_id: user.id
+                });
+              }
+              promise.then(function(link) {
+                Q.nfcall(msg.updateLink, link.id).then(function(msg) {
+                  observe.messageBroadcast(groupId, msg);
+                });
+              });
+            });
+          });
+
         }
-        promise.then(function(msg) {
-          resolve(msg);
+
+        observe.messageBroadcast(groupId, msg);
+        res.jsonp({
+          err: 0
         });
       });
-    }).then(function(msg) {
-      observe.messageBroadcast(groupId, msg);
-      res.jsonp({
-        err: 0
-      });
-    }).fin(function() {
-      console.info(JSON.parse(arguments));
     });
 }
 

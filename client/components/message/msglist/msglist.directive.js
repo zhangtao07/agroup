@@ -111,8 +111,19 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
 
           socket.joinGroup(groupId, function(data) {
+            var obj = JSON.parse(data);
+            var exist = false;
+            scope.msglist.forEach(function(item,i){
+              if(item.id == obj.id){
+                scope.msglist[i] = obj;
+                exist = true;
+                return false;
+              }
+            });
+            if(!exist){
+              scope.msglist.unshift(obj);
+            }
 
-            scope.msglist.unshift(JSON.parse(data));
           });
 
 
