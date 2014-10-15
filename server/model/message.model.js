@@ -21,7 +21,7 @@ module.exports = function(orm, db) {
       },
       methods: {
 
-        getMkContent:function(callback){
+        getMkContent: function(callback) {
           if (this.type != "mk") {
             callback(null, false);
           }
@@ -38,7 +38,7 @@ module.exports = function(orm, db) {
             fileversions.forEach(function(fileversion) {
               if (fileversion) {
                 var content = {
-                  "fileid":fileversion.id,
+                  "fileid": fileversion.id,
                   "filepath": fileversion.getOnlinePath(),
                   "filename": fileversion.filename
                 }
@@ -105,19 +105,41 @@ module.exports = function(orm, db) {
 
           var obj = JSON.parse(this.content);
 
-          Q.nfcall(db.models.link.get, obj.link_id).then(function(link) {
-            callback(null, {
+          Q.promise(function getLink(resolve) {
+
+            var link_id = obj.link_id;
+            if (link_id) {
+              Q.nfcall(db.models.link.get, link_id).then(function(link) {
+                if (link) {
+                  resolve(link);
+                } else {
+                  resolve(null);
+                }
+              });
+            } else {
+              resolve(null);
+            }
+
+          }).then(function(link) {
+            var res = {
               type: 'link',
               content: {
-                content:obj.content,
-                link: {
-                  url: link.url,
-                  title: link.title,
-                  icon: link.icon,
-                  description: link.description
-                }}
-            });
+                content: obj.content
+              }
+            };
+            if (link) {
+              res.content.link = {
+                url: link.url,
+                title: link.title,
+                icon: link.icon,
+                description: link.description
+              }
+            } else {
+              res.content.link = null;
+            }
+            callback(null, res);
           });
+
         },
         getPlainContent: function(callback) {
           if (this.type != "plain") {
@@ -144,6 +166,15 @@ module.exports = function(orm, db) {
             });
 
           });
+        },
+        updateLink: function(linkId, callback) {
+          var obj = JSON.parse(this.content);
+          obj.link_id = linkId;
+          this.content = JSON.stringify(obj);
+          this.save(function(err, msg) {
+            callback(err, msg);
+          });
+
         }
       }
 
@@ -161,7 +192,7 @@ module.exports = function(orm, db) {
    * @param {Array} files
    */
 
-  function createFileMessage(userId, groupId, action,type, fileIds, callback){
+  function createFileMessage(userId, groupId, action, type, fileIds, callback) {
     db.models.message.create({
       user_id: userId,
       group_id: groupId,
@@ -183,11 +214,11 @@ module.exports = function(orm, db) {
   }
 
   Message.createFileMessage = function(userId, groupId, action, fileIds, callback) {
-    createFileMessage(userId, groupId, action,'file', fileIds, callback)
+    createFileMessage(userId, groupId, action, 'file', fileIds, callback)
   }
 
   Message.createMkMessage = function(userId, groupId, action, fileIds, callback) {
-    createFileMessage(userId, groupId, action,'mk', fileIds, callback)
+    createFileMessage(userId, groupId, action, 'mk', fileIds, callback)
   }
 
   Message.createLinkMessage = function(userId, groupId, content, linkId, callback) {
@@ -209,6 +240,7 @@ module.exports = function(orm, db) {
       }
     })
   }
+
 
   Message.createPlainMessage = function(userId, groupId, content, callback) {
     db.models.message.create({
