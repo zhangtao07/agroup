@@ -70,7 +70,8 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   var Folder = req.models.folder;
   Folder.find({
-    group_id: req.params.id
+    group_id: req.params.id,
+    status: 'vision'
   }, function(err, file) {
     if (err) {
       return handleError(res, err);
@@ -85,6 +86,8 @@ exports.show = function(req, res) {
 // Creates a new folder in the DB.
 exports.create = function(req, res) {
   var Folder = req.models.folder;
+  var user = req.session.user;
+  req.body.user_id = user.id;
   Folder.create(req.body, function(err, folder) {
     if (err) {
       return handleError(res, err);
@@ -127,12 +130,19 @@ exports.destroy = function(req, res) {
     if (!file) {
       return res.send(404);
     }
-    file.remove(function(err) {
+    file.status = 'delete';
+    file.save(function(err){
       if (err) {
         return handleError(res, err);
       }
       return res.send(204);
     });
+    //file.remove(function(err) {
+      //if (err) {
+        //return handleError(res, err);
+      //}
+      //return res.send(204);
+    //});
   });
 };
 

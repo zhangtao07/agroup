@@ -70,7 +70,6 @@ function updateFile(file){
   getDB(function(err, db) {
     db.models.file.get(file.id, function(err, f) {
       //TBD
-      f.status = file.status;
       f.name = file.name || defaultFileName({nickname:'agroup'});
       f.save();
     });
@@ -84,14 +83,14 @@ exports.createFile = function(group, user, cb) {
     file.create([{
       name: defaultFileName(user),
       mimetype: 'text/x-markdown',
-      status: 'init',
       createDate: new Date(),
       user_id: user.id,
       group_id: group
     }], function(err, files) {
       _.each(files, function(file) {
-        createFileversion(file);
         cache[file.id] = file;
+        createFileversion(file);
+        createFolder(file,user);
         return cb && cb(err,file.id);
       });
     });
@@ -160,4 +159,40 @@ function createFileversion(file) {
       fs.writeFile(getFileRealpath(fv.filepath), file.content || '', 'utf8');
     }
   });
+}
+
+function createFolder(file,user){
+  getDB(function(err, db) {
+    var defaultFolder = {
+      name: '笔记',
+      parent_id: 0,
+      type: 'folder',
+      user_id: user.id,
+      group_id: file.group_id
+    };
+    db.models.folder.find(defaultFolder,function(err,data){
+      var defaultFolderCreated = data && data.length;
+      if(defaultFolderCreated){
+        createSubfile(db,user,file,data[0].id);
+      }else{
+        db.models.folder.create(defaultFolder,function(err,result){
+          createSubfile(db,user,file,result.id);
+        });
+      }
+    });
+  });
+}
+
+function createSubfile(db,user,file,parent_id){
+    var f = {
+      name: file.name,
+      parent_id: parent_id,
+      file_id: file.id,
+      type: file.mimetype,
+      user_id: user.id,
+      group_id:file.group_id
+    };
+    db.models.folder.create(f, function(err, result) {
+      if (err) throw err;
+    });
 }

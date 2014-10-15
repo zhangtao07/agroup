@@ -23,6 +23,26 @@ marked.setOptions({
 });
 
 exports.destroy = function(req, res) {
+  remove(req,res);
+};
+
+function remove(req,res){
+  var fileid = req.params.id;
+  var user = req.session.user;
+  removeFolder(req.models,fileid,user);
+  req.models.file.get(fileid, function(err, file) {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    file.status = 'delete';
+    file.user_id = user.id;
+    file.save();
+    res.status(200).send('success');
+  });
+}
+
+function realRemove(req,res){
   var id = req.params.id;
   req.models.fileversion.find({
     file_id: id
@@ -44,7 +64,19 @@ exports.destroy = function(req, res) {
     });
     res.status(200).send('success');
   });
-};
+}
+
+function removeFolder(models,fileid,user){
+  models.folder.find({
+    file_id:fileid,
+  },function(err,folders){
+    _.each(folders,function(folder){
+      folder.status = 'delete';
+      folder.user_id = user.id;
+      folder.save();
+    });
+  });
+}
 
 
 // Get list of markdowns
@@ -58,7 +90,7 @@ exports.index = function(req, res) {
   req.models.file.find({
       group_id: group,
       mimetype: 'text/x-markdown',
-      status: 'vision',
+      status: 'vision'
     }).order('-createDate').limit(limit).offset(offset)
     .run(function(err, files) {
       getFileversion(user, files, res, req.models, group, limit, offset);

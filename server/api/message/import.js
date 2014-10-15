@@ -138,6 +138,7 @@ module.exports=function(models,args){
           file_id:file.id,
           parent_id:folderId,
           type:mimetype,
+          user_id:userId,
           group_id:groupId
         }).then(function(folder){
           resolve({file_id : file.id,folder:folder});

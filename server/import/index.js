@@ -42,6 +42,7 @@ function readPath(p, parentID) {
         name: path.basename(p),
         parent_id: parentID,
         type: 'folder',
+        user_id: user.id,
         group_id: group.id
       }], function(err, item) {
         //console.log(item[0].id);

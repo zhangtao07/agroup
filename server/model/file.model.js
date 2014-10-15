@@ -7,7 +7,7 @@ module.exports = function(orm, db) {
     id: { type: 'serial', key: true },
     name:String,
     mimetype: String,
-    status: [ 'init' , 'vision' , 'removed' ],
+    status: [ 'vision' ,'hidden', 'removed' ],
     createDate: {type: 'date', time: true}
   },{
     hooks: {

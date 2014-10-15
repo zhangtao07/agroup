@@ -117,6 +117,7 @@ exports.upload = function(req, res) {
               name: '聊天',
               parent_id: 0,
               type: 'folder',
+              user_id: user.id,
               group_id: fields['groupId']
             }).then(function(folder) {
               resolve(folder.id);
