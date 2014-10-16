@@ -106,6 +106,7 @@ db.writeFile = function(file, data, parentID) {
       parent_id: parentID,
       file_id: fileid,
       type: file.mimetype,
+      user_id: data.userid,
       group_id: data.groupid
     };
 
