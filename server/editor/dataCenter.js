@@ -5,6 +5,7 @@ var models = require('../model');
 var md5 = require('MD5');
 var config = require("../config/environment");
 var _ = require('lodash');
+var observe = require('../components/group.observe');
 var cache = {};
 var database;
 var basepath = config.root + config.upload_dir + '/markdown';
@@ -71,6 +72,12 @@ function updateFile(file,user){
     var filename = defaultFileName(user || {nickname:'agroup'});
     db.models.file.get(file.id, function(err, f) {
       //TBD
+      if(f.status === 'init'){
+        f.status = 'vision';
+        db.models.message.createMkMessage(user.id,file.group_id,'create',[file.id],markdownMessage);
+      }else{
+        db.models.message.createMkMessage(user.id,file.group_id,'update',[file.id],markdownMessage);
+      }
       f.name = file.name || filename;
       f.user_id = user.id;
       f.save();
@@ -93,6 +100,7 @@ exports.createFile = function(group, user, cb) {
       name: '',//defaultFileName(user),
       mimetype: 'text/x-markdown',
       createDate: new Date(),
+      status: 'init',
       user_id: user.id,
       group_id: group
     }], function(err, files) {
@@ -105,6 +113,10 @@ exports.createFile = function(group, user, cb) {
     });
   });
 };
+
+function markdownMessage(err,message){
+  observe.messageBroadcast(message.group_id,message);
+}
 
 exports.checkFile = function(fileid, cb) {
   if (cache[fileid]) {
