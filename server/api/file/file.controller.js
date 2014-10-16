@@ -4,6 +4,7 @@ var _ = require('lodash');
 var fs = require('fs');
 //var File = require('./file.model');
 var marked = require('marked');
+var dc = require('../../editor/dataCenter.js');
 
 
 marked.setOptions({
@@ -76,6 +77,16 @@ exports.show = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
+
+    _.each(file,function(d){
+      var cached = dc.getCache(d.file_id);
+      if(d.type !=='folder' && cached){
+        d.name = cached.name;
+        //d.content = cached.content;
+        d.writers = cached.writers;
+      }
+    });
+
     if (!file) {
       return res.send(404);
     }
@@ -99,6 +110,7 @@ exports.create = function(req, res) {
 // Updates an existing file in the DB.
 exports.update = function(req, res) {
   var Folder = req.models.folder;
+  var File = req.models.file;
   if (req.body.id) {
     delete req.body.id;
   }
@@ -110,6 +122,15 @@ exports.update = function(req, res) {
       return res.send(404);
     }
     var updated = _.merge(file, req.body);
+
+    File.get(file.file_id,function(err,file){
+      updateFile(file,updated.name);
+      var cached = dc.getCache(file.id);
+      if(cached){
+        cached.name = updated.name;
+      }
+    });
+
     //console.log(file);
     updated.save(function(err) {
       if (err) {
@@ -119,6 +140,11 @@ exports.update = function(req, res) {
     });
   });
 };
+
+function updateFile(file,name){
+  file.name = name;
+  file.save();
+}
 
 // Deletes a file from the DB.
 exports.destroy = function(req, res) {

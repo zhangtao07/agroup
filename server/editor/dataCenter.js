@@ -31,7 +31,7 @@ exports.userLeave = function(client) {
 
   if (!writers.length) {
     createFileversion(file);
-    updateFile(file);
+    updateFile(file,client.user);
     delete cache[file.id];
   }
 }
@@ -66,12 +66,20 @@ exports.readFile = function(fileid, cb) {
   });
 };
 
-function updateFile(file){
+function updateFile(file,user){
   getDB(function(err, db) {
     db.models.file.get(file.id, function(err, f) {
       //TBD
       f.name = file.name || defaultFileName({nickname:'agroup'});
+      f.user_id = user.id;
       f.save();
+    });
+    db.models.folder.find({file_id:file.id}, function(err, fds) {
+      _.each(fds,function(fd){
+        fd.name = file.name || defaultFileName({nickname:'agroup'});
+        fd.user_id = user.id;
+        fd.save();
+      });
     });
   });
 }

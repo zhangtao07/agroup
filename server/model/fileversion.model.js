@@ -80,6 +80,11 @@ module.exports = function(orm, db) {
           time: ago(self.updateDate),
           content: ''
         }
+
+        self.getFile(function(err,file){
+          result.filename = file.name;
+        });
+
         fs.readFile(this.getRealpath(), 'utf8', function(err, content) {
           result.content = content;
           cb(err,result);
