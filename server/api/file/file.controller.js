@@ -123,13 +123,16 @@ exports.update = function(req, res) {
     }
     var updated = _.merge(file, req.body);
 
-    File.get(file.file_id,function(err,file){
-      updateFile(file,updated.name);
-      var cached = dc.getCache(file.id);
-      if(cached){
-        cached.name = updated.name;
-      }
-    });
+    if(file.type !== 'folder'){
+      //目录不是真的文件,所以在file表中不存在
+      File.get(file.file_id,function(err,file){
+        updateFile(file,updated.name);
+        var cached = dc.getCache(file.id);
+        if(cached){
+          cached.name = updated.name;
+        }
+      });
+    }
 
     //console.log(file);
     updated.save(function(err) {
