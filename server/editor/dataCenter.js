@@ -36,9 +36,9 @@ exports.userLeave = function(client) {
   }
 }
 
-exports.setTitle = function(fileid, fileDesc) {
+exports.setTitle = function(fileid, filename) {
   //console.log(fileDesc);
-  cache[fileid].name = fileDesc._title;
+  cache[fileid].name = filename;
 }
 
 exports.setContent = function(fileid, content) {
@@ -68,15 +68,16 @@ exports.readFile = function(fileid, cb) {
 
 function updateFile(file,user){
   getDB(function(err, db) {
+    var filename = defaultFileName(user || {nickname:'agroup'});
     db.models.file.get(file.id, function(err, f) {
       //TBD
-      f.name = file.name || defaultFileName({nickname:'agroup'});
+      f.name = file.name || filename;
       f.user_id = user.id;
       f.save();
     });
     db.models.folder.find({file_id:file.id}, function(err, fds) {
       _.each(fds,function(fd){
-        fd.name = file.name || defaultFileName({nickname:'agroup'});
+        fd.name = file.name || filename;
         fd.user_id = user.id;
         fd.save();
       });
@@ -89,7 +90,7 @@ exports.createFile = function(group, user, cb) {
   getDB(function(err, db) {
     var file = db.models.file;
     file.create([{
-      name: defaultFileName(user),
+      name: '',//defaultFileName(user),
       mimetype: 'text/x-markdown',
       createDate: new Date(),
       user_id: user.id,
