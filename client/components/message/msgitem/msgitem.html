@@ -1,23 +1,33 @@
-<div>
+<div ng-init="mouseEnter=false;" ng-mouseenter="mouseEnter=true" ng-mouseleave="mouseEnter=false">
+
     <a class="pull-left thumb-sm avatar m-l-n-md">
-        <img image-resize-width="40" image-resize-height="40" image-resize="{{data.avartar}}" class="img-circle" alt="...">
+        <img image-resize-width="40" image-resize-height="40" image-resize="{{data.avartar}}" class="img-circle"
+             alt="...">
     </a>
+
     <div class="m-l-lg panel b-a">
         <div class="panel-heading pos-rlt b-b b-light">
             <span class="arrow left"></span>
-            <span >
+            <span>
                 {{data.nickname}}
                 <span>
                     {{title}}
                 </span>
             </span>
             <!--<label class="label bg-info m-l-xs">Editor</label>-->
-              <span class="text-muted m-l-sm pull-right">
-                <i class="fa fa-clock-o"></i>
-                {{data.time}}
-              </span>
+            <div class="pull-right">
+                <span class="text-muted m-l-sm pull-right" ng-hide="mouseEnter">
+                    <i class="fa fa-clock-o"></i>
+                    {{data.time}}
+                </span>
+                <span class="msg-toolbar" ng-show="mouseEnter">
+                    <i ng-click="onDel(data)" class="icon-close icon" ng-show="__user.id == data.user_id"></i>
+                </span>
+
+            </div>
         </div>
         <div class="panel-body">
+
             <mkitem data="data.content" ng-if="data.type=='mk'"></mkitem>
             <linkitem data="data.content" ng-if="data.type=='link'"></linkitem>
             <plainitem data="data.content" ng-if="data.type=='plain'"></plainitem>

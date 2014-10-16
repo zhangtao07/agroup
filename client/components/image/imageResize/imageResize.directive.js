@@ -18,6 +18,7 @@ angular.module('agroupApp').directive('imageResize', function() {
         imageResizeGravity,
         url;
       scope.$watchCollection('[url,imageResizeWidth, imageResizeHeight,imageResizeType,imageResizeGravity]', function(newValues) {
+
         url = newValues[0];
         if(!/^http(s)?:\/\//.test(url)){
           url = url.replace(/^\//,function(s0,s1){

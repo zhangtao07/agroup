@@ -9,10 +9,27 @@ angular.module('agroupApp')
         'data': '=data'
       },
       link: function(scope, element, attrs) {
+
+        scope.onCoverLoad = function(item){
+
+          item.coverLoad = true;
+        }
+
+        scope.onCoverError = function(item){
+          if(!item._cover){
+            item._cover = item.cover;
+          }
+          item.coverLoad = false;
+          setTimeout(function(){
+            item.cover = item._cover+'?d='+new Date().getTime();
+            scope.$apply();
+          },3000);
+
+
+        }
         scope.onimgclick = function(data){
           if(data.pdf){
             if(!/pdf/.test(data.mimetype)){
-              debugger;
               pdf(data.pdf,data.filepath+"?filename="+data.filename);
             }else{
               pdf(data.pdf);

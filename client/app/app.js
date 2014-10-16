@@ -2,6 +2,8 @@
 
 var app = angular.module('agroupApp', [
     'RootModule',
+    'ngError',
+    'ngLoad',
     'ngStorage',
     'pascalprecht.translate',
     'ngCookies',

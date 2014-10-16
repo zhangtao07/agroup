@@ -29,7 +29,7 @@ angular.module('agroupApp')
           className = classTypes['excel'];
         }else if(/ppt|pot|pps|ppa|pptx|potx|ppsx|ppam|pptm|potm|ppsm/.test(ext)){
           className = classTypes['ppt'];
-        }else if(/zip|tar|rar|7z/.test(ext)){
+        }else if(/zip|tar|rar|7z|jar/.test(ext)){
           className = classTypes['archive'];
         }else if(/webm|mkv|flv|ogv|ogg|avi|mov|wmv|rmvb|rm|mp4|m4p|m4v|mpg|mpeg|m4v/.test(ext)){
           className = classTypes['video'];
@@ -70,8 +70,9 @@ angular.module('agroupApp')
       link: function (scope, element, attrs) {
         var mimetype = attrs.mimetype;
         var filename = attrs.filename;
-        var className = getClassByMimetype(mimetype) || getClassByFilename(filename) || mimetype['file'];
-        element.attr('class',element.attr("class")+' '+className);
+        var className = getClassByMimetype(mimetype) || getClassByFilename(filename) || 'fa fa-file';
+//        element.attr('class',element.attr("class")+' '+className);
+        element.addClass(className);
       }
     };
   });

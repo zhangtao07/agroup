@@ -19,7 +19,9 @@
     "ngstorage": "latest",
     "angular-animate": "latest",
     "github-markdown-css": "~1.1.1",
-    "rangy-official": "~1.3.0-alpha.20140921"
+    "rangy-official": "~1.3.0-alpha.20140921",
+    "ng-error":"latest",
+    "ng-load":"latest"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
