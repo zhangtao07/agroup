@@ -31,7 +31,8 @@ exports.userLeave = function(client) {
   });
 
   if (!writers.length) {
-    createFileversion(file);
+    var broadFilecreate = file.status === 'init';
+    createFileversion(file,false,broadFilecreate,client.user);
     updateFile(file,client.user);
     delete cache[file.id];
   }
@@ -74,9 +75,6 @@ function updateFile(file,user){
       //TBD
       if(f.status === 'init'){
         f.status = 'vision';
-        db.models.message.createMkMessage(user.id,file.group_id,'create',[file.id],markdownMessage);
-      }else{
-        db.models.message.createMkMessage(user.id,file.group_id,'update',[file.id],markdownMessage);
       }
       f.name = file.name || filename;
       f.user_id = user.id;
@@ -106,7 +104,7 @@ exports.createFile = function(group, user, cb) {
     }], function(err, files) {
       _.each(files, function(file) {
         cache[file.id] = file;
-        createFileversion(file);
+        createFileversion(file,true);
         createFolder(file,user);
         return cb && cb(err,file.id);
       });
@@ -162,7 +160,7 @@ function readFromDisk(file, fv, cb) {
   });
 }
 
-function createFileversion(file) {
+function createFileversion(file,isinit,broadFilecreate,user) {
   getDB(function(err, db) {
     var fv = {
       filepath: path.join('markdown/', md5(file.content || file.name)) + '.md',
@@ -174,7 +172,14 @@ function createFileversion(file) {
       user_id: file.user_id
     };
     if (file.filepath !== fv.filepath) {
-      db.models.fileversion.create([fv], function(err, fvs) {
+      db.models.fileversion.create(fv, function(err, sfv) {
+        if(!isinit){
+          if(broadFilecreate){
+            db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.id],markdownMessage);
+          }else{
+            db.models.message.createMkMessage(user.id,file.group_id,'update',[sfv.id],markdownMessage);
+          }
+        }
         if (err) throw err;
       });
       fs.writeFile(getFileRealpath(fv.filepath), file.content || '', 'utf8');
