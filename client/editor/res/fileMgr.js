@@ -11,7 +11,6 @@ define([
   "classes/FileDescriptor",
   "text!WELCOME.md"
 ], function($, _, constants, core, utils, storage, settings, eventMgr, fileSystem, FileDescriptor, welcomeContent) {
-
   var fileMgr = {};
 
   // Defines the current file
@@ -159,7 +158,7 @@ define([
     //var fileDesc = fileMgr.createFile(file.title, file.content);
     if (file && url) {
       fileMgr.syncFromServer(file, url);
-      return;
+      //return;
     }
     fileMgr.selectFile();
 

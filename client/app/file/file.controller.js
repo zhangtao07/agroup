@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', function($scope, $stateParams, $http,Modal,$localStorage) {
+  .controller('FileCtrl', function($scope, $stateParams, $http,Modal,$localStorage,messageAPI) {
 
     var allFolder = [{
       files: [],
@@ -49,16 +49,17 @@ angular.module('agroupApp')
       folder.selectedItem = item;
       var index = level.indexOf(folder);
 
+      $scope.scrollLeft();
       if (item.type !== 'folder') {
         closeFolder(index + 1, level.length - index);
         $scope.preview(item);
-        return;
+      }else{
+        var nextLevel = level[index + 1] = level[index + 1] || {};
+        nextLevel.files = getChild(item.id);
+        nextLevel.parent_id = item.id;
+        $scope.nopreview(nextLevel.files);
+        level.splice(index + 2, level.length - index - 2);
       }
-      $scope.nopreview();
-      var nextLevel = level[index + 1] = level[index + 1] || {};
-      nextLevel.files = getChild(item.id);
-      nextLevel.parent_id = item.id;
-      level.splice(index + 2, level.length - index - 2);
     }
 
     function closeFolder(index, end) {
@@ -72,6 +73,12 @@ angular.module('agroupApp')
       }
     }
 
+    function deleteFile(foldid){
+      _.remove(db, function(item){
+        return item.id === foldid;
+      });
+    }
+
     function deleteItem(folder, item) {
       confirm(function(){
         var i = folder.files.indexOf(item);
@@ -83,6 +90,7 @@ angular.module('agroupApp')
         if (!folder.files.length) {
           level.splice(j, 1);
         }
+        deleteFile(item.id);
         $http.delete('api/files/'+item.id);
       })(item.name);
     }
@@ -130,22 +138,30 @@ angular.module('agroupApp')
 
     var panel = $scope.uploadpanel = {}
 
-    function sendFile(file, folder) {
+    function sendFile(file, folder,folderId,length) {
       var groupId = $stateParams.group;
+      var completeQueue = [];
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
         formData.append('groupId', groupId);
         formData.append('file', file);
+        formData.append('folderId', folderId);
         send('api/message/upload', formData);
-
-      }, function(res) {
-        var i = level.indexOf(folder);
-        addItem(i, res.file.id, res.msg.content);
+      }, function(fileID,fd) {
+        db.push(fd);
+        var index = level.indexOf(folder);
+        level[index].files.push(fd);
+        completeQueue.push(fileID);
+        if (completeQueue.length === length) {
+          messageAPI.uploadEnd(groupId, completeQueue.join(','));
+        }
       });
     }
     $scope.onDrop = function(files, folder) {
+      var index = level.indexOf(folder);
+      var folderId = index > 0 ? level[index - 1].selectedItem.id : 0;
       files.forEach(function(file) {
-        sendFile(file, folder);
+        sendFile(file, folder, folderId,files.length);
       });
     };
   });

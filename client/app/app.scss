@@ -61,8 +61,8 @@ background-color: #e4eaec!important;
 }
 
 .ng-enter-stagger{
-  transition-delay: 0.1s;
-  animation-delay: 0.1s;
+  /*transition-delay: 0.1s;*/
+  /*animation-delay: 0.1s;*/
 }
 
 
@@ -79,12 +79,16 @@ background-color: #e4eaec!important;
 @import 'group/group.scss';
 @import 'main/main.scss';
 @import 'markdown/markdown.scss';
+@import 'search/search.scss';
+@import 'search/searchFileList/searchFileList.scss';
 @import 'test/test.scss';
 @import 'group/creategroup/creategroup.scss';
 @import 'message/dropzone/dropzone.scss';
 @import 'message/fileicon/fileicon.scss';
 @import 'message/fileitem/fileitem.scss';
 @import 'message/gallery/gallery.scss';
+@import 'message/linkitem/linkitem.scss';
+@import 'message/mkitem/mkitem.scss';
 @import 'message/msgitem/msgitem.scss';
 @import 'message/msglist/msglist.scss';
 @import 'message/pdf/pdf.scss';

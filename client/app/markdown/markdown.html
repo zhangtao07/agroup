@@ -31,9 +31,9 @@
               <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
               <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
-            <span class="pull-left thumb-sm"><img image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
+            <span class="pull-left thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}" ><img image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
             <div class="media-body">
-              <div><a href="">{{ md.user.nickname }}</a>
+              <div><a href="" popover="{{ md.filename }}" popover-trigger="mouseenter" class='md-filename'>{{ md.filename }}</a>
               </div>
               <span class="text-muted ng-binding">
                 <i class="fa fa-clock-o"></i>
@@ -42,8 +42,16 @@
             </div>
           </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body relative">
           <div class="md-content" ng-bind-html="md.content"></div>
+          <div class="m-b m-t writer-pannel">
+            <a ng-repeat="writer in md.writers" href="" class="avatar thumb-xs m-r-xs">
+              <img class="w-a" image-resize-width="20" image-resize-height="20" image-resize="{{ writer.avatar }}" alt="...">
+              <!--<i class="on b-white left"></i>-->
+            </a>
+            <!--<span ng-show="{{md.writers}}" class="h5 m-l-sm">Editting</span>-->
+          </div>
+
         </div>
       </div>
     </section>

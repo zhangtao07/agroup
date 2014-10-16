@@ -14,6 +14,12 @@ angular.module('agroupApp').factory('messageAPI', ['apiRoot','$http',function(ap
       return $http.get(apiRoot+"api/message/list",{
         params:params
       });
+    },
+    uploadEnd:function(groupId,fileids){
+      return $http.post(apiRoot+"api/message/uploadEnd",{
+        groupId:groupId,
+        fileids:fileids
+      });
     }
   };
 }]);
