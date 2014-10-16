@@ -89,6 +89,10 @@ exports.uploadStart = function(req, res) {
 
 var pipe = require('./pipe');
 var importFile = require('./import');
+var events = require('events');
+var importEventEmitter = new events.EventEmitter();
+
+
 exports.upload = function(req, res) {
   var user = req.session.user;
 
@@ -138,7 +142,6 @@ exports.upload = function(req, res) {
           filename: file.filename,
           fileSize: file.fileSize,
           encoding: file.encoding,
-          messageId: fields['messageId'],
           folderId: folderId
         }));
       });
@@ -195,6 +198,7 @@ function getMetaFromUrl(url) {
     request({
       url: url,
       encoding: null,
+
       timeout:5*1000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36'
@@ -310,3 +314,10 @@ exports.post = function(req, res) {
     });
 }
 
+exports.delete = function(req,res){
+  var user = req.session.user;
+  var messageId = req.body.messageId;
+
+
+
+}

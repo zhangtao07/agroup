@@ -116,10 +116,10 @@ angular.module('agroupApp')
           icon = 'file-pdf-o';
           break;
         case 'application/octet-stream':
-          icon = 'file';
+//          icon = 'file';
           break;
         default:
-          //icon = 'file';
+          icon = 'file';
       }
       return icon;
     }

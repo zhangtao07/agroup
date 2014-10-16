@@ -9,7 +9,8 @@ module.exports = function(orm, db) {
       id: { type: 'serial', key: true },
       content: String,
       type: String,
-      date: {type: 'date', required: true, time: true}
+      date: {type: 'date', required: true, time: true},
+      hide:Boolean
     },
     {
       hooks: {
@@ -162,7 +163,8 @@ module.exports = function(orm, db) {
               nickname: self.user.nickname,
               time: ago(self.date),
               content: contentObj.content,
-              'type': contentObj.type
+              'type': contentObj.type,
+              user_id:self.user.id
             });
 
           });
@@ -257,6 +259,18 @@ module.exports = function(orm, db) {
         callback(null, message);
       }
     })
+  }
+
+  Message.deleteMessage = function(messageId,userId,callback){
+    db.models.message.one({
+      id:messageId,
+      user_id:userId
+    },function(err,msg){
+      if(msg){
+        msg.hide = true;
+
+      }
+    });
   }
 
 }

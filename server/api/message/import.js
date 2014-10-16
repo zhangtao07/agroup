@@ -13,67 +13,61 @@ segment.useDefault();
 
 
 /*function word2Pdf(file) {
-  return Q.Promise(function(resolve) {
-    var output = file + ".pdf";
-    exec("java -jar " + __dirname + "/convert.jar -i " + file + " -o " + output, function(error, stdout, stderr) {
-      resolve(output);
-    });
-  });
+ return Q.Promise(function(resolve) {
+ var output = file + ".pdf";
+ exec("java -jar " + __dirname + "/convert.jar -i " + file + " -o " + output, function(error, stdout, stderr) {
+ resolve(output);
+ });
+ });
 
-}*/
+ }*/
 
-function pdf2image(pdf) {
 
-  return Q.all([Q.nfcall(tool.getPDFText,pdf), Q.nfcall(tool.pdfToConver,pdf,300,25,pdf+'.cover.jpg')]).then(function(result){
-    return Q.promise(function(resolve){
+function processPdf(pdf) {
 
-      resolve(result[0]);
+  var imagesPath = pdf + '.images';
+  if (!fs.existsSync(imagesPath)) {
+    fs.mkdirSync(imagesPath);
+  }
 
-      //generate images from pdf in background
-      var imagesPath = pdf+'.images';
-      if (!fs.existsSync(imagesPath)) {
-        fs.mkdirSync(imagesPath);
-      }
+  Q.nfcall(tool.pdfToConver, pdf, 300, 25, pdf + '.cover.jpg');
 
-      pdfToImages(pdf,300,50,imagesPath);
-//      exec("gm convert -density 300 -resize 50% pdf:" + pdf + " +adjoin jpeg:" + imagesPath + "/%01d.jpg");
-    });
-  });
+  Q.nfcall(tool.pdfToImages,pdf, 300, 50,  imagesPath);
+
+  return Q.nfcall(tool.getPDFText, pdf);
+
 }
 
-function generatePreview(mimetype, file) {
+function generatePreview(mimetype, file,callback) {
+
+  var getPdf;
 
   if (mimetype == "application/pdf") {
-    return Q.promise(function(resolve){
-      pdf2image(file).then(function(text){
-        resolve({
-          text:text
-        })
-      });
+
+    getPdf = Q.fcall(function(){
+      return file;
     });
   } else if (/ms[-]*word|officedocument|ms[-]*excel|spreadsheetml|ms[-]*powerpoint|presentationml/.test(mimetype)) {
-    return Q.promise(function(resolve){
-      Q.nfcall(tool.office2pdf,file,file+'.pdf').then(function() {
-        return pdf2image(file+'.pdf');
-      }).then(function(text){
-        resolve({
-          text:text
-        })
+
+    getPdf = Q.promise(function(resolve) {
+      var pdf = file + '.pdf';
+      Q.nfcall(tool.office2pdf, file, pdf).then(function() {
+        resolve(pdf);
       });
     });
-  } else {
-    return Q.fcall(function() {
-      return {
-        text:null
-      }
-    });
   }
+
+  getPdf.then(function(pdf){
+    processPdf(pdf).then(function(text){
+      callback(null,text);
+    });
+  });
 }
-function chineseSegment(text){
+function chineseSegment(text) {
 
   var utf8segments = [];
-  segment.doSegment(text).forEach(function(word){
-    utf8segments.push(encodeURI(word.w).replace(/\%/g,''));
+  segment.doSegment(text).forEach(function(word) {
+    utf8segments.push(encodeURI(word.w).replace(/\%/g, ''));
   });
   return utf8segments.join(' ');
 }
@@ -82,14 +76,14 @@ var Iconv = require('iconv').Iconv;
 var jschardet = require("jschardet");
 var istextorbinary = require('istextorbinary');
 
-function extractPlainFileText(file){
-  return Q.promise(function(resolve){
-    istextorbinary.isText(file,null,function(err, result){
-      if(result){
-        Q.nfcall(fs.readFile,file).then(function(buffer){
+function extractPlainFileText(file) {
+  return Q.promise(function(resolve) {
+    istextorbinary.isText(file, null, function(err, result) {
+      if (result) {
+        Q.nfcall(fs.readFile, file).then(function(buffer) {
           resolve(bufferToString(buffer));
         });
-      }else{
+      } else {
         resolve(null);
       }
     });
@@ -112,7 +106,7 @@ function extractPlainFileText(file){
  * @returns {*}
  */
 
-module.exports=function(models,args){
+module.exports = function(models, args) {
   var fileId = args.fileId,//not required
     userId = args.userId,//required
     groupId = args.groupId,//required
@@ -128,18 +122,18 @@ module.exports=function(models,args){
     if (fileId) {
       resolve(fileId);
     } else {
-      Q.nfcall(models.file.create,{
+      Q.nfcall(models.file.create, {
         name: filename,
         group_id: groupId,
         user_id: userId
-      }).then(function(file){
-        Q.nfcall(models.folder.create,{
-          name:filename,
-          file_id:file.id,
-          parent_id:folderId,
-          type:'file',
-          group_id:groupId
-        }).then(function(){
+      }).then(function(file) {
+        Q.nfcall(models.folder.create, {
+          name: filename,
+          file_id: file.id,
+          parent_id: folderId,
+          type: 'file',
+          group_id: groupId
+        }).then(function() {
           resolve(file.id);
         });
 
@@ -188,26 +182,21 @@ module.exports=function(models,args){
           fileVersion.width = dimen.width;
           fileVersion.height = dimen.height;
         }
-        Q.all([extractPlainFileText(saveFile),generatePreview(mimetype, saveFile)]).then(function(result){
-          Q.nfcall(models.fileversion.create,fileVersion).then(function(fileversion){
-            var filetext = result[1].text || result[0];
-            if(filetext){
-              Q.nfcall(models.filefulltext.create,{
-                utf8segments:chineseSegment(filetext),
-                text:filetext,
-                fileversion_id:fileversion.id
-              }).then(function(){
-                resolve(fileversion);
-              }).fail(function(err){
-                console.info(err);
+        Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
+          resolve(fileversion);
+          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview,mimetype, saveFile)]).then(function(result) {
+            var filetext = result[1] || result[0];
+            if (filetext) {
+              Q.nfcall(models.filefulltext.create, {
+                utf8segments: chineseSegment(filetext),
+                text: filetext,
+                fileversion_id: fileversion.id
               });
-            }else{
-              resolve(fileversion);
             }
-
-          })
+          });
+        }).fail(function(err){
+          console.info(err);
         });
-
       });
     });
   });
