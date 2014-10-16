@@ -121,6 +121,7 @@ exports.upload = function(req, res) {
               name: '聊天',
               parent_id: 0,
               type: 'folder',
+              user_id: user.id,
               group_id: fields['groupId']
             }).then(function(folder) {
               resolve(folder.id);
@@ -146,9 +147,11 @@ exports.upload = function(req, res) {
         }));
       });
       Q.all(promies).then(function(result) {
-        var fileId = result[0].id;
+        var fileId = result[0].fv.id;
+        var folder = result[0].folder;
         res.json(200, {
           fileId: fileId,
+          folder: folder,
           status: "ok"
         });
       });

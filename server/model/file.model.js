@@ -7,8 +7,16 @@ module.exports = function(orm, db) {
     id: { type: 'serial', key: true },
     name:String,
     mimetype: String,
+    status: [ 'vision' ,'hidden', 'removed' ],
     createDate: {type: 'date', time: true}
   },{
+    hooks: {
+      beforeCreate: function() {
+        if (this.status === null) {
+          this.status = 'vision';
+        }
+      }
+    },
     methods:{
       getFile : function(){
         return {

@@ -42,6 +42,7 @@ function readPath(p, parentID) {
         name: path.basename(p),
         parent_id: parentID,
         type: 'folder',
+        user_id: user.id,
         group_id: group.id
       }], function(err, item) {
         //console.log(item[0].id);
@@ -105,6 +106,7 @@ db.writeFile = function(file, data, parentID) {
       parent_id: parentID,
       file_id: fileid,
       type: file.mimetype,
+      user_id: data.userid,
       group_id: data.groupid
     };
 

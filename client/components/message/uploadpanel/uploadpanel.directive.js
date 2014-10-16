@@ -71,7 +71,7 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
               item.percent = 100;
               item.status = "complete";
               scope.$apply();
-              onfinish && onfinish(res.fileId);
+              return onfinish && onfinish(res.fileId,res.folder);
             }
           }
         };

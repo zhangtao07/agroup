@@ -112,6 +112,9 @@ angular.module('agroupApp')
         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
           icon = 'file-word-o';
           break;
+        case 'application/vnd.ms-excel':
+          icon = 'file-excel-o'
+          break;
         case 'application/pdf':
           icon = 'file-pdf-o';
           break;

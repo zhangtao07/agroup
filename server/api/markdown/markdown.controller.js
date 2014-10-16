@@ -5,6 +5,7 @@ var fs = require('fs');
 var async = require('async');
 var markdown = require("markdown").markdown;
 var marked = require('marked');
+var ed = require('../../editor/dataCenter');
 
 
 marked.setOptions({
@@ -22,6 +23,26 @@ marked.setOptions({
 });
 
 exports.destroy = function(req, res) {
+  remove(req,res);
+};
+
+function remove(req,res){
+  var fileid = req.params.id;
+  var user = req.session.user;
+  removeFolder(req.models,fileid,user);
+  req.models.file.get(fileid, function(err, file) {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    file.status = 'delete';
+    file.user_id = user.id;
+    file.save();
+    res.status(200).send('success');
+  });
+}
+
+function realRemove(req,res){
   var id = req.params.id;
   req.models.fileversion.find({
     file_id: id
@@ -43,7 +64,19 @@ exports.destroy = function(req, res) {
     });
     res.status(200).send('success');
   });
-};
+}
+
+function removeFolder(models,fileid,user){
+  models.folder.find({
+    file_id:fileid,
+  },function(err,folders){
+    _.each(folders,function(folder){
+      folder.status = 'delete';
+      folder.user_id = user.id;
+      folder.save();
+    });
+  });
+}
 
 
 // Get list of markdowns
@@ -56,7 +89,8 @@ exports.index = function(req, res) {
 
   req.models.file.find({
       group_id: group,
-      mimetype: 'text/x-markdown'
+      mimetype: 'text/x-markdown',
+      status: 'vision'
     }).order('-createDate').limit(limit).offset(offset)
     .run(function(err, files) {
       getFileversion(user, files, res, req.models, group, limit, offset);
@@ -75,11 +109,18 @@ function getFileversion(user, files, res, models, group, limit, offset) {
       });
       latestVersion.get(user, function data(err, result) {
         if (err) return errorHandler(res, err);
+        //当前正在编辑的内容
+        var cached = ed.getCache(result.id);
+        if(cached){
+          result.filename = cached.name;
+          result.content = cached.content;
+          result.writers = cached.writers;
+        }
         result.content = marked(result.content);
         completeQueue.push(result);
         if (count && completeQueue.length === files.length) {
           return res.status(200).json({
-            list: _.sortBy(completeQueue,function(d){ return d.id }),
+            list: _.sortBy(completeQueue,function(d){ return -d.id }),
             hasMore: limit + offset < count ? true : false
           });
         }

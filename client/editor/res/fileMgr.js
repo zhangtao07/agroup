@@ -11,7 +11,6 @@ define([
   "classes/FileDescriptor",
   "text!WELCOME.md"
 ], function($, _, constants, core, utils, storage, settings, eventMgr, fileSystem, FileDescriptor, welcomeContent) {
-
   var fileMgr = {};
 
   // Defines the current file
@@ -158,8 +157,9 @@ define([
     var $editorElt = $("#wmd-input");
     //var fileDesc = fileMgr.createFile(file.title, file.content);
     if (file && url) {
+      file.title = file.title.replace(/[.md]/g,'');
       fileMgr.syncFromServer(file, url);
-      return;
+      //return;
     }
     fileMgr.selectFile();
 

@@ -126,21 +126,24 @@ module.exports = function(models, args) {
         name: filename,
         group_id: groupId,
         user_id: userId
-      }).then(function(file) {
-        Q.nfcall(models.folder.create, {
-          name: filename,
-          file_id: file.id,
-          parent_id: folderId,
-          type: 'file',
-          group_id: groupId
-        }).then(function() {
-          resolve(file.id);
+
+      }).then(function(file){
+        Q.nfcall(models.folder.create,{
+          name:filename,
+          file_id:file.id,
+          parent_id:folderId,
+          type:mimetype,
+          user_id:userId,
+          group_id:groupId
+        }).then(function(folder){
+          resolve({file_id : file.id,folder:folder});
         });
 
       });
 
     }
-  }).then(function(file_id) {
+  }).then(function(data) {
+    var file_id = data.file_id;
     return Q.Promise(function getFileversion(resolve) {
       var upload_dir = config.upload_dir;
       var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -183,7 +186,7 @@ module.exports = function(models, args) {
           fileVersion.height = dimen.height;
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
-          resolve(fileversion);
+          resolve({fv :fileversion,folder:data.folder});
           Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview,mimetype, saveFile)]).then(function(result) {
             var filetext = result[1] || result[0];
             if (filetext) {
@@ -192,6 +195,7 @@ module.exports = function(models, args) {
                 text: filetext,
                 fileversion_id: fileversion.id
               });
+
             }
           });
         }).fail(function(err){
