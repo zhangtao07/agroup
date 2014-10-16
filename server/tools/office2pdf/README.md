@@ -8,6 +8,10 @@
     aspose-cells-8.2.1.jar         aspose-words-14.7.0.jar        bcprov-jdk16-146.jar
     aspose-email-4.5.0.0-jdk16.jar aspose.slides-14.6.0.jar       jcommander-1.30.jar
 
+运行
+
+    gradle build
+
 ## 使用方法
 
     java -jar office2pdf.jar -l licence.xml -f dir input.doc output.pdf
@@ -17,4 +21,5 @@
 ## 支持的格式
 
 可以在源码中找到
+
 
