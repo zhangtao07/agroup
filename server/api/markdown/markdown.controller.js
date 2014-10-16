@@ -130,7 +130,8 @@ function getFileversion(user, files, res, models, group, limit, offset) {
 
   models.file.count({
     group_id: group,
-    mimetype: 'text/x-markdown'
+    mimetype: 'text/x-markdown',
+    status: 'vision'
   }, function(err, num) {
     if (err) return errorHandler(res, err);
     count = num;
