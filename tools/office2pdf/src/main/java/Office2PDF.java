@@ -162,7 +162,13 @@ class Office2PDF {
     }
 
     Workbook workbook = new Workbook(input);
-    workbook.calculateFormula();
+
+    try {
+      workbook.calculateFormula();
+    } catch (Exception e) {
+      //do nothing
+    }
+
     workbook.save(output, com.aspose.cells.FileFormatType.PDF);
   }
 
