@@ -10,13 +10,17 @@ function requiredProcessEnv(name) {
   return process.env[name];
 }
 
+function getNodeENV(){
+  return process.env.NODE_ENV || 'development';
+}
+
 
 // All configurations will extend these options
 // ============================================
 
 var rootPath = path.normalize(__dirname + '/../../..');
 
-var envConfig = require('./' + process.env.NODE_ENV + '.js') || {};
+var envConfig = require('./' + getNodeENV() + '.js') || {};
 
 var mysql = envConfig.mysql;
 

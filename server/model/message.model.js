@@ -10,11 +10,14 @@ module.exports = function(orm, db) {
       content: String,
       type: String,
       date: {type: 'date', required: true, time: true},
-      hide:Boolean
+      status: [ 'vision' ,'hidden', 'removed' ]
     },
     {
       hooks: {
         beforeCreate: function() {
+          if (this.status === null) {
+            this.status = 'vision';
+          }
           if (this.date === null) {
             this.date = new Date();
           }
@@ -65,9 +68,20 @@ module.exports = function(orm, db) {
           var list = [];
 //          var list = obj.list;
           var promiseFileversions = [];
-          obj.fileIds.forEach(function(fileversionId) {
-            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
-
+          obj.fileIds.forEach(function(fileId) {
+            promiseFileversions.push(Q.promise(function(resovle) {
+              Q.nfcall(models.file.get, fileId).then(function(file) {
+                Q.nfcall(models.fileversion.find, {
+                  file_id: file.id
+                }, 1, ['createDate', 'Z']).then(function(rs) {
+                  var fileversion = null;
+                  if (rs.length > 0) {
+                    fileversion = rs[0];
+                  }
+                  resovle(fileversion);
+                });
+              });
+            }));
           });
 
           Q.all(promiseFileversions).then(function(fileversions) {
@@ -164,7 +178,8 @@ module.exports = function(orm, db) {
               time: ago(self.date),
               content: contentObj.content,
               'type': contentObj.type,
-              user_id:self.user.id
+              user_id: self.user.id,
+              status:self.status
             });
 
           });
@@ -261,14 +276,57 @@ module.exports = function(orm, db) {
     })
   }
 
-  Message.deleteMessage = function(messageId,userId,callback){
-    db.models.message.one({
-      id:messageId,
-      user_id:userId
-    },function(err,msg){
-      if(msg){
-        msg.hide = true;
+  Message.getList = function(groupId, date, offset, limit, callback) {
 
+
+    var getCount = Q.nfcall(db.models.message.count, {
+      group_id: groupId,
+      date: orm.lte(date),
+      status:'vision'
+    });
+    var getData = Q.nfcall(db.models.message.find, {
+      group_id: groupId,
+      date: orm.lte(date),
+      status:'vision'
+    }, { offset: offset }, limit, ['date', 'Z'])
+    Q.all([getCount, getData]).then(function(result) {
+      callback(null,{
+        count: result[0],
+        list: result[1]
+      })
+    }).fail(function(err){
+      console.info(err);
+    });
+
+
+  }
+
+  Message.deleteMessage = function(messageId, userId, callback) {
+    db.models.message.one({
+      id: messageId,
+      user_id: userId
+    }, function(err, msg) {
+      if (msg) {
+        msg.status = 'removed';
+        var updateFilePromise = Q.promise(function(resovle,reject){
+          db.driver.execQuery('update file t1 join fileversion t2 on t1.id = t2.file_id and t1.id="' + msg.fileversion_id + '" and t1.user_id=' + userId + '  set t1.`status` = "removed"',function(err,data){
+            if(err){
+              console.info(err);
+              reject(err);
+            }else{
+              resovle();
+            }
+
+
+          });
+        });
+        var updateMessageProimise = Q.nfcall(msg.save);
+        Q.all([updateFilePromise,updateMessageProimise])
+          .then(function(results) {
+            callback(null, results[1]);
+          }).fail(function(err){
+            console.info(err);
+          });
       }
     });
   }

@@ -136,14 +136,14 @@ module.exports = function(models, args) {
           user_id:userId,
           group_id:groupId
         }).then(function(folder){
-          resolve({file_id : file.id,folder:folder});
+          resolve({file : file,folder:folder});
         });
 
       });
 
     }
   }).then(function(data) {
-    var file_id = data.file_id;
+    var file_id = data.file.id;
     return Q.Promise(function getFileversion(resolve) {
       var upload_dir = config.upload_dir;
       var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -186,7 +186,7 @@ module.exports = function(models, args) {
           fileVersion.height = dimen.height;
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
-          resolve({fv :fileversion,folder:data.folder});
+          resolve({file:data.file,fv :fileversion,folder:data.folder});
           Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview,mimetype, saveFile)]).then(function(result) {
             var filetext = result[1] || result[0];
             if (filetext) {
