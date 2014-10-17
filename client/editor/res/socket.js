@@ -86,6 +86,7 @@ define([
         if(!data || !data.fileid){
           window.location.href = '/';
         }
+        $('#my-avatar').attr('src',imgresize(data.user.avatar) || '/assets/images/avatar.jpg');
         socket.emit('editor-join', data);
       });
 
