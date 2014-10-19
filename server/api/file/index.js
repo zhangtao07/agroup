@@ -9,6 +9,7 @@ router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/folder/:groupid/:folderid', controller.getFiles);
 router.post('/preview/:id', controller.preview);
+router.post('/images/:groupid', controller.getMDimage);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 //router.patch('/:id', controller.update);

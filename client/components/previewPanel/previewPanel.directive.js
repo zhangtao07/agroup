@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http, $state,pdf,$localStorage) {
+  .directive('previewPanel', function($http, $state,pdf,$localStorage,folderAPI) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
@@ -43,7 +43,13 @@ angular.module('agroupApp')
           'text/x-markdown': function(file) {
             getFile(file, 'markdown').success(function(res) {
               //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
-              element.find('.preview-stage').html(res.data);
+              var md = element.find('.preview-stage').html(res.data);
+              var img = md.find('img');
+              if(img.length){
+                folderAPI.getMDimage($state.params.group,file,img.attr('src')).success(function(data){
+                  img.attr('src',data.filepath);
+                });
+              }
             });
           },
           pdf : function(file){

@@ -23,7 +23,6 @@ marked.setOptions({
 
 exports.preview = function(req, res) {
   var type = req.body.type;
-  console.log(type);
   req.models.fileversion.one({
     file_id: req.params.id
   }, ['updateDate', 'Z'], function(err, file) {
@@ -46,7 +45,7 @@ exports.preview = function(req, res) {
       case 'pdf':
         res.json(200,{
           err: err,
-          data: file.getOnlinePath() + '.cover.jpg',
+          data: file.getCover(),
           pdf: file.getOnlinePath(),
           width:file.width,
           height:file.height
@@ -125,6 +124,22 @@ exports.getFiles = function(req,res){
       return res.send(404);
     }
     return res.status(200).json(file);
+  });
+}
+
+exports.getMDimage = function(req,res){
+  //TBD
+  req.models.fileversion.one({
+    filename: req.body.filename
+  }, ['updateDate', 'Z'], function(err, file) {
+    if (err) {
+      return handleError(err);
+    }
+    res.json(200,{
+      filepath: file.getOnlinePath(),
+      width:file.width,
+      height:file.height
+    });
   });
 }
 
