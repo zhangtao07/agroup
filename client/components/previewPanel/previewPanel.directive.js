@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http,$state) {
+  .directive('previewPanel', function($http, $state,pdf) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
@@ -43,16 +43,27 @@ angular.module('agroupApp')
               //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
               element.find('.preview-stage').html(res.data);
             });
+          },
+          pdf : function(file){
+            getFile(file, 'pdf').success(function(res) {
+              //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
+              file.previewsrc = res.data;
+              file.pdf = res.pdf;
+              element.find('.preview-stage').html('<img class="area canvas" src="' + res.data + '"/>');
+            });
           }
         };
 
         scope.preview = function(file) {
+          var isPdf = /pdf/.test(file.type);
+          file.type = isPdf ? 'pdf' : file.type;
           var type = file.type.replace(/\/\w+$/, '')
-          if (!prview[type]) {
-            element.find('.preview-stage').html('<h1>Coming soon...</h1>');
-          } else {
+
+          if (prview[type]) {
             prview[type].call(prview, file);
             scope.previewitem = file;
+          } else {
+            element.find('.preview-stage').html('<h1>Coming soon...</h1>');
           }
         };
 
@@ -72,7 +83,10 @@ angular.module('agroupApp')
         scope.previewFile = function(item) {
           switch (item.type) {
             case 'text/x-markdown':
-              window.open('/editor/' + $state.params.group + '?file='+item['file_id']+'&view=true', '_blank');
+              window.open('/editor/' + $state.params.group + '?file=' + item.file_id + '&view=true', '_blank');
+              break;
+            case 'pdf':
+              pdf(item.pdf);
               break;
             default:
           }
@@ -81,12 +95,17 @@ angular.module('agroupApp')
         scope.editFile = function(item) {
           switch (item.type) {
             case 'text/x-markdown':
-              window.open('/editor/' + $state.params.group + '?file='+item['file_id'], '_blank');
+              window.open('/editor/' + $state.params.group + '?file=' + item.file_id, '_blank');
               break;
             default:
           }
         };
 
+        scope.isPreviewType = function(type){
+          if(!type) return false;
+          var reg = new RegExp(type.replace('application/',''));
+          return reg.test('pdf|text/x-markdown');
+        };
       }
     };
   });

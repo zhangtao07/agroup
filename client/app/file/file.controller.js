@@ -152,6 +152,8 @@ angular.module('agroupApp')
         var index = level.indexOf(folder);
         level[index].files.push(fd);
         completeQueue.push(fileID);
+        $scope.selectItem(folder,fd);
+        //$scope.preview(fd);
         if (completeQueue.length === length) {
           messageAPI.uploadEnd(groupId, completeQueue.join(','));
         }

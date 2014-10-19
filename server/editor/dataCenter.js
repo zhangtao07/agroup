@@ -177,7 +177,7 @@ function createFileversion(file,isinit,broadFilecreate,user) {
           if(broadFilecreate){
             db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.id],markdownMessage);
           }else{
-            db.models.message.createMkMessage(user.id,file.group_id,'update',[sfv.id],markdownMessage);
+            //db.models.message.createMkMessage(user.id,file.group_id,'update',[sfv.id],markdownMessage);
           }
         }
         if (err) throw err;

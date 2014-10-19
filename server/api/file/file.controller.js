@@ -24,32 +24,41 @@ marked.setOptions({
 exports.preview = function(req, res) {
   var type = req.body.type;
   console.log(type);
-  req.models.fileversion.find({
+  req.models.fileversion.one({
     file_id: req.params.id
-  }, ['updateDate', 'Z'], function(err, files) {
+  }, ['updateDate', 'Z'], function(err, file) {
     if (err) {
       return handleError(err);
     }
     var result = '';
     switch (type) {
       case 'markdown':
-        result = files[0].getRealpath();
-        fs.readFile(files[0].getRealpath(),'utf8',function(err,content){
+        result = file.getRealpath();
+        fs.readFile(file.getRealpath(),'utf8',function(err,content){
           res.json(200,{
             err: err,
             data: marked(content),
-            width:files[0].width,
-            height:files[0].height
+            width:file.width,
+            height:file.height
           });
         });
         break;
+      case 'pdf':
+        res.json(200,{
+          err: err,
+          data: file.getOnlinePath() + '.cover.jpg',
+          pdf: file.getOnlinePath(),
+          width:file.width,
+          height:file.height
+        });
+        break;
       default:
-        result = files[0].getOnlinePath();
+        result = file.getOnlinePath();
         res.json(200,{
           err: err,
           data: result,
-          width:files[0].width,
-          height:files[0].height
+          width:file.width,
+          height:file.height
         });
         break;
     }
