@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http, $state,pdf) {
+  .directive('previewPanel', function($http, $state,pdf,$localStorage) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
       link: function(scope, element, attrs) {
+
+        var lp = $localStorage['file.lastpreview'] = $localStorage['file.lastpreview'] || {};
 
         function getFile(file, type) {
           var defer = {
@@ -27,7 +29,7 @@ angular.module('agroupApp')
           return defer;
         }
 
-        var prview = {
+        var show = {
           image: function(file) {
             if (file.previewsrc) {
               return element.find('.preview-stage').html('<img class="area canvas" src="' + file.previewsrc + '"/>');
@@ -55,25 +57,34 @@ angular.module('agroupApp')
         };
 
         scope.preview = function(file) {
-          var isPdf = /pdf/.test(file.type);
-          file.type = isPdf ? 'pdf' : file.type;
-          var type = file.type.replace(/\/\w+$/, '')
+          showFile(file);
+          lp.file = file;
+        };
 
-          if (prview[type]) {
-            prview[type].call(prview, file);
+        console.log(lp);
+        showFile(lp.file);
+
+        function showFile(file){
+          if(!file) return;
+          var type = file.type.replace(/\/\w+$/, '')
+          var isPdf = /pdf/.test(file.type);
+          type = isPdf ? 'pdf' : type;
+
+          if (show[type]) {
+            show[type].call(show, file);
             scope.previewitem = file;
           } else {
             element.find('.preview-stage').html('<h1>Coming soon...</h1>');
           }
-        };
+        }
 
-        scope.nopreview = function(files) {
+        scope.previewFolder = function(files,folder) {
           var readme = _.find(files, function(file) {
             return file.type === 'text/x-markdown' && file.name.toLocaleLowerCase() === 'readme.md'
           });
           if (readme) {
-            prview[readme.type].call(prview, readme);
-            scope.previewitem = readme;
+            scope.preview(readme);
+            scope.selectItem(folder,readme);
           } else {
             element.find('.preview-stage').html('');
             scope.previewitem = null;
@@ -85,7 +96,7 @@ angular.module('agroupApp')
             case 'text/x-markdown':
               window.open('/editor/' + $state.params.group + '?file=' + item.file_id + '&view=true', '_blank');
               break;
-            case 'pdf':
+            case 'application/pdf':
               pdf(item.pdf);
               break;
             default:
