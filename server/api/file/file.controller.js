@@ -129,14 +129,15 @@ exports.getFiles = function(req,res){
 
 exports.getMDimage = function(req,res){
   //TBD
+  var filename = req.body.filename;
   req.models.fileversion.one({
-    filename: req.body.filename
+    filename: filename
   }, ['updateDate', 'Z'], function(err, file) {
     if (err) {
       return handleError(err);
     }
     res.json(200,{
-      filepath: file.getOnlinePath(),
+      filepath: file ? file.getOnlinePath() : filename,
       width:file.width,
       height:file.height
     });

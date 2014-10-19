@@ -46,8 +46,10 @@ angular.module('agroupApp')
               var md = element.find('.preview-stage').html(res.data);
               var img = md.find('img');
               if(img.length){
-                folderAPI.getMDimage($state.params.group,file,img.attr('src')).success(function(data){
-                  img.attr('src',data.filepath);
+                img.each(function(i,d){
+                  folderAPI.getMDimage($state.params.group,file,d.src).success(function(data){
+                    img[i].src = data.filepath;
+                  });
                 });
               }
             });

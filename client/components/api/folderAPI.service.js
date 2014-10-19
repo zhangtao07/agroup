@@ -11,7 +11,7 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
         filepath.replace(/[^\/]+\/?/g,function(target,position,source){
           path.push(target);
         });
-        var filename = path[path.length-1];
+        var filename = path[path.length-1].replace(/\?.*/,'');
         return $http.post(apiRoot + "api/files/images/" + groupId,{filename:filename});
       }
     };
