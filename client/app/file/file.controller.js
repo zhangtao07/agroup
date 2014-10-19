@@ -1,43 +1,50 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', function($scope, $stateParams, $http, Modal, $localStorage, messageAPI) {
+  .controller('FileCtrl', function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI) {
 
     var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       files: [],
       parent_id: 0
     }];
+    var panel = $scope.uploadpanel = {}
 
-    var db;
     var confirm = Modal.confirm.delete;
+    $scope.clearSelect = clearSelect;
+    $scope.selectItem = selectItem;
+    $scope.deleteItem = deleteItem;
+    $scope.addItem = addItem;
+    $scope.editItem = editItem;
+    $scope.doneEditing = doneEditing;
+    $scope.home = home;
+    init();
 
-    function getChild(index, level) {
-      return _.filter(db, function(d) {
-        if (+d.parent_id === index) {
-          var isSelected = level && level.selectedItem && level.selectedItem.id === +d.id;
-          if (isSelected) {
-            d.selected = true;
-          } else {
-            d.selected = false;
-          }
-          return d;
-        }
+    function getFiles(item, folder, groupId, cb) {
+      folderAPI.getFiles(groupId, item.id).success(function(files, status) {
+        return cb && cb(
+          _.each(files, function(d) {
+            var isSelected = folder && folder.selectedItem && folder.selectedItem.id === +d.id;
+            if (isSelected) {
+              d.selected = true;
+            } else {
+              d.selected = false;
+            }
+          }));
       });
     }
 
-    init();
-
     function init() {
       var group = $stateParams.group;
-      $http.get('api/files/' + group).success(function(data, status) {
-        db = data;
-        var firstLevel = level[0];
-        var files = firstLevel.files = getChild(0, firstLevel);
+      var firstLevel = level[0];
+      getFiles({
+        id: 0
+      }, firstLevel, group, function(files) {
+        firstLevel.files = files;
         if (!files.length) {
           firstLevel.selectedItem = undefined;
         }
         $scope.level = level;
-      })
+      });
     }
 
     function home() {
@@ -45,13 +52,10 @@ angular.module('agroupApp')
     }
 
     function selectItem(folder, item) {
-      if (folder.selectedItem) {
-        folder.selectedItem.selected = false;
-        _.each(folder.files, function(d) {
-          d.selected = false;
-        });
-      }
+      var groupId = $stateParams.group;
+      clearSelect(folder);
       item.selected = true;
+      folder.selectedItem = item;
       var index = level.indexOf(folder);
 
       $scope.scrollLeft();
@@ -59,13 +63,14 @@ angular.module('agroupApp')
         closeFolder(index + 1, level.length - index);
         $scope.preview(item);
       } else {
-        var nextLevel = level[index + 1] = level[index + 1] || {};
-        nextLevel.files = getChild(item.id, folder);
-        nextLevel.parent_id = item.id;
-        $scope.previewFolder(nextLevel.files, nextLevel);
-        level.splice(index + 2, level.length - index - 2);
+        getFiles(item, folder, groupId, function(files) {
+          var nextLevel = level[index + 1] = level[index + 1] || {};
+          nextLevel.files = files;
+          nextLevel.parent_id = item.id;
+          $scope.previewFolder(nextLevel.files, nextLevel);
+          level.splice(index + 2, level.length - index - 2);
+        });
       }
-      folder.selectedItem = item;
     }
 
     function closeFolder(index, end) {
@@ -74,15 +79,12 @@ angular.module('agroupApp')
 
     function clearSelect(folder) {
       if (folder.selectedItem) {
+        _.each(folder.files, function(d) {
+          d.selected = false;
+        });
         folder.selectedItem.selected = false;
         folder.selectedItem.editing = false;
       }
-    }
-
-    function deleteFile(foldid) {
-      _.remove(db, function(item) {
-        return item.id === foldid;
-      });
     }
 
     function deleteItem(folder, item) {
@@ -96,7 +98,6 @@ angular.module('agroupApp')
         if (!folder.files.length) {
           level.splice(j, 1);
         }
-        deleteFile(item.id);
         $http.delete('api/files/' + item.id);
       })(item.name);
     }
@@ -112,19 +113,9 @@ angular.module('agroupApp')
         group_id: $stateParams.group
       };
       $http.post('api/files/', data).success(function(d, status) {
-        db.push(d);
-        //var files = level[index].files = level[index].files || [];
         level[index].files.push(d);
       });
     }
-
-    $scope.clearSelect = clearSelect;
-    $scope.selectItem = selectItem;
-    $scope.deleteItem = deleteItem;
-    $scope.addItem = addItem;
-    $scope.editItem = editItem;
-    $scope.doneEditing = doneEditing;
-    $scope.home = home;
 
     $scope.updateItem = function(item) {
       $http.put('api/files/' + item.id, JSON.stringify({
@@ -140,10 +131,6 @@ angular.module('agroupApp')
       item.editing = false;
     }
 
-
-
-    var panel = $scope.uploadpanel = {}
-
     function sendFile(file, folder, folderId, length) {
       var groupId = $stateParams.group;
       var completeQueue = [];
@@ -154,7 +141,6 @@ angular.module('agroupApp')
         formData.append('folderId', folderId);
         send('api/message/upload', formData);
       }, function(fileID, fd) {
-        db.push(fd);
         var index = level.indexOf(folder);
         level[index].files.push(fd);
         completeQueue.push(fileID);
@@ -172,4 +158,5 @@ angular.module('agroupApp')
         sendFile(file, folder, folderId, files.length);
       });
     };
+
   });

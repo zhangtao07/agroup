@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.get('/folder/:groupid/:folderid', controller.getFiles);
 router.post('/preview/:id', controller.preview);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

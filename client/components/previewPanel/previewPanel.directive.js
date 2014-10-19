@@ -61,7 +61,6 @@ angular.module('agroupApp')
           lp.file = file;
         };
 
-        console.log(lp);
         showFile(lp.file);
 
         function showFile(file){

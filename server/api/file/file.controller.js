@@ -103,6 +103,31 @@ exports.show = function(req, res) {
   });
 };
 
+exports.getFiles = function(req,res){
+  var Folder = req.models.folder;
+  Folder.find({
+    group_id: req.params.groupid,
+    parent_id: req.params.folderid,
+    status: 'vision'
+  }, function(err, file) {
+    if (err) {
+      return handleError(res, err);
+    }
+    _.each(file,function(d){
+      var cached = dc.getCache(d.file_id);
+      if(d.type !=='folder' && cached){
+        d.name = cached.name;
+        //d.content = cached.content;
+        d.writers = cached.writers;
+      }
+    });
+    if (!file) {
+      return res.send(404);
+    }
+    return res.status(200).json(file);
+  });
+}
+
 // Creates a new folder in the DB.
 exports.create = function(req, res) {
   var Folder = req.models.folder;
