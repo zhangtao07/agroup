@@ -14,6 +14,7 @@ angular.module('agroupApp').factory('pdf', function($document, $compile,$rootSco
     var compiled = $compile(template)($rootScope.$new());
 
     $document.find('body').append(compiled);
+
   }
 
 });

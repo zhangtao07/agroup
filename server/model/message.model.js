@@ -24,54 +24,13 @@ module.exports = function(orm, db) {
         }
       },
       methods: {
-
-        getMkContent: function(callback) {
-          if (this.type != "mk") {
-            callback(null, false);
-          }
-          var obj = JSON.parse(this.content);
+        getFilesMessage:function(fileIds,callback){
           var list = [];
-//          var list = obj.list;
           var promiseFileversions = [];
-          obj.fileIds.forEach(function(fileversionId) {
-            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
-
-          });
-
-          Q.all(promiseFileversions).then(function(fileversions) {
-            fileversions.forEach(function(fileversion) {
-              if (fileversion) {
-                var content = {
-                  "fileid": fileversion.id,
-                  "filepath": fileversion.getOnlinePath(),
-                  "filename": fileversion.filename
-                }
-                list.push(content);
-              }
-            });
-
-            callback(null, {
-              type: "mk",
-              content: {
-                action: obj.action,
-                list: list
-              }
-            });
-          });
-        },
-
-        getFileContent: function(callback) {
-          if (this.type != "file") {
-            callback(null, false);
-          }
-          var obj = JSON.parse(this.content);
-          var list = [];
-//          var list = obj.list;
-          var promiseFileversions = [];
-          obj.fileIds.forEach(function(fileId) {
+          fileIds.forEach(function(fileId) {
             promiseFileversions.push(Q.promise(function(resovle) {
-              Q.nfcall(models.file.get, fileId).then(function(file) {
-                Q.nfcall(models.fileversion.find, {
+              Q.nfcall(db.models.file.get, fileId).then(function(file) {
+                Q.nfcall(db.models.fileversion.find, {
                   file_id: file.id
                 }, 1, ['createDate', 'Z']).then(function(rs) {
                   var fileversion = null;
@@ -79,8 +38,8 @@ module.exports = function(orm, db) {
                     fileversion = rs[0];
                   }
                   resovle(fileversion);
-                });
-              });
+                })
+              })
             }));
           });
 
@@ -103,6 +62,34 @@ module.exports = function(orm, db) {
               }
             });
 
+            callback(null, list);
+          });
+        },
+        getMkContent: function(callback) {
+          if (this.type != "mk") {
+            callback(null, false);
+            return;
+          }
+          var obj = JSON.parse(this.content);
+          Q.nfcall(this.getFilesMessage,obj.fileIds).then(function(list){
+            callback(null, {
+              type: "mk",
+              content: {
+                action: obj.action,
+                list: list
+              }
+            });
+          });
+
+        },
+
+        getFileContent: function(callback) {
+          if (this.type != "file") {
+            callback(null, false);
+            return;
+          }
+          var obj = JSON.parse(this.content);
+          Q.nfcall(this.getFilesMessage,obj.fileIds).then(function(list){
             callback(null, {
               type: "file",
               content: {
@@ -116,6 +103,7 @@ module.exports = function(orm, db) {
         getLinkContent: function(callback) {
           if (this.type != "link") {
             callback(null, false);
+            return;
           }
 
           var obj = JSON.parse(this.content);
@@ -159,6 +147,7 @@ module.exports = function(orm, db) {
         getPlainContent: function(callback) {
           if (this.type != "plain") {
             callback(null, false);
+            return;
           }
 
           callback(null, {

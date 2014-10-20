@@ -17,10 +17,6 @@ function onConnect(socket) {
     console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
-  // Insert sockets below
-  require('../api/search/search.socket').register(socket);
-  require('../api/file/file.socket').register(socket);
-  require('../api/markdown/markdown.socket').register(socket);
 
 }
 

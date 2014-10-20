@@ -32,19 +32,19 @@ function processPdf(pdf) {
 
   Q.nfcall(tool.pdfToConver, pdf, 300, 25, pdf + '.cover.jpg');
 
-  Q.nfcall(tool.pdfToImages,pdf, 300, 50,  imagesPath);
+  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
 
   return Q.nfcall(tool.getPDFText, pdf);
 
 }
 
-function generatePreview(mimetype, file,callback) {
+function generatePreview(mimetype, file, callback) {
 
   var getPdf;
 
   if (mimetype == "application/pdf") {
 
-    getPdf = Q.fcall(function(){
+    getPdf = Q.fcall(function() {
       return file;
     });
   } else if (/ms[-]*word|officedocument|ms[-]*excel|spreadsheetml|ms[-]*powerpoint|presentationml/.test(mimetype)) {
@@ -57,11 +57,18 @@ function generatePreview(mimetype, file,callback) {
     });
   }
 
-  getPdf.then(function(pdf){
-    processPdf(pdf).then(function(text){
-      callback(null,text);
+
+  if(getPdf){
+    getPdf.then(function(pdf) {
+      processPdf(pdf).then(function(text) {
+        callback(null, text);
+      });
     });
-  });
+  }else{
+    callback(null, null);
+  }
+
+
 }
 function chineseSegment(text) {
 
@@ -81,7 +88,8 @@ function extractPlainFileText(file) {
     istextorbinary.isText(file, null, function(err, result) {
       if (result) {
         Q.nfcall(fs.readFile, file).then(function(buffer) {
-          resolve(bufferToString(buffer));
+          var str = bufferToString(buffer);
+          resolve(str);
         });
       } else {
         resolve(null);
@@ -127,16 +135,16 @@ module.exports = function(models, args) {
         group_id: groupId,
         user_id: userId
 
-      }).then(function(file){
-        Q.nfcall(models.folder.create,{
-          name:filename,
-          file_id:file.id,
-          parent_id:folderId,
-          type:mimetype,
-          user_id:userId,
-          group_id:groupId
-        }).then(function(folder){
-          resolve({file : file,folder:folder});
+      }).then(function(file) {
+        Q.nfcall(models.folder.create, {
+          name: filename,
+          file_id: file.id,
+          parent_id: folderId,
+          type: mimetype,
+          user_id: userId,
+          group_id: groupId
+        }).then(function(folder) {
+          resolve({file: file, folder: folder});
         });
 
       });
@@ -186,19 +194,21 @@ module.exports = function(models, args) {
           fileVersion.height = dimen.height;
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
-          resolve({file:data.file,fv :fileversion,folder:data.folder});
-          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview,mimetype, saveFile)]).then(function(result) {
+          resolve({file: data.file, fv: fileversion, folder: data.folder});
+          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile)]).then(function(result) {
             var filetext = result[1] || result[0];
             if (filetext) {
               Q.nfcall(models.filefulltext.create, {
                 utf8segments: chineseSegment(filetext),
                 text: filetext,
                 fileversion_id: fileversion.id
+              }).fail(function(err){
+                console.info(err);
               });
 
             }
           });
-        }).fail(function(err){
+        }).fail(function(err) {
           console.info(err);
         });
       });

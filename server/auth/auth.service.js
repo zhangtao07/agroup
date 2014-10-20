@@ -36,15 +36,28 @@ exports.addUser = function(req, res, username, email) {
           });
         })
       }).then(function createUser(){
-        return Q.nfcall(User.create,{
+        var addUser = Q.nfcall(User.create,{
           username:username,
           nickname:username,
           email:email
         });
-      }).then(function(savedUser){
-        req.session.user.id = savedUser.id;
-        res.redirect(req.query.url||"/");
-      });
+
+        var allGroups = Q.nfcall(req.models.group.find,{});
+        Q.all([addUser,allGroups]).then(function(result){
+          var savedUser = result[0],
+              groups = result[1];
+          savedUser.addGroups(groups,function(err,data){
+            if(err){
+              console.info(err);
+              return;
+            }
+            req.session.user.id = savedUser.id;
+            res.redirect(req.query.url||"/");
+          });
+        }).fail(function(err){
+          console.info(err);
+        });
+      })
     }
   });
 }
