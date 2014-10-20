@@ -14,39 +14,11 @@ exports.list = function(req, res) {
 
   var limit = parseInt(req.query.limit) || 10;
 
-  function getCount() {
-    var result = Q.defer();
-    req.models.message.count({
-      group_id: groupId,
-      date: orm.lte(date)
-    }, function(err, count) {
-      if (err) {
-        result.reject(err);
-      } else {
-        result.resolve(count);
-      }
-    })
-    return result.promise;
-  }
-
-  function getData() {
-    var result = Q.defer();
-    req.models.message.find({
-      group_id: groupId,
-      date: orm.lte(date)
-    }, { offset: offset }, limit, ['date', 'Z'], function(err, messages) {
-      if (err) {
-        result.reject(err);
-      } else {
-        result.resolve(messages);
-      }
-    });
-    return result.promise;
-  }
-
-  Q.all([getCount(), getData()]).spread(function(count, messages) {
+  Q.nfcall(req.models.message.getList, groupId, date, offset, limit).then(function(result) {
+    var list = result.list;
+    var count = result.count;
     var promises = [];
-    messages.forEach(function(message) {
+    list.forEach(function(message) {
       promises.push(Q.nfcall(message.getMessage));
     });
     Q.all(promises).then(function(datas) {
@@ -61,12 +33,7 @@ exports.list = function(req, res) {
     }).fail(function(err) {
       console.info(err);
     });
-
-
-  }, function(err1, err2) {
-    console.info(err1, err2);
   });
-
 
 };
 
@@ -147,7 +114,7 @@ exports.upload = function(req, res) {
         }));
       });
       Q.all(promies).then(function(result) {
-        var fileId = result[0].fv.id;
+        var fileId = result[0].file.id;
         var folder = result[0].folder;
         res.json(200, {
           fileId: fileId,
@@ -196,13 +163,13 @@ var Iconv = require('iconv').Iconv;
 
 function getMetaFromUrl(url) {
 
-  return Q.Promise(function(resolve,reject) {
+  return Q.Promise(function(resolve, reject) {
 
     request({
       url: url,
       encoding: null,
 
-      timeout:5*1000,
+      timeout: 5 * 1000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36'
       }
@@ -239,7 +206,7 @@ function getMetaFromUrl(url) {
 //        console.info(result);
         resolve(result);
 
-      }else{
+      } else {
         reject();
       }
     })
@@ -265,20 +232,20 @@ exports.post = function(req, res) {
       promise.then(function(msg) {
         if (msg.type == 'link') {
 
-          Q.promise(function getMeta(resolve){
-            getMetaFromUrl(url).then(function(meta){
+          Q.promise(function getMeta(resolve) {
+            getMetaFromUrl(url).then(function(meta) {
               resolve(meta);
-            }).fail(function(){
+            }).fail(function() {
               resolve(null)
             });
-          }).then(function(meta){
+          }).then(function(meta) {
             req.models.link.one({
-              url:url
-            },function(err,link){
+              url: url
+            }, function(err, link) {
               var promise = null;
-              if(meta == null){
+              if (meta == null) {
                 meta = {
-                  title:url
+                  title: url
                 }
               }
               if (link) {
@@ -317,10 +284,15 @@ exports.post = function(req, res) {
     });
 }
 
-exports.delete = function(req,res){
+exports.delete = function(req, res) {
   var user = req.session.user;
   var messageId = req.body.messageId;
-
+  Q.nfcall(req.models.message.deleteMessage, messageId, user.id).then(function(msg) {
+    observe.messageBroadcast(msg.group_id, msg);
+    res.jsonp({
+      err: 0
+    });
+  });
 
 
 }

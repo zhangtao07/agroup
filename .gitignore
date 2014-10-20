@@ -17,4 +17,4 @@ test.html
 .DS_Store
 /.resize_cache
 cache.manifest
-license.xml
+/server/tools/licence.xml

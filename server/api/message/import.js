@@ -6,6 +6,7 @@ var sizeOf = require('image-size');
 var Q = require('q');
 var tool = require('../../tools/tool');
 var Segment = require('segment').Segment;
+var filetype = require('../../components/filetype');
 // 创建实例
 var segment = new Segment();
 // 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
@@ -32,22 +33,22 @@ function processPdf(pdf) {
 
   Q.nfcall(tool.pdfToConver, pdf, 300, 25, pdf + '.cover.jpg');
 
-  Q.nfcall(tool.pdfToImages,pdf, 300, 50,  imagesPath);
+  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
 
   return Q.nfcall(tool.getPDFText, pdf);
 
 }
 
-function generatePreview(mimetype, file,callback) {
+function generatePreview(mimetype, file, callback) {
 
   var getPdf;
+  var type = filetype(mimetype);
+  if (type == "pdf") {
 
-  if (mimetype == "application/pdf") {
-
-    getPdf = Q.fcall(function(){
+    getPdf = Q.fcall(function() {
       return file;
     });
-  } else if (/ms[-]*word|officedocument|ms[-]*excel|spreadsheetml|ms[-]*powerpoint|presentationml/.test(mimetype)) {
+  } else if (/word|ppt|excel/.test(type)) {
 
     getPdf = Q.promise(function(resolve) {
       var pdf = file + '.pdf';
@@ -57,11 +58,18 @@ function generatePreview(mimetype, file,callback) {
     });
   }
 
-  getPdf.then(function(pdf){
-    processPdf(pdf).then(function(text){
-      callback(null,text);
+
+  if(getPdf){
+    getPdf.then(function(pdf) {
+      processPdf(pdf).then(function(text) {
+        callback(null, text);
+      });
     });
-  });
+  }else{
+    callback(null, null);
+  }
+
+
 }
 function chineseSegment(text) {
 
@@ -81,7 +89,8 @@ function extractPlainFileText(file) {
     istextorbinary.isText(file, null, function(err, result) {
       if (result) {
         Q.nfcall(fs.readFile, file).then(function(buffer) {
-          resolve(bufferToString(buffer));
+          var str = bufferToString(buffer);
+          resolve(str);
         });
       } else {
         resolve(null);
@@ -127,23 +136,24 @@ module.exports = function(models, args) {
         mimetype: mimetype,
         group_id: groupId,
         user_id: userId
-      }).then(function(file){
-        Q.nfcall(models.folder.create,{
-          name:filename,
-          file_id:file.id,
-          parent_id:folderId,
-          type:mimetype,
-          user_id:userId,
-          group_id:groupId
-        }).then(function(folder){
-          resolve({file_id : file.id,folder:folder});
+
+      }).then(function(file) {
+        Q.nfcall(models.folder.create, {
+          name: filename,
+          file_id: file.id,
+          parent_id: folderId,
+          type: mimetype,
+          user_id: userId,
+          group_id: groupId
+        }).then(function(folder) {
+          resolve({file: file, folder: folder});
         });
 
       });
 
     }
   }).then(function(data) {
-    var file_id = data.file_id;
+    var file_id = data.file.id;
     return Q.Promise(function getFileversion(resolve) {
       var upload_dir = config.upload_dir;
       var databasepath = groupId + "/" + sha1.substring(0, 2) + "/" + sha1.substring(2) + path.extname(filename);
@@ -186,19 +196,21 @@ module.exports = function(models, args) {
           fileVersion.height = dimen.height;
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
-          resolve({fv :fileversion,folder:data.folder});
-          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview,mimetype, saveFile)]).then(function(result) {
+          resolve({file: data.file, fv: fileversion, folder: data.folder});
+          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile)]).then(function(result) {
             var filetext = result[1] || result[0];
             if (filetext) {
               Q.nfcall(models.filefulltext.create, {
                 utf8segments: chineseSegment(filetext),
                 text: filetext,
                 fileversion_id: fileversion.id
+              }).fail(function(err){
+                console.info(err);
               });
 
             }
           });
-        }).fail(function(err){
+        }).fail(function(err) {
           console.info(err);
         });
       });

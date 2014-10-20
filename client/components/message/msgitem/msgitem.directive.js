@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('agroupApp').directive('msgitem', function($rootScope,Modal) {
+angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messageAPI) {
 
 
   function getTitle(data) {
@@ -48,7 +48,7 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal) {
       scope.__user = $rootScope.__user;
       scope.onDel = function(item){
         Modal.confirm.delete(function(){
-
+          messageAPI.delete(item.id);
         })('');
       }
       scope.title = getTitle(data);

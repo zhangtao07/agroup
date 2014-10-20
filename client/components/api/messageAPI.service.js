@@ -20,6 +20,11 @@ angular.module('agroupApp').factory('messageAPI', ['apiRoot','$http',function(ap
         groupId:groupId,
         fileids:fileids
       });
+    },
+    delete:function(messageId){
+      return $http.post(apiRoot+"api/message/delete",{
+        messageId:messageId
+      });
     }
   };
 }]);

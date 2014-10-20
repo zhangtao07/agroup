@@ -4,49 +4,79 @@ var ago = require('../components/dateformate/ago');
 var Q = require("q");
 var fs = require("fs");
 var config = require("../config/environment");
+var filetype = require('../components/filetype')
 module.exports = function(orm, db) {
   var Message = db.define("message", {
       id: { type: 'serial', key: true },
       content: String,
       type: String,
       date: {type: 'date', required: true, time: true},
-      hide:Boolean
+      status: [ 'vision' ,'hidden', 'removed' ]
     },
     {
       hooks: {
         beforeCreate: function() {
+          if (this.status === null) {
+            this.status = 'vision';
+          }
           if (this.date === null) {
             this.date = new Date();
           }
         }
       },
       methods: {
-
-        getMkContent: function(callback) {
-          if (this.type != "mk") {
-            callback(null, false);
-          }
-          var obj = JSON.parse(this.content);
+        getFilesMessage:function(fileIds,callback){
           var list = [];
-//          var list = obj.list;
           var promiseFileversions = [];
-          obj.fileIds.forEach(function(fileversionId) {
-            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
-
+          fileIds.forEach(function(fileId) {
+            promiseFileversions.push(Q.promise(function(resovle) {
+              Q.nfcall(db.models.file.get, fileId).then(function(file) {
+                Q.nfcall(db.models.fileversion.find, {
+                  file_id: file.id
+                }, 1, ['createDate', 'Z']).then(function(rs) {
+                  var fileversion = null;
+                  if (rs.length > 0) {
+                    fileversion = rs[0];
+                  }
+                  resovle(fileversion);
+                })
+              })
+            }));
           });
 
           Q.all(promiseFileversions).then(function(fileversions) {
             fileversions.forEach(function(fileversion) {
               if (fileversion) {
                 var content = {
-                  "fileid": fileversion.id,
+                  "fv_id":fileversion.id,
+                  "cover": fileversion.getCover(),
                   "filepath": fileversion.getOnlinePath(),
-                  "filename": fileversion.filename
+                  "filename": fileversion.filename,
+                  "mimetype": fileversion.mimetype
+                }
+                console.info('t1')
+                var ftype = filetype(content.mimetype);
+                console.info('t2')
+                if (ftype == "pdf") {
+                  content.pdf = content.filepath;
+                }
+                if (/word|excel|ppt/.test(ftype)) {
+                  content.pdf = content.filepath + ".pdf";
                 }
                 list.push(content);
               }
             });
 
+            callback(null, list);
+          });
+        },
+        getMkContent: function(callback) {
+          if (this.type != "mk") {
+            callback(null, false);
+            return;
+          }
+          var obj = JSON.parse(this.content);
+          Q.nfcall(this.getFilesMessage,obj.fileIds).then(function(list){
             callback(null, {
               type: "mk",
               content: {
@@ -55,40 +85,16 @@ module.exports = function(orm, db) {
               }
             });
           });
+
         },
 
         getFileContent: function(callback) {
           if (this.type != "file") {
             callback(null, false);
+            return;
           }
           var obj = JSON.parse(this.content);
-          var list = [];
-//          var list = obj.list;
-          var promiseFileversions = [];
-          obj.fileIds.forEach(function(fileversionId) {
-            promiseFileversions.push(Q.nfcall(db.models.fileversion.get, fileversionId));
-
-          });
-
-          Q.all(promiseFileversions).then(function(fileversions) {
-            fileversions.forEach(function(fileversion) {
-              if (fileversion) {
-                var content = {
-                  "cover": fileversion.getCover(),
-                  "filepath": fileversion.getOnlinePath(),
-                  "filename": fileversion.filename,
-                  "mimetype": fileversion.mimetype
-                }
-                if (/pdf/.test(content.mimetype)) {
-                  content.pdf = content.filepath;
-                }
-                if (/ms[-]*word|officedocument/.test(content.mimetype)) {
-                  content.pdf = content.filepath + ".pdf";
-                }
-                list.push(content);
-              }
-            });
-
+          Q.nfcall(this.getFilesMessage,obj.fileIds).then(function(list){
             callback(null, {
               type: "file",
               content: {
@@ -102,6 +108,7 @@ module.exports = function(orm, db) {
         getLinkContent: function(callback) {
           if (this.type != "link") {
             callback(null, false);
+            return;
           }
 
           var obj = JSON.parse(this.content);
@@ -145,6 +152,7 @@ module.exports = function(orm, db) {
         getPlainContent: function(callback) {
           if (this.type != "plain") {
             callback(null, false);
+            return;
           }
 
           callback(null, {
@@ -164,7 +172,8 @@ module.exports = function(orm, db) {
               time: ago(self.date),
               content: contentObj.content,
               'type': contentObj.type,
-              user_id:self.user.id
+              user_id: self.user.id,
+              status:self.status
             });
 
           });
@@ -261,14 +270,57 @@ module.exports = function(orm, db) {
     })
   }
 
-  Message.deleteMessage = function(messageId,userId,callback){
-    db.models.message.one({
-      id:messageId,
-      user_id:userId
-    },function(err,msg){
-      if(msg){
-        msg.hide = true;
+  Message.getList = function(groupId, date, offset, limit, callback) {
 
+
+    var getCount = Q.nfcall(db.models.message.count, {
+      group_id: groupId,
+      date: orm.lte(date),
+      status:'vision'
+    });
+    var getData = Q.nfcall(db.models.message.find, {
+      group_id: groupId,
+      date: orm.lte(date),
+      status:'vision'
+    }, { offset: offset }, limit, ['date', 'Z'])
+    Q.all([getCount, getData]).then(function(result) {
+      callback(null,{
+        count: result[0],
+        list: result[1]
+      })
+    }).fail(function(err){
+      console.info(err);
+    });
+
+
+  }
+
+  Message.deleteMessage = function(messageId, userId, callback) {
+    db.models.message.one({
+      id: messageId,
+      user_id: userId
+    }, function(err, msg) {
+      if (msg) {
+        msg.status = 'removed';
+        var updateFilePromise = Q.promise(function(resovle,reject){
+          db.driver.execQuery('update file t1 join fileversion t2 on t1.id = t2.file_id and t1.id="' + msg.fileversion_id + '" and t1.user_id=' + userId + '  set t1.`status` = "removed"',function(err,data){
+            if(err){
+              console.info(err);
+              reject(err);
+            }else{
+              resovle();
+            }
+
+
+          });
+        });
+        var updateMessageProimise = Q.nfcall(msg.save);
+        Q.all([updateFilePromise,updateMessageProimise])
+          .then(function(results) {
+            callback(null, results[1]);
+          }).fail(function(err){
+            console.info(err);
+          });
       }
     });
   }

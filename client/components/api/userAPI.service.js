@@ -4,6 +4,9 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot','$http',function(apiRo
   return {
     getMe:function(){
       return $http.get(apiRoot+"api/user/me");
+    },
+    getGroups:function(){
+      return $http.get(apiRoot+"api/user/groups");
     }
   };
 }]);

@@ -33,6 +33,7 @@ module.exports = function(orm, db) {
       }
     }
   });
+
   File.hasOne('user', db.models.user, { required: true , autoFetch: true });
   File.hasOne('group', db.models.group, { required: true, autoFetch: true });
 }

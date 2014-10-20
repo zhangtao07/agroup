@@ -18,5 +18,6 @@ module.exports = {
     port: 3306
   },
 
-  owa_server: 'http://172.22.65.38/'
+  owa_server: 'http://172.22.65.38/',
+  hostname:'zzm.com'
 };

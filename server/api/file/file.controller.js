@@ -5,6 +5,9 @@ var fs = require('fs');
 //var File = require('./file.model');
 var marked = require('marked');
 var dc = require('../../editor/dataCenter.js');
+var Q = require('q');
+
+var config = require('../../config/environment')
 
 
 marked.setOptions({
@@ -33,8 +36,8 @@ exports.preview = function(req, res) {
     switch (type) {
       case 'markdown':
         result = file.getRealpath();
-        fs.readFile(file.getRealpath(),'utf8',function(err,content){
-          res.json(200,{
+        fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
+          res.json(200, {
             err: err,
             data: marked(content),
             width: file && file.width,
@@ -43,7 +46,7 @@ exports.preview = function(req, res) {
         });
         break;
       case 'pdf':
-        res.json(200,{
+        res.json(200, {
           err: err,
           cover: file && file.getCover(),
           filepath: file && file.getOnlinePath(),
@@ -62,7 +65,7 @@ exports.preview = function(req, res) {
         break;
       default:
         result = file.getOnlinePath();
-        res.json(200,{
+        res.json(200, {
           err: err,
           data: result,
           width: file && file.width,
@@ -95,9 +98,9 @@ exports.show = function(req, res) {
       return handleError(res, err);
     }
 
-    _.each(file,function(d){
+    _.each(file, function(d) {
       var cached = dc.getCache(d.file_id);
-      if(d.type !=='folder' && cached){
+      if (d.type !== 'folder' && cached) {
         d.name = cached.name;
         //d.content = cached.content;
         d.writers = cached.writers;
@@ -111,7 +114,7 @@ exports.show = function(req, res) {
   });
 };
 
-exports.getFiles = function(req,res){
+exports.getFiles = function(req, res) {
   var Folder = req.models.folder;
   Folder.find({
     group_id: req.params.groupid,
@@ -121,9 +124,9 @@ exports.getFiles = function(req,res){
     if (err) {
       return handleError(res, err);
     }
-    _.each(file,function(d){
+    _.each(file, function(d) {
       var cached = dc.getCache(d.file_id);
-      if(d.type !=='folder' && cached){
+      if (d.type !== 'folder' && cached) {
         d.name = cached.name;
         //d.content = cached.content;
         d.writers = cached.writers;
@@ -136,7 +139,7 @@ exports.getFiles = function(req,res){
   });
 }
 
-exports.getMDimage = function(req,res){
+exports.getMDimage = function(req, res) {
   //TBD
   var filename = req.body.filename;
   req.models.fileversion.one({
@@ -145,10 +148,10 @@ exports.getMDimage = function(req,res){
     if (err) {
       return handleError(err);
     }
-    res.json(200,{
+    res.json(200, {
       filepath: file ? file.getOnlinePath() : filename,
-      width:file ? file.width : 0,
-      height:file ? file.height : 0
+      width: file ? file.width : 0,
+      height: file ? file.height : 0
     });
   });
 }
@@ -182,12 +185,12 @@ exports.update = function(req, res) {
     }
     var updated = _.merge(file, req.body);
 
-    if(file.type !== 'folder'){
+    if (file.type !== 'folder') {
       //目录不是真的文件,所以在file表中不存在
-      File.get(file.file_id,function(err,file){
-        updateFile(file,updated.name);
+      File.get(file.file_id, function(err, file) {
+        updateFile(file, updated.name);
         var cached = dc.getCache(file.id);
-        if(cached){
+        if (cached) {
           cached.name = updated.name;
         }
       });
@@ -203,7 +206,7 @@ exports.update = function(req, res) {
   });
 };
 
-function updateFile(file,name){
+function updateFile(file, name) {
   file.name = name;
   file.save();
 }
@@ -219,20 +222,47 @@ exports.destroy = function(req, res) {
       return res.send(404);
     }
     file.status = 'delete';
-    file.save(function(err){
+    file.save(function(err) {
       if (err) {
         return handleError(res, err);
       }
       return res.send(204);
     });
     //file.remove(function(err) {
-      //if (err) {
-        //return handleError(res, err);
-      //}
-      //return res.send(204);
+    //if (err) {
+    //return handleError(res, err);
+    //}
+    //return res.send(204);
     //});
   });
 };
+
+var filetype = require('../../components/filetype');
+
+exports.previewUrl = function(req, res) {
+  var fileversionID = req.query.id;
+  console.info(fileversionID);
+  req.models.fileversion.get(fileversionID, function(err, fileversion) {
+    var type = filetype(fileversion.mimetype);
+    var filepath = fileversion.getOnlinePath();
+    var pdf = filepath+".pdf";
+    var filename = fileversion.filename;
+    var pdfRedir = '/pdf?file=' + pdf + '&download=' + filepath + '?filename=' + filename;
+    var redirUrl = "about:blank";
+    if (/word|excel|ppt/.test(type)) {
+      if(config.owa_server){
+        var url = 'http://'+config.hostname+":"+config.port+filepath;
+        redirUrl = config.owa_server+'?src='+encodeURIComponent(url);
+      }else{
+        redirUrl = pdfRedir;
+      }
+
+    } else if (type == "pdf") {
+      redirUrl = pdfRedir;
+    }
+    res.redirect(redirUrl);
+  });
+}
 
 function handleError(res, err) {
   return res.send(500, err);

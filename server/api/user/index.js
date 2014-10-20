@@ -10,9 +10,9 @@ router.get('/me', function(req, res) {
   if ('session' in req && 'user' in req.session) {
     var user = req.session.user;
     res.jsonp({
-      err:0,
-      data:extend(user,{
-        avatar:"/api/user/avatar/"+user.username
+      err: 0,
+      data: extend(user, {
+        avatar: "/api/user/avatar/" + user.username
       })
     });
   } else {
@@ -39,6 +39,18 @@ router.get('/avatar/:name', function(req, res) {
       console.log(err);
       res.status(err.status).end();
     }
+  });
+});
+
+
+router.get('/groups', function(req, res) {
+  var user = req.session.user;
+  var sql = 'select t2.id,t2.`name` from user_groups t1 join `group` t2 on (t1.groups_id = t2.id) where t1.user_id = '+user.id;
+  req.db.driver.execQuery(sql, function(err, data) {
+    res.json({
+      err:0,
+      data:data
+    })
   });
 });
 

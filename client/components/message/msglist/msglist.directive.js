@@ -115,6 +115,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
             var exist = false;
             scope.msglist.forEach(function(item,i){
               if(item.id == obj.id){
+//                debugger;
                 scope.msglist[i] = obj;
                 exist = true;
                 return false;
@@ -122,6 +123,8 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
             });
             if(!exist){
               scope.msglist.unshift(obj);
+            }else{
+//              scope.$apply();
             }
 
           });
