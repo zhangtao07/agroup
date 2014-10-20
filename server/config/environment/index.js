@@ -49,15 +49,18 @@ var all = {
   // Default auth is fake
   auth: 'fake',
 
-  upload_temp_dir: "/upload/.tmp",
+  upload_temp_dir: '/upload/.tmp',
 
-  upload_dir: "/upload",
+  upload_dir: '/upload',
 
   resize_dist_cache : '/.resize_cache',
 
   getAvatar:function(name){
-    return all.root+all.upload_dir+'/'+name+'.jpg';
+    return all.root + all.upload_dir + '/' + name + '.jpg';
   },
+
+  // Office Web Apps server
+  owa_server: '',
 
   sessionStorage: {
     host: mysql.host,
