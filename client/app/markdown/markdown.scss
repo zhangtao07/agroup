@@ -5,6 +5,10 @@
   height: 200px;
   overflow: hidden;
   overflow-x: hidden;
+
+  * {
+    font-size: .5em;
+  }
 }
 
 .panel-body.relative{

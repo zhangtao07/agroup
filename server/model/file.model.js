@@ -15,6 +15,9 @@ module.exports = function(orm, db) {
         if (this.status === null) {
           this.status = 'vision';
         }
+        if (this.createDate === null) {
+          this.createDate = new Date();
+        }
       }
     },
     methods:{
