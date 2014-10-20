@@ -54,7 +54,12 @@ router.post('/:group', function(req, res) {
       group: group,
       title: file.name,
       content: file.content || '',
-      user: user
+      user: {
+        id: user.id,
+        username: user.username,
+        nickname: user.nickname,
+        avatar: '/api/user/avatar/' + user.username
+      }
     });
   });
 });

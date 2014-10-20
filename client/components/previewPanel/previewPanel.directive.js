@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http,$state) {
+  .directive('previewPanel', function($http, $state,pdf,$localStorage,folderAPI) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
       link: function(scope, element, attrs) {
+
+        var lp = $localStorage['file.lastpreview'] = $localStorage['file.lastpreview'] || {};
 
         function getFile(file, type) {
           var defer = {
@@ -27,7 +29,7 @@ angular.module('agroupApp')
           return defer;
         }
 
-        var prview = {
+        var show = {
           image: function(file) {
             if (file.previewsrc) {
               return element.find('.preview-stage').html('<img class="area canvas" src="' + file.previewsrc + '"/>');
@@ -41,28 +43,55 @@ angular.module('agroupApp')
           'text/x-markdown': function(file) {
             getFile(file, 'markdown').success(function(res) {
               //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
-              element.find('.preview-stage').html(res.data);
+              var md = element.find('.preview-stage').html(res.data);
+              var img = md.find('img');
+              if(img.length){
+                img.each(function(i,d){
+                  folderAPI.getMDimage($state.params.group,file,d.src).success(function(data){
+                    img[i].src = data.filepath;
+                  });
+                });
+              }
+            });
+          },
+          pdf : function(file){
+            getFile(file, 'pdf').success(function(res) {
+              //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
+              file.previewsrc = res.data;
+              file.pdf = res.pdf;
+              element.find('.preview-stage').html('<img class="area canvas" src="' + res.data + '"/>');
             });
           }
         };
 
         scope.preview = function(file) {
-          var type = file.type.replace(/\/\w+$/, '')
-          if (!prview[type]) {
-            element.find('.preview-stage').html('<h1>Coming soon...</h1>');
-          } else {
-            prview[type].call(prview, file);
-            scope.previewitem = file;
-          }
+          showFile(file);
+          lp.file = file;
         };
 
-        scope.nopreview = function(files) {
+        showFile(lp.file);
+
+        function showFile(file){
+          if(!file) return;
+          var type = file.type.replace(/\/\w+$/, '')
+          var isPdf = /pdf/.test(file.type);
+          type = isPdf ? 'pdf' : type;
+
+          if (show[type]) {
+            show[type].call(show, file);
+            scope.previewitem = file;
+          } else {
+            element.find('.preview-stage').html('<h1>Coming soon...</h1>');
+          }
+        }
+
+        scope.previewFolder = function(files,folder) {
           var readme = _.find(files, function(file) {
             return file.type === 'text/x-markdown' && file.name.toLocaleLowerCase() === 'readme.md'
           });
           if (readme) {
-            prview[readme.type].call(prview, readme);
-            scope.previewitem = readme;
+            scope.preview(readme);
+            scope.selectItem(folder,readme);
           } else {
             element.find('.preview-stage').html('');
             scope.previewitem = null;
@@ -72,7 +101,10 @@ angular.module('agroupApp')
         scope.previewFile = function(item) {
           switch (item.type) {
             case 'text/x-markdown':
-              window.open('/editor/' + $state.params.group + '?file='+item['file_id']+'&view=true', '_blank');
+              window.open('/editor/' + $state.params.group + '?file=' + item.file_id + '&view=true', '_blank');
+              break;
+            case 'application/pdf':
+              pdf(item.pdf);
               break;
             default:
           }
@@ -81,12 +113,17 @@ angular.module('agroupApp')
         scope.editFile = function(item) {
           switch (item.type) {
             case 'text/x-markdown':
-              window.open('/editor/' + $state.params.group + '?file='+item['file_id'], '_blank');
+              window.open('/editor/' + $state.params.group + '?file=' + item.file_id, '_blank');
               break;
             default:
           }
         };
 
+        scope.isPreviewType = function(type){
+          if(!type) return false;
+          var reg = new RegExp(type.replace('application/',''));
+          return reg.test('pdf|text/x-markdown');
+        };
       }
     };
   });

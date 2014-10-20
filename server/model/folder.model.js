@@ -8,7 +8,7 @@ module.exports = function(orm, db) {
     parent_id: {type: 'integer', defaultValue:0},
     file_id: {type: 'integer', defaultValue:0},
     type:{type: 'text', defaultValue:'folder'},
-    createDate:String,
+    createDate: { type: 'date', time: true },
     status: [ 'vision' ,'hidden', 'removed' ]
   },{
     hooks: {

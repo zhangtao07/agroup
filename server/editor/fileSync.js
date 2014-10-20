@@ -28,9 +28,9 @@ Client.prototype.add = function(socket) {
     self.onPatch(socket, message);
   });
 
-  socket.on('changeFilename', function(fileDesc) {
-    dc.setTitle(self.fileid,fileDesc)
-    self.changeFilename(socket, fileDesc);
+  socket.on('changeFilename', function(filename) {
+    dc.setTitle(self.fileid,filename)
+    self.changeFilename(socket, filename);
   });
 };
 

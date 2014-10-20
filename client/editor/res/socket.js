@@ -33,10 +33,38 @@ define([
       eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
         var patchList = diff.patch_make(oldContent, newContent);
         var patchText = diff.patch_toText(patchList);
+        firstLineAsTitle(newContent,fileDesc);
         socket.emit('patch', {
           patch: patchText
         });
       });
+
+      function firstLineAsTitle(newContent,fileDesc){
+        var lineno = 0;
+        var title = fileDesc.title;
+        var noTitle = !title || !title.length;
+        if(noTitle){
+          var t = ''
+          newContent.replace(/.*/gm,function(result){
+            if(/\S+/.test(result)){
+              if(lineno === 0){
+                t = result.replace(/[#|>|\s]*/g,'');
+                syncTitle(t);
+              }
+              if(noTitle && lineno === 1){
+                title = t;
+                fileDesc.title = title;
+                eventMgr.onTitleChanged(fileDesc);
+              }
+              lineno++;
+            }
+          });
+        }
+      }
+
+      function syncTitle(txt){
+        $('.file-title-navbar').text(txt);
+      }
 
 
       eventMgr.addListener('onEditorPopover', function() {
@@ -44,18 +72,21 @@ define([
       });
 
       eventMgr.addListener('onTitleChanged', function(fileDesc) {
-        socket.emit('changeFilename',fileDesc);
+        var filename = fileDesc.title || fileDesc._title;
+        socket.emit('changeFilename', filename.replace(/[.md]/g,'')+'.md');
       });
 
-      socket.on('server:changeFilename', function(fileDesc) {
+      socket.on('server:changeFilename', function(filename) {
         //eventMgr.onTitleChanged(fileDesc);
-        console.log(fileDesc);
+        //syncTitle(filename);
+        console.log(filename);
       });
 
       eventMgr.addListener('onReady', function(data) {
         if(!data || !data.fileid){
           window.location.href = '/';
         }
+        $('#my-avatar').attr('src',imgresize(data.user.avatar) || '/assets/images/avatar.jpg');
         socket.emit('editor-join', data);
       });
 

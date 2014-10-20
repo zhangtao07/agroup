@@ -41,9 +41,7 @@ exports.resize = function(req, res) {
 
     }
   }catch(e){
-    console.info(e);
-    res.set('Content-Type', 'image/jpeg');
-    res.end('', 'binary');
+    res.send(404);
   }
 
   var cacheResizeFile = S(cacheOrginFile + "_{{type}}_{{gravity}}_{{width}}__{{height}}").template({
@@ -107,8 +105,7 @@ exports.resize = function(req, res) {
                 headers:req.headers
               }, function(err, result, body) {
                 if(err){
-                  res.set('Content-Type', 'image/jpeg');
-                  res.end('', 'binary');
+                  res.send(404);
                 }else{
                   var contentType = result.headers['content-type'];
                   if (!/^image\/(png|jpeg|jpg|gif)/.test(contentType)) {
