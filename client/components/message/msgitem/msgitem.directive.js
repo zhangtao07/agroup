@@ -27,6 +27,9 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
           case 'create':
             action = '创建';
             break;
+          case 'update':
+            action = '更新';
+            break;
         }
         text = action + '了' + data.content.list.length + '个笔记';
         break;

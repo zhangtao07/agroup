@@ -16,6 +16,7 @@ module.exports = {
     user: "root",
     password: "end",
     port: 3306
+  },
 
-  }
+  owa_server: 'http://172.22.65.38/'
 };

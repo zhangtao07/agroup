@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 exports.office2pdf = function(input, output, callback) {
   var jar = __dirname + '/office2pdf.jar';
   var licence = __dirname + '/licence.xml';
-  exec('java -jar ' + jar + ' -l ' + licence + ' ' + input + ' ' + output + '', function(error, stdout, stderr) {
+  exec('java -jar ' + jar + ' -l ' + licence + ' -f fonts ' + input + ' ' + output + '', function(error, stdout, stderr) {
     var err = error || stderr;
     if (err) {
       console.info(err);

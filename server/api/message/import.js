@@ -132,6 +132,7 @@ module.exports = function(models, args) {
     } else {
       Q.nfcall(models.file.create, {
         name: filename,
+        mimetype: mimetype,
         group_id: groupId,
         user_id: userId
 

@@ -3,15 +3,14 @@ var path = require('path');
 var models = require('../model');
 var md5 = require('MD5');
 var mime = require('mime');
+var importFile = require('../api/message/import.js');
 
 var basepath = path.join(__dirname, '../../import/internal-master/');
 var dest = path.join(__dirname, '../../upload/');
 
-
-
 var database;
 var db = {};
-var noop = function(){};
+var noop = function() {};
 
 var user = {
   id: 2
@@ -31,11 +30,31 @@ function getDB(cb) {
   });
 }
 
+function sysImport(p, stats, parentID) {
+  fs.readFile(p, function(err, buf) {
+    var filename = path.basename(p);
+    var mimetype = mime.lookup(filename);
+    var file = {
+      userId: user.id,
+      groupId: group.id,
+      sha1: md5(buf),
+      filepath: p,
+      mimetype: mimetype,
+      filename: filename,
+      fileSize: stats.blksize,
+      encoding: stats.encoding || 'utf8',
+      folderId: parentID
+    };
+    importFile(database, file);
+  });
+}
+
 function readPath(p, parentID) {
   parentID = parentID || 0;
   fs.stat(p, function(err, stats) {
     if (stats.isFile()) {
-      readFile(p, stats, parentID);
+      //readFile(p, stats, parentID);
+      sysImport(p,stats,parentID);
     } else if (stats.isDirectory()) {
       //console.log(path.basename(p), path.basename(upfolder));
       database.folder.create([{
@@ -55,13 +74,15 @@ function readPath(p, parentID) {
 function readFile(p, stats, parentID) {
   fs.readFile(p, function(err, buf) {
     var filename = md5(buf) + path.extname(p);
+    var mimetype = mime.lookup(filename);
     var realname = path.basename(p);
-    writeFile(filename,realname, buf, stats, parentID);
+    writeFile(filename, realname, buf, stats, parentID);
   });
 }
 
-function writeFile(filename,realname, buf, stats, parentID) {
-  var filepath = path.join('import/',filename);
+
+function writeFile(filename, realname, buf, stats, parentID) {
+  var filepath = path.join('import/', filename);
   var destpath = path.join(dest, filepath);
 
   fs.writeFile(destpath, buf, function(err) {

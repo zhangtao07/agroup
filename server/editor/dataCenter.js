@@ -5,6 +5,7 @@ var models = require('../model');
 var md5 = require('MD5');
 var config = require("../config/environment");
 var _ = require('lodash');
+var observe = require('../components/group.observe');
 var cache = {};
 var database;
 var basepath = config.root + config.upload_dir + '/markdown';
@@ -30,7 +31,8 @@ exports.userLeave = function(client) {
   });
 
   if (!writers.length) {
-    createFileversion(file);
+    var broadFilecreate = file.status === 'init';
+    createFileversion(file,false,broadFilecreate,client.user);
     updateFile(file,client.user);
     delete cache[file.id];
   }
@@ -71,6 +73,9 @@ function updateFile(file,user){
     var filename = defaultFileName(user || {nickname:'agroup'});
     db.models.file.get(file.id, function(err, f) {
       //TBD
+      if(f.status === 'init'){
+        f.status = 'vision';
+      }
       f.name = file.name || filename;
       f.user_id = user.id;
       f.save();
@@ -93,18 +98,23 @@ exports.createFile = function(group, user, cb) {
       name: '',//defaultFileName(user),
       mimetype: 'text/x-markdown',
       createDate: new Date(),
+      status: 'init',
       user_id: user.id,
       group_id: group
     }], function(err, files) {
       _.each(files, function(file) {
         cache[file.id] = file;
-        createFileversion(file);
+        createFileversion(file,true);
         createFolder(file,user);
         return cb && cb(err,file.id);
       });
     });
   });
 };
+
+function markdownMessage(err,message){
+  observe.messageBroadcast(message.group_id,message);
+}
 
 exports.checkFile = function(fileid, cb) {
   if (cache[fileid]) {
@@ -150,7 +160,7 @@ function readFromDisk(file, fv, cb) {
   });
 }
 
-function createFileversion(file) {
+function createFileversion(file,isinit,broadFilecreate,user) {
   getDB(function(err, db) {
     var fv = {
       filepath: path.join('markdown/', md5(file.content || file.name)) + '.md',
@@ -162,7 +172,14 @@ function createFileversion(file) {
       user_id: file.user_id
     };
     if (file.filepath !== fv.filepath) {
-      db.models.fileversion.create([fv], function(err, fvs) {
+      db.models.fileversion.create(fv, function(err, sfv) {
+        if(!isinit){
+          if(broadFilecreate){
+            db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.id],markdownMessage);
+          }else{
+            //db.models.message.createMkMessage(user.id,file.group_id,'update',[sfv.id],markdownMessage);
+          }
+        }
         if (err) throw err;
       });
       fs.writeFile(getFileRealpath(fv.filepath), file.content || '', 'utf8');

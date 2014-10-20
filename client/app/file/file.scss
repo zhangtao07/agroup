@@ -15,6 +15,14 @@
 .preview-stage{
   text-align: left !important;
   padding: 10px 20px;
+
+  ol ,ul {
+    padding-left: 40px;
+  }
+
+  img {
+    max-width: 100%;
+  }
 }
 .bread-nav{
   margin-bottom: 7px;

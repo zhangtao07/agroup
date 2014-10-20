@@ -23,33 +23,41 @@ marked.setOptions({
 
 exports.preview = function(req, res) {
   var type = req.body.type;
-  console.log(type);
-  req.models.fileversion.find({
+  req.models.fileversion.one({
     file_id: req.params.id
-  }, ['updateDate', 'Z'], function(err, files) {
+  }, ['updateDate', 'Z'], function(err, file) {
     if (err) {
       return handleError(err);
     }
     var result = '';
     switch (type) {
       case 'markdown':
-        result = files[0].getRealpath();
-        fs.readFile(files[0].getRealpath(),'utf8',function(err,content){
+        result = file.getRealpath();
+        fs.readFile(file.getRealpath(),'utf8',function(err,content){
           res.json(200,{
             err: err,
             data: marked(content),
-            width:files[0].width,
-            height:files[0].height
+            width:file.width,
+            height:file.height
           });
         });
         break;
+      case 'pdf':
+        res.json(200,{
+          err: err,
+          data: file.getCover(),
+          pdf: file.getOnlinePath(),
+          width:file.width,
+          height:file.height
+        });
+        break;
       default:
-        result = files[0].getOnlinePath();
+        result = file.getOnlinePath();
         res.json(200,{
           err: err,
           data: result,
-          width:files[0].width,
-          height:files[0].height
+          width:file.width,
+          height:file.height
         });
         break;
     }
@@ -94,6 +102,48 @@ exports.show = function(req, res) {
   });
 };
 
+exports.getFiles = function(req,res){
+  var Folder = req.models.folder;
+  Folder.find({
+    group_id: req.params.groupid,
+    parent_id: req.params.folderid,
+    status: 'vision'
+  }, function(err, file) {
+    if (err) {
+      return handleError(res, err);
+    }
+    _.each(file,function(d){
+      var cached = dc.getCache(d.file_id);
+      if(d.type !=='folder' && cached){
+        d.name = cached.name;
+        //d.content = cached.content;
+        d.writers = cached.writers;
+      }
+    });
+    if (!file) {
+      return res.send(404);
+    }
+    return res.status(200).json(file);
+  });
+}
+
+exports.getMDimage = function(req,res){
+  //TBD
+  var filename = req.body.filename;
+  req.models.fileversion.one({
+    filename: filename
+  }, ['updateDate', 'Z'], function(err, file) {
+    if (err) {
+      return handleError(err);
+    }
+    res.json(200,{
+      filepath: file ? file.getOnlinePath() : filename,
+      width:file ? file.width : 0,
+      height:file ? file.height : 0
+    });
+  });
+}
+
 // Creates a new folder in the DB.
 exports.create = function(req, res) {
   var Folder = req.models.folder;
@@ -123,13 +173,16 @@ exports.update = function(req, res) {
     }
     var updated = _.merge(file, req.body);
 
-    File.get(file.file_id,function(err,file){
-      updateFile(file,updated.name);
-      var cached = dc.getCache(file.id);
-      if(cached){
-        cached.name = updated.name;
-      }
-    });
+    if(file.type !== 'folder'){
+      //目录不是真的文件,所以在file表中不存在
+      File.get(file.file_id,function(err,file){
+        updateFile(file,updated.name);
+        var cached = dc.getCache(file.id);
+        if(cached){
+          cached.name = updated.name;
+        }
+      });
+    }
 
     //console.log(file);
     updated.save(function(err) {
