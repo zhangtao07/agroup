@@ -10,6 +10,33 @@
     /*width: 400px;*/
   }
 }
+.app-icons{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-size: contain !important;
+  vertical-align: middle;
+}
+
+.folder{
+  background: url("/assets/images/folder-icon.png");
+}
+.pdf{
+  background: url("/assets/images/PDF-icon.png");
+}
+.note{
+  background: url("/assets/images/Notes-icon.png");
+}
+.ppt{
+  background: url("/assets/images/PowerPoint-icon.png");
+}
+.word{
+  background: url("/assets/images/Word-icon.png");
+}
+.excel{
+  background: url("/assets/images/Excel-icon.png");
+}
+
 .preview-panel{
   z-index: 300;
   /*min-width: 600px;*/

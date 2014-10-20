@@ -26,7 +26,8 @@
                 <span tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
                 <span class="block" ng-class="{'m-n': item.selected }">
                   <!--<fileicon  mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>-->
-                  <span class="fa fa-{{ item.type | fileicon }}"></span>
+                  <!--<span class="fa fa-{{ item.type | fileicon }}"></span>-->
+                  <fileicon mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>
                   <em class="text-eclipse" ng-blur="doneEditing(item)" file-editing class="file-ml" ng-blur="doneEditing(item)"></em></span>
                 <!--<input stop-event type="text" class="form-control pos-abt" ng-show="item.editing" file-editing ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%;padding-left:25px;" >-->
               </a>
