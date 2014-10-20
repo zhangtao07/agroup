@@ -56,7 +56,6 @@ angular.module('agroupApp')
           },
           pdf : function(file){
             getFile(file, 'pdf').success(function(res) {
-              //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
               file.previewsrc = res.data;
               file.pdf = res.filepath;
               element.find('.preview-stage').html('<img class="area canvas" src="' + res.cover + '"/>');
@@ -64,8 +63,6 @@ angular.module('agroupApp')
           },
           office: function(file){
             getFile(file, 'office').success(function(res) {
-              //element.find('.preview-stage').html('<img class="area canvas" src="' + res.cover + '"/>');
-              console.log(folderAPI.officePreview(res.filepath));
               element.find('.preview-stage').html(folderAPI.officePreview(res.filepath));
             });
           }
@@ -78,20 +75,18 @@ angular.module('agroupApp')
 
         showFile(lp.file);
 
-        function showFile(file){
+        function showFile(file) {
           if(!file) return;
           var type = file.type.replace(/\/\w+$/, '')
           var isPdf = /pdf/.test(file.type);
           var isOffice = /word|excel|presentation/.test(file.type) || /doc|xls|ppt/.test(file.name);
           type = isPdf ? 'pdf' : type;
           type = isOffice ? 'office' : type;
-          console.log(file);
 
           if (show[type]) {
             show[type].call(show, file);
             scope.previewitem = file;
           } else {
-            console.log(type);
             element.find('.preview-stage').html('<h1>Coming soon...</h1>');
           }
         }

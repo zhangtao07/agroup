@@ -2,11 +2,9 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-//var File = require('./file.model');
 var marked = require('marked');
 var dc = require('../../editor/dataCenter.js');
 var Q = require('q');
-
 var config = require('../../config/environment')
 
 
@@ -23,6 +21,14 @@ marked.setOptions({
     return require('highlight.js').highlightAuto(code).value;
   }
 });
+
+exports.getConfig = function(req,res){
+  if(req.session.user){
+    return res.json(200,config.op);
+  }else{
+    return handleError(res, 'login first');
+  }
+}
 
 exports.preview = function(req, res) {
   var type = req.body.type;

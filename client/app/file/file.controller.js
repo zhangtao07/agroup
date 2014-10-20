@@ -59,7 +59,6 @@ angular.module('agroupApp')
       var index = level.indexOf(folder);
 
       if (item.type !== 'folder') {
-        console.log(index,level.length);
         if(index === level.length-2){
           closeFolder(index + 1, level.length - index);
         }
@@ -79,7 +78,6 @@ angular.module('agroupApp')
     }
 
     function closeFolder(index, end) {
-      //console.log(index,end);
       $scope.scrollRight();
       setTimeout(function() {
         level.splice(index, end);

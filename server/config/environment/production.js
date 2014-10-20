@@ -17,6 +17,11 @@ module.exports = {
     password: "end",
     port: 3306
   },
+  op: {
+    server :'http://172.22.65.38',
+    view: '/op/view.aspx?src=',
+    embed: '/op/embed.aspx?src='
+  },
 
   owa_server: 'http://172.22.65.38/',
   hostname:'zzm.com'
