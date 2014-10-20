@@ -29,12 +29,7 @@ angular.module('agroupApp')
         }
         scope.onimgclick = function(data){
           if(data.pdf){
-            if(!/pdf/.test(data.mimetype)){
-              pdf(data.pdf,data.filepath+"?filename="+data.filename);
-            }else{
-              pdf(data.pdf);
-            }
-
+            window.open('/api/files/previewUrl?id='+data.fv_id,'_blank');
           }
         };
       }

@@ -4,6 +4,7 @@ var ago = require('../components/dateformate/ago');
 var Q = require("q");
 var fs = require("fs");
 var config = require("../config/environment");
+var filetype = require('../components/filetype')
 module.exports = function(orm, db) {
   var Message = db.define("message", {
       id: { type: 'serial', key: true },
@@ -47,15 +48,19 @@ module.exports = function(orm, db) {
             fileversions.forEach(function(fileversion) {
               if (fileversion) {
                 var content = {
+                  "fv_id":fileversion.id,
                   "cover": fileversion.getCover(),
                   "filepath": fileversion.getOnlinePath(),
                   "filename": fileversion.filename,
                   "mimetype": fileversion.mimetype
                 }
-                if (/pdf/.test(content.mimetype)) {
+                console.info('t1')
+                var ftype = filetype(content.mimetype);
+                console.info('t2')
+                if (ftype == "pdf") {
                   content.pdf = content.filepath;
                 }
-                if (/ms[-]*word|officedocument/.test(content.mimetype)) {
+                if (/word|excel|ppt/.test(ftype)) {
                   content.pdf = content.filepath + ".pdf";
                 }
                 list.push(content);

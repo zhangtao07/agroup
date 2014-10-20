@@ -6,6 +6,7 @@ var sizeOf = require('image-size');
 var Q = require('q');
 var tool = require('../../tools/tool');
 var Segment = require('segment').Segment;
+var filetype = require('../../components/filetype');
 // 创建实例
 var segment = new Segment();
 // 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
@@ -41,13 +42,13 @@ function processPdf(pdf) {
 function generatePreview(mimetype, file, callback) {
 
   var getPdf;
-
-  if (mimetype == "application/pdf") {
+  var type = filetype(mimetype);
+  if (type == "pdf") {
 
     getPdf = Q.fcall(function() {
       return file;
     });
-  } else if (/ms[-]*word|officedocument|ms[-]*excel|spreadsheetml|ms[-]*powerpoint|presentationml/.test(mimetype)) {
+  } else if (/word|ppt|excel/.test(type)) {
 
     getPdf = Q.promise(function(resolve) {
       var pdf = file + '.pdf';

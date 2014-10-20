@@ -30,6 +30,8 @@ var all = {
   // Root path of server
   root: rootPath,
 
+  hostname:'zzm.com',
+
   // Server port
   port: process.env.PORT || 9000,
 
@@ -63,9 +65,6 @@ var all = {
     return all.root + all.upload_dir + '/' + name + '.jpg';
   },
 
-  // Office Web Apps server
-  owa_server: '',
-
   sessionStorage: {
     host: mysql.host,
     port: mysql.port || 3306,
@@ -73,6 +72,8 @@ var all = {
     password: mysql.password,
     database: mysql.database
   }
+
+
 
 };
 
