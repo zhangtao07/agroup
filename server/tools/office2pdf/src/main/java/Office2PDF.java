@@ -34,6 +34,22 @@ class Office2PDF {
       return;
     }
 
+    if (!office2PDF.licenceFile.equals("")) {
+      File licenceFile = new File(office2PDF.licenceFile);
+      if (!licenceFile.exists()) {
+        System.out.println("Warning: licence file don't exists");
+        office2PDF.licenceFile = "";
+      }
+    }
+
+    if (!office2PDF.fontDir.equals("")) {
+      File fontDir = new File(office2PDF.fontDir);
+      if (!fontDir.exists() || !fontDir.isDirectory()) {
+        System.out.println("Warning: font directory don't exists");
+        office2PDF.fontDir = "";
+      }
+    }
+
     String input = office2PDF.files.get(0);
     String output = office2PDF.files.get(1);
 
