@@ -37,18 +37,27 @@ exports.preview = function(req, res) {
           res.json(200,{
             err: err,
             data: marked(content),
-            width:file.width,
-            height:file.height
+            width: file && file.width,
+            height:file && file.height
           });
         });
         break;
       case 'pdf':
         res.json(200,{
           err: err,
-          data: file.getCover(),
-          pdf: file.getOnlinePath(),
-          width:file.width,
-          height:file.height
+          cover: file && file.getCover(),
+          filepath: file && file.getOnlinePath(),
+          width: file && file.width,
+          height:file && file.height
+        });
+        break;
+      case 'office':
+        res.json(200,{
+          err: err,
+          cover: file && file.getCover(),
+          filepath: file && file.getOnlinePath(),
+          width:file && file.width,
+          height:file && file.height
         });
         break;
       default:
@@ -56,8 +65,8 @@ exports.preview = function(req, res) {
         res.json(200,{
           err: err,
           data: result,
-          width:file.width,
-          height:file.height
+          width: file && file.width,
+          height:file && file.height
         });
         break;
     }

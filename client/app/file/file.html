@@ -3,7 +3,7 @@
   <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)"><a href="">{{ folder.selectedItem.name }}</a></li>
 </ul>
 
-<div class="file-sys-panel scrollable hover" scroll-to ng-init="
+<div class="file-sys-panel" scroll-to ng-init="
   app.settings.asideFixed = true;
   app.settings.asideDock = false;
   app.settings.container = false;
@@ -41,10 +41,8 @@
       </div>
     </div>
   </div>
-  <!-- column -->
-  <preview-panel class='col'></preview-panel>
-  <!-- /column -->
 </div>
 </div>
 
+<preview-panel class='col file-sys-preview'></preview-panel>
 <uploadpanel control="uploadpanel" style="display: none;"></uploadpanel>

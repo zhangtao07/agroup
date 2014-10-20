@@ -48,7 +48,12 @@ angular.module('agroupApp')
     return function(scope, element, attrs) {
       //window.element = element;
       scope.scrollLeft = function(){
-        element.scrollLeft(1000);
+        //element.scrollLeft(1000);
+        element.animate( { scrollLeft: '+=200' }, 400)
+      };
+      scope.scrollRight = function(){
+        //element.scrollLeft(1000);
+        element.animate( { scrollLeft: '-=200' }, 400)
       };
       //element.scrollLeft(1000);
     };

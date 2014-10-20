@@ -58,9 +58,11 @@ angular.module('agroupApp')
       folder.selectedItem = item;
       var index = level.indexOf(folder);
 
-      $scope.scrollLeft();
       if (item.type !== 'folder') {
-        closeFolder(index + 1, level.length - index);
+        console.log(index,level.length);
+        if(index === level.length-2){
+          closeFolder(index + 1, level.length - index);
+        }
         $scope.preview(item);
       } else {
         getFiles(item, folder, groupId, function(files) {
@@ -69,12 +71,19 @@ angular.module('agroupApp')
           nextLevel.parent_id = item.id;
           $scope.previewFolder(nextLevel.files, nextLevel);
           level.splice(index + 2, level.length - index - 2);
+          setTimeout(function() {
+            $scope.scrollLeft();
+          }.bind(this), 10);
         });
       }
     }
 
     function closeFolder(index, end) {
-      level.splice(index, end);
+      //console.log(index,end);
+      $scope.scrollRight();
+      setTimeout(function() {
+        level.splice(index, end);
+      }.bind(this), 600);
     }
 
     function clearSelect(folder) {
