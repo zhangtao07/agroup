@@ -138,8 +138,8 @@ exports.getMDimage = function(req,res){
     }
     res.json(200,{
       filepath: file ? file.getOnlinePath() : filename,
-      width:file.width,
-      height:file.height
+      width:file ? file.width : 0,
+      height:file ? file.height : 0
     });
   });
 }

@@ -10,7 +10,7 @@ define([
         path: '/socket.io-client'
       });
       var diff = new diff_match_patch();
-      var fileid = window.location.href.replace(/.*\?file=([\w]+).*/,'$1');
+      var fileid = window.location.href.replace(/.*\?file=([\w]+).*/, '$1');
 
 
       socket.on('server:clientJoin', function(user) {
@@ -33,36 +33,36 @@ define([
       eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
         var patchList = diff.patch_make(oldContent, newContent);
         var patchText = diff.patch_toText(patchList);
-        firstLineAsTitle(newContent,fileDesc);
+        firstLineAsTitle(newContent, fileDesc);
         socket.emit('patch', {
           patch: patchText
         });
       });
 
-      function firstLineAsTitle(newContent,fileDesc){
+      function firstLineAsTitle(newContent, fileDesc) {
         var lineno = 0;
         var title = fileDesc.title;
         var noTitle = !title || !title.length;
-        if(noTitle){
+        if (noTitle) {
           var t = ''
-          newContent.replace(/.*/gm,function(result){
-            if(/\S+/.test(result)){
-              if(lineno === 0){
-                t = result.replace(/[#|>|\s]*/g,'');
-                syncTitle(t);
+            newContent.replace(/.*/gm, function(result) {
+              if (/\S+/.test(result)) {
+                if (lineno === 0) {
+                  t = result.replace(/[#|>|\s]*/g, '');
+                  syncTitle(t);
+                }
+                if (noTitle && lineno === 1) {
+                  title = t;
+                  fileDesc.title = title;
+                  eventMgr.onTitleChanged(fileDesc);
+                }
+                lineno++;
               }
-              if(noTitle && lineno === 1){
-                title = t;
-                fileDesc.title = title;
-                eventMgr.onTitleChanged(fileDesc);
-              }
-              lineno++;
-            }
-          });
+            });
         }
       }
 
-      function syncTitle(txt){
+      function syncTitle(txt) {
         $('.file-title-navbar').text(txt);
       }
 
@@ -73,7 +73,7 @@ define([
 
       eventMgr.addListener('onTitleChanged', function(fileDesc) {
         var filename = fileDesc.title || fileDesc._title;
-        socket.emit('changeFilename', filename.replace(/[.md]/g,'')+'.md');
+        socket.emit('changeFilename', filename.replace(/[.md]/g, '') + '.md');
       });
 
       socket.on('server:changeFilename', function(filename) {
@@ -82,12 +82,40 @@ define([
         console.log(filename);
       });
 
+      var groupid;
+
       eventMgr.addListener('onReady', function(data) {
-        if(!data || !data.fileid){
+        if (!data || !data.fileid) {
           window.location.href = '/';
         }
-        $('#my-avatar').attr('src',imgresize(data.user.avatar) || '/assets/images/avatar.jpg');
+        //console.log(data);
+        groupid = data.group;
+        $('#my-avatar').attr('src', imgresize(data.user.avatar) || '/assets/images/avatar.jpg');
         socket.emit('editor-join', data);
+      });
+
+      function getImgname(filepath) {
+        var path = [];
+        filepath.replace(/[^\/]+\/?/g, function(target, position, source) {
+          path.push(target);
+        });
+        var filename = path[path.length - 1].replace(/\?.*/, '');
+        return filename;
+      }
+
+      function correctImgpath(){
+        $('#preview-contents img').each(function(i, d) {
+          console.log(d);
+          $.post("/api/files/images/" + groupid, {
+            filename: getImgname(d.src)
+          }).done(function(data){
+            d.src = data.filepath;
+          });
+        });
+      }
+
+      eventMgr.addListener('onPreviewFinished', function(data) {
+        correctImgpath();
       });
 
       return socket;
