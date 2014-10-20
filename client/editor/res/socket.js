@@ -105,7 +105,6 @@ define([
 
       function correctImgpath(){
         $('#preview-contents img').each(function(i, d) {
-          console.log(d);
           $.post("/api/files/images/" + groupid, {
             filename: getImgname(d.src)
           }).done(function(data){
