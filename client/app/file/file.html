@@ -1,6 +1,9 @@
 <ul class="breadcrumb bg-white b-a bread-nav">
   <li ng-click="home()"><a href=""><i class="fa fa-home"></i> AGroup</a></li>
-  <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)"><a href="">{{ folder.selectedItem.name }}</a></li>
+  <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)">
+    <fileicon mimetype="{{folder.selectedItem.type}}" filename="{{folder.selectedItem.name}}"></fileicon>
+    <a href="">{{ folder.selectedItem.name }}</a>
+  </li>
 </ul>
 
 <div class="file-sys-panel" scroll-to ng-init="

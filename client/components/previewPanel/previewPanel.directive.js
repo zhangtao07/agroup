@@ -44,7 +44,7 @@ angular.module('agroupApp')
           },
           'text/x-markdown': function(file) {
             getFile(file, 'markdown').success(function(res) {
-              element.find('.preview-stage').html('<iframe src="/editor/' + file.group.id + '?file='+file.file_id+'&view=true&notitle=true" class=area /></iframe>');
+              element.find('.preview-stage').html('<iframe style="transform:translateY(-50px)" src="/editor/' + file.group.id + '?file='+file.file_id+'&view=true&notitle=true" class=area /></iframe>');
               //var md = element.find('.preview-stage').html(res.data);
               downloadBtn.attr('href',res.filepath + '?filename='+ file.name);
               var img = md.find('img');
