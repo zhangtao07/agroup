@@ -236,20 +236,18 @@ exports.previewUrl = function(req, res) {
   req.models.fileversion.get(fileversionID, function(err, fileversion) {
     var type = filetype(fileversion.mimetype);
     var filepath = fileversion.getOnlinePath();
-    var pdf = filepath+".pdf";
     var filename = fileversion.filename;
-    var pdfRedir = '/pdf?file=' + pdf + '&download=' + filepath + '?filename=' + filename;
     var redirUrl = "about:blank";
     if (/word|excel|ppt/.test(type)) {
       if(config.owa_server){
         var url = 'http://'+config.hostname+":"+config.port+filepath;
         redirUrl = config.owa_server+'?src='+encodeURIComponent(url);
       }else{
-        redirUrl = pdfRedir;
+        redirUrl = '/pdf?file=' + filepath + '.pdf&download=' + filepath + '?filename=' + filename;
       }
 
     } else if (type == "pdf") {
-      redirUrl = pdfRedir;
+      redirUrl = '/pdf?file=' + filepath + '&download=' + filepath + '?filename=' + filename;
     }
     res.redirect(redirUrl);
   });

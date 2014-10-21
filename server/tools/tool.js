@@ -1,5 +1,18 @@
 
 var exec = require('child_process').exec;
+
+exports.video2Thumbnail = function(input,output,callback){
+  exec('ffmpeg -i '+input+' -ss 00:00:01 -f image2 -vframes 1 '+output,function(error, stdout, stderr) {
+    var err = error || stderr;
+    if (err) {
+      console.info(err);
+      callback(err,null);
+    } else {
+      callback(null, stdout);
+    }
+  });
+}
+
 exports.office2pdf = function(input, output, callback) {
   var jar = __dirname + '/office2pdf.jar';
   var licence = __dirname + '/licence.xml';

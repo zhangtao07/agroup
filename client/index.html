@@ -18,6 +18,9 @@
   <!-- build:css(client) app/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/github-markdown-css/github-markdown.css" />
+  <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery.css" />
+  <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css" />
+  <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-video.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
@@ -56,6 +59,13 @@
 <script src="bower_components/rangy-official/rangy-textrange.min.js"></script>
 <script src="bower_components/ng-error/ng-error.js"></script>
 <script src="bower_components/ng-load/ng-load.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-helper.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery-video.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery-vimeo.js"></script>
+<script src="bower_components/blueimp-gallery/js/blueimp-gallery-youtube.js"></script>
 <!-- endbower -->
 <script src="assets/js/ng-infinite-scroll.js"></script>
 <script src="assets/js/angular-translate.js"></script>
@@ -121,6 +131,14 @@
 <script src="assets/js/directives.js"></script>
 <!-- endbuild -->
 
-
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
 </body>
 </html>

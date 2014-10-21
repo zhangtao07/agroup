@@ -29,6 +29,8 @@ module.exports = function(app) {
     }
   });
 
+
+
   app.use('/static/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
@@ -48,6 +50,10 @@ module.exports = function(app) {
   app.use('/editor', require('./editor'));
   app.route('/pdf').get(function(req, res) {
     res.render('pdf.html');
+  });
+
+  app.route('/signin').get(function(req, res) {
+    res.render('login.html');
   });
 
   // All undefined asset or api routes should return a 404

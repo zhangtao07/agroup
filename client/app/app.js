@@ -19,13 +19,17 @@ var app = angular.module('agroupApp', [
     'ui.bootstrap',
     'app.directives',
     'ngAnimate'
-  ]).config(["$provide", function ($provide) {
-    $provide.value("apiRoot","");
-  }]).run(['$rootScope','userAPI','$q',function($rootScope,userAPI,$q){
-    $q.when(userAPI.getMe()).then(function(obj){
+  ]).config(["$provide", function($provide) {
+    $provide.value("apiRoot", "");
+  }]).run(['$rootScope', 'userAPI', '$q', function($rootScope, userAPI, $q) {
+
+    $q.when(userAPI.getMe()).then(function(obj) {
+
       $rootScope.__user = obj.data.data;
-//      $rootScope.$apply();
+
     });
+
+
   }]).run(
     [ '$rootScope', '$state', '$stateParams', '$window', '$localStorage', '$translate',
       function($rootScope, $state, $stateParams, $window, $localStorage, $translate) {

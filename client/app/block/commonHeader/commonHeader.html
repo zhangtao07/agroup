@@ -57,13 +57,12 @@
         <li class="hidden-xs">
             <a ui-fullscreen></a>
         </li>
-        <li class="dropdown">
+        <!--<li class="dropdown">
             <a href class="dropdown-toggle">
                 <i class="icon-bell fa-fw"></i>
                 <span class="visible-xs-inline">Notifications</span>
                 <span class="badge badge-sm up bg-danger pull-right-xs">2</span>
             </a>
-            <!-- dropdown -->
             <div class="dropdown-menu w-xl animated fadeInUp">
                 <div class="panel bg-white">
                     <div class="panel-heading b-light bg-light">
@@ -92,15 +91,14 @@
                     </div>
                 </div>
             </div>
-            <!-- / dropdown -->
-        </li>
+        </li>-->
         <li class="dropdown">
-            <a href class="dropdown-toggle clear" data-toggle="dropdown">
+            <a href class="dropdown-toggle clear" data-toggle="dropdown" style="height: 50px;">
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img image-resize="{{__user.avatar}}" image-resize-width="40" image-resize-height="40" style="max-width: 40px;max-height: 40px;" alt="{{__user.nickname}}">
+                <div class="_avatar" image-resize="{{__user.avatar}}" image-resize-width="40" image-resize-height="40" style="max-width: 40px;max-height: 40px;" alt="{{__user.nickname}}"></div>
                 <i class="on md b-white bottom"></i>
               </span>
-                <span class="hidden-sm hidden-md">{{__user.nickname}}</span> <b class="caret"></b>
+                <span class="hidden-sm hidden-md">{{__user.nickname}}</span> <!--<b class="caret"></b>-->
             </a>
 
             <ul class="dropdown-menu animated fadeInRight w">

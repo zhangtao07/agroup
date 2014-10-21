@@ -2,7 +2,7 @@
 var config = require("../config/environment");
 var fs = require("fs");
 var ago = require('../components/dateformate/ago');
-
+var filetype = require('../components/filetype');
 module.exports = function(orm, db) {
   var Fileversion = db.define('fileversion', {
     id: {
@@ -49,13 +49,16 @@ module.exports = function(orm, db) {
         return config.root + config.upload_dir + '/' + this.filepath;
       },
       getCover:function(){
-        if (/^image\//.test(this.mimetype)) {
+        var type = filetype(this.mimetype);
+
+        if (type == 'image') {
           return this.getOnlinePath();
-        }else if(/pdf/.test(this.mimetype)){
+        }else if(/pdf|html5video/.test(type)){
           return this.getOnlinePath()+".cover.jpg";
-        }else if(/msword|doc/.test(this.mimetype)){
+        }else if(/word|excel|ppt/.test(type)){
           return this.getOnlinePath()+".pdf.cover.jpg";
         }
+
       },
       getImages: function() {
         if (/^image\//.test(this.mimetype)) {

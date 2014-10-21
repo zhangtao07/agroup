@@ -39,6 +39,22 @@ function processPdf(pdf) {
 
 }
 
+function video2Thumbnail(mimetype,file,callback){
+  var type = filetype(mimetype);
+  var promise = null;
+  if(type == "html5video"){
+    console.info("html5");
+    promise = Q.nfcall(tool.video2Thumbnail,file,file+'.cover.jpg');
+  }
+  if(promise){
+    promise.then(function(){
+      callback(null,file+'.cover.jpg');
+    });
+  }else{
+    callback(null,null);
+  }
+}
+
 function generatePreview(mimetype, file, callback) {
 
   var getPdf;
@@ -197,8 +213,8 @@ module.exports = function(models, args) {
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
           resolve({file: data.file, fv: fileversion, folder: data.folder});
-          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile)]).then(function(result) {
-            var filetext = result[1] || result[0];
+          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile), Q.nfcall(video2Thumbnail,mimetype,saveFile)]).then(function(result) {
+            var filetext = result[2] || result[1] || result[0];
             if (filetext) {
               Q.nfcall(models.filefulltext.create, {
                 utf8segments: chineseSegment(filetext),

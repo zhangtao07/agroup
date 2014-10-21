@@ -1,18 +1,20 @@
 'use strict';
 
-angular.module('agroupApp').factory('authHttpResponseInterceptor',['$q','$location',function($q,$location){
+angular.module('agroupApp').factory('authHttpResponseInterceptor', ['$q', '$window', function($q, $window) {
   return {
-    response: function(response){
+    response: function(response) {
 
 
       return response || $q.when(response);
     },
     responseError: function(rejection) {
-      if (rejection.status === 401) {
-        debugger;
-        console.log("Response Error 401",rejection);
-        location.href ='/auth/login?url='+location.href;
+
+      console.log("Response Error 401", rejection);
+      if (!/\/signin/.test(location.href)) {
+        $window.location.href = 'signin';
       }
+
+
       return $q.reject(rejection);
     }
   }

@@ -12,10 +12,10 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 body {
   font-family: "Helvetica Neue", "Hiragino Sans GB", Helvetica, Arial, sans-serif;
 }
-
 * {
   padding: 0;
   margin: 0;
+
 }
 
 ::-webkit-scrollbar {
@@ -64,7 +64,15 @@ background-color: #e4eaec!important;
   /*transition-delay: 0.1s;*/
   /*animation-delay: 0.1s;*/
 }
-
+._avatar{
+  display: inline-block;
+  border-radius: 50% 50%;
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
 
 // Component styles are injected through grunt
 // injector

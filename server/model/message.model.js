@@ -54,9 +54,7 @@ module.exports = function(orm, db) {
                   "filename": fileversion.filename,
                   "mimetype": fileversion.mimetype
                 }
-                console.info('t1')
                 var ftype = filetype(content.mimetype);
-                console.info('t2')
                 if (ftype == "pdf") {
                   content.pdf = content.filepath;
                 }

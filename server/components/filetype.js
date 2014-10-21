@@ -10,6 +10,8 @@ module.exports = function(mimetype){
     type = 'ppt';
   }else if(/pdf/.test(mimetype)){
     type = 'pdf';
+  }else if(/^video\/(mp4|webm|ogg)$/.test(mimetype)){
+    type = "html5video";
   }
   return type;
 }

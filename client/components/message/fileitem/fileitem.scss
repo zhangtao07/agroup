@@ -3,6 +3,10 @@
   max-height: 200px;
 }
 fileitem{
+  .file-li{
+    display: inline-block;
+    margin: 0 5px;
+  }
   .coverLoading{
     width: 160px;
     height:200px;
