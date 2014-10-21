@@ -35,7 +35,7 @@ define([
         var patchText = diff.patch_toText(patchList);
         firstLineAsTitle(newContent, fileDesc);
         socket.emit('patch', {
-          patch: patchText
+          patch: patchText || ''
         });
       });
 

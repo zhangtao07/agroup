@@ -17,13 +17,17 @@ router.get('/:group', function(req, res) {
   var group = req.params.group;
   var fileid = req.query.file;
   var view = req.query.view;
+  var cache = true;
+  if(typeof req.query.debug !== 'undefined'){
+    cache = false;
+  }
 
   if(!fileid){
     res.redirect('/');
   }else{
     dataCenter.checkFile(fileid,function(err,exists){
       if(exists){
-        return view ? res.render('viewer.html') : res.render('editor.html');
+        return view ? res.render('viewer.html', { cache: cache }) : res.render('editor.html', { cache: cache });
       }else{
         res.render('no-file.html');
       }

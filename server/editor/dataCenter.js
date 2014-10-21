@@ -48,7 +48,7 @@ exports.setContent = function(fileid, content) {
 }
 
 exports.getContent = function(fileid, content) {
-  return cache[fileid].content;
+  return cache[fileid].content || '';
 }
 
 exports.getCache = function(fileid) {
