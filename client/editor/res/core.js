@@ -290,6 +290,7 @@ define([
                     document.body.innerHTML = bodyViewerHTML;
                     if(getParam('notitle')){
                         $('.navbar').hide();
+                        $('.main-container').css({transform:'translateY(-50px)'});
                     }
                 }
                 else {

@@ -1,6 +1,13 @@
 .preview-stage{
   text-align: center;
   padding:0;
+  background: #f6f6f6;
+  pre {
+    background: #fff;
+  }
+}
+.preview-stage .area.canvas{
+  display: inherit;
 }
 .canvas{
   margin: 30px auto;

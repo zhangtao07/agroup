@@ -2,25 +2,9 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var marked = require('marked');
 var dc = require('../../editor/dataCenter.js');
 var Q = require('q');
 var config = require('../../config/environment')
-
-
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  highlight: function(code) {
-    return require('highlight.js').highlightAuto(code).value;
-  }
-});
 
 exports.getConfig = function(req, res) {
   if (req.session.user) {
@@ -45,9 +29,9 @@ exports.preview = function(req, res) {
       width: file && file.width,
       height: file && file.height
     };
-    if(type === 'markdown'){
+    if(type === 'text'){
         fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
-          data.data = marked(content);
+          data.data = content;
           res.json(200,data);
         });
     }else{

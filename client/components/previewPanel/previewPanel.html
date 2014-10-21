@@ -1,20 +1,20 @@
 <!--<div>this is the previewPanel directive</div>-->
 <div class="vbox bg-white-only preview-panel">
-  <div class="wrapper-sm b-b" ng-show="isPreviewType(previewitem.type)">
+  <div class="wrapper-sm b-b" ng-show="previewitem">
     <div class="m-t-n-xxs m-b-n-xxs m-l-xs">
       <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
       </a>
       <div>
-        <a class="btn btn-xs btn-default" ng-hide="!previewitem" ng-click="previewFile(previewitem)" translate="files.preview"></a>
-        <a class="btn btn-xs btn-default" ng-show="previewitem && previewitem.type=='text/x-markdown'" ng-click="editFile(previewitem)" translate="files.edit"></a>
-        <a id="p-download-btn" target="_blank" class="btn btn-xs btn-default" ng-show="previewitem && previewitem.type=='text/x-markdown'" translate="files.download"></a>
+        <a class="btn btn-xs btn-default" ng-click="lookUp(previewitem)" translate="files.preview"></a>
+        <a class="btn btn-xs btn-default" ng-show="previewitem.type=='text/x-markdown'" ng-click="editFile(previewitem)" translate="files.edit"></a>
+        <a id="p-download-btn" target="_blank" class="btn btn-xs btn-default" translate="files.download"></a>
       </div>
       <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
     </div>
   </div>
   <div class="row-row">
-    <div class="cell">
-      <div class="cell-inner preview-stage">
+    <div class="cell preview-stage">
+      <div class="cell-inner ">
       </div>
     </div>
   </div>
