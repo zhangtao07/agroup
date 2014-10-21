@@ -39,7 +39,7 @@ angular.module('agroupApp')
             } else {
               getFile(file, 'image').success(function(res) {
                 file.previewsrc = res.data;
-                element.find('.preview-stage').html('<img class="area canvas" src="' + res.filepath + '"/>');
+                element.find('.preview-stage').html('<span class="img-res" style="background:url(' + res.filepath + ')"/>');
                 downloadBtn.attr('href',res.filepath + '?filename='+ file.name);
                 currentFile = res;
               });

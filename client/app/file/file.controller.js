@@ -138,9 +138,8 @@ angular.module('agroupApp')
       item.editing = false;
     }
 
-    function sendFile(file, folder, folderId, length) {
+    function sendFile(file, folder, folderId, length,completeQueue) {
       var groupId = $stateParams.group;
-      var completeQueue = [];
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
         formData.append('groupId', groupId);
@@ -161,8 +160,9 @@ angular.module('agroupApp')
     $scope.onDrop = function(files, folder) {
       var index = level.indexOf(folder);
       var folderId = index > 0 ? level[index - 1].selectedItem.id : 0;
+      var completeQueue = [];
       files.forEach(function(file) {
-        sendFile(file, folder, folderId, files.length);
+        sendFile(file, folder, folderId, files.length, completeQueue);
       });
     };
 

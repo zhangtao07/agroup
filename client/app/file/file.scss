@@ -62,6 +62,15 @@
     max-width: 100%;
   }
 }
+.preview-stage{
+  .img-res{
+    height: 100%;
+    display: block;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+  }
+}
 .bread-nav{
   margin-bottom: 7px;
   box-shadow: 1px 1px 3px 1px #A0A39E;
