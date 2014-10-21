@@ -49,6 +49,7 @@ module.exports = function(orm, db) {
               if (fileversion) {
                 var content = {
                   "fv_id":fileversion.id,
+                  "file_id":fileversion.file_id,
                   "cover": fileversion.getCover(),
                   "filepath": fileversion.getOnlinePath(),
                   "filename": fileversion.filename,

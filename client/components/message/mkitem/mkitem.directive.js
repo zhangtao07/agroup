@@ -6,7 +6,8 @@ angular.module('agroupApp')
       templateUrl: 'components/message/mkitem/mkitem.html',
       restrict: 'EA',
       scope: {
-        data: '=data'
+        data: '=data',
+        group: '=group'
       },
       link: function (scope, element, attrs) {
 

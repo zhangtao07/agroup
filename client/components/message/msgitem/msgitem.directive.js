@@ -41,7 +41,8 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
     templateUrl: 'components/message/msgitem/msgitem.html',
     restrict: 'EA',
     scope: {
-      data: '=data'
+      data: '=data',
+      group: '=group'
     },
     link: function(scope, element, attrs) {
       var data = scope.data;
