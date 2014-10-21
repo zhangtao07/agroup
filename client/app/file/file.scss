@@ -3,14 +3,52 @@
   top: 38px;
   bottom: 0px;
   left: 0;
-  right: 0;
-
-  width: 100%;
+  /*right: 40%;*/
+  width: 400px;
   overflow: hidden;
-
-  .vbox{
-    min-width: 200px;
+  .w {
+    /*width: 400px;*/
   }
+}
+.app-icons{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background-size: contain !important;
+  vertical-align: middle;
+}
+
+.folder{
+  background: url("/assets/images/folder-icon.png");
+}
+.pdf{
+  background: url("/assets/images/PDF-icon.png");
+}
+.note{
+  background: url("/assets/images/Notes-icon.png");
+}
+.ppt{
+  background: url("/assets/images/PowerPoint-icon.png");
+}
+.word{
+  background: url("/assets/images/Word-icon.png");
+}
+.excel{
+  background: url("/assets/images/Excel-icon.png");
+}
+
+.preview-panel{
+  z-index: 300;
+  /*min-width: 600px;*/
+}
+.file-sys-preview{
+  position: absolute;
+  top: 38px;
+  bottom: 0px;
+  left: 400px;
+  right: 0;
+  /*width: 400px;*/
+  overflow: hidden;
 }
 .preview-stage{
   text-align: left !important;
@@ -22,6 +60,15 @@
 
   img {
     max-width: 100%;
+  }
+}
+.preview-stage{
+  .img-res{
+    height: 100%;
+    display: block;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
   }
 }
 .bread-nav{
@@ -98,26 +145,26 @@
     background: #edf1f2;
     z-index: 1;
   }
-  .ng-enter {
+  .ng-enter-x {
     -webkit-transition: .4s; /* Chrome */
     transition: .4s;
     -webkit-transform: translateX(-100%);
     opacity:0;
     z-index:0;
   }
-  .ng-leave-m{
+  .ng-leave-x{
     -webkit-transition: .4s; /* Chrome */
     transition: .4s;
     opacity:1;
     z-index:0;
   }
 
-  .ng-enter.ng-enter-active {
+  .ng-enter.ng-enter-active-x {
     opacity:1;
     -webkit-transform: translateX(0);
   }
 
-  .ng-leave.ng-leave-active {
+  .ng-leave.ng-leave-active-x {
     opacity:0;
     -webkit-transform: translateX(-100%);
   }

@@ -1,9 +1,12 @@
 <ul class="breadcrumb bg-white b-a bread-nav">
   <li ng-click="home()"><a href=""><i class="fa fa-home"></i> AGroup</a></li>
-  <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)"><a href="">{{ folder.selectedItem.name }}</a></li>
+  <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)">
+    <fileicon ng-show="folder && folder.selectedItem" mimetype="{{folder.selectedItem.type}}" filename="{{folder.selectedItem.name}}"></fileicon>
+    <a href="">{{ folder.selectedItem.name }}</a>
+  </li>
 </ul>
 
-<div class="file-sys-panel scrollable hover" scroll-to ng-init="
+<div class="file-sys-panel" scroll-to ng-init="
   app.settings.asideFixed = true;
   app.settings.asideDock = false;
   app.settings.container = false;
@@ -26,7 +29,8 @@
                 <span tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
                 <span class="block" ng-class="{'m-n': item.selected }">
                   <!--<fileicon  mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>-->
-                  <span class="fa fa-{{ item.type | fileicon }}"></span>
+                  <!--<span class="fa fa-{{ item.type | fileicon }}"></span>-->
+                  <fileicon mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>
                   <em class="text-eclipse" ng-blur="doneEditing(item)" file-editing class="file-ml" ng-blur="doneEditing(item)"></em></span>
                 <!--<input stop-event type="text" class="form-control pos-abt" ng-show="item.editing" file-editing ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%;padding-left:25px;" >-->
               </a>
@@ -41,10 +45,8 @@
       </div>
     </div>
   </div>
-  <!-- column -->
-  <preview-panel class='col'></preview-panel>
-  <!-- /column -->
 </div>
 </div>
 
+<preview-panel class='col file-sys-preview'></preview-panel>
 <uploadpanel control="uploadpanel" style="display: none;"></uploadpanel>

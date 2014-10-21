@@ -1,5 +1,10 @@
 .preview-stage{
   text-align: center;
+  padding:0;
+  background: #f6f6f6;
+}
+.preview-stage .area.canvas{
+  display: inherit;
 }
 .canvas{
   margin: 30px auto;

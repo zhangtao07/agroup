@@ -58,9 +58,10 @@ angular.module('agroupApp')
       folder.selectedItem = item;
       var index = level.indexOf(folder);
 
-      $scope.scrollLeft();
       if (item.type !== 'folder') {
-        closeFolder(index + 1, level.length - index);
+        if(index === level.length-2){
+          closeFolder(index + 1, level.length - index);
+        }
         $scope.preview(item);
       } else {
         getFiles(item, folder, groupId, function(files) {
@@ -69,12 +70,18 @@ angular.module('agroupApp')
           nextLevel.parent_id = item.id;
           $scope.previewFolder(nextLevel.files, nextLevel);
           level.splice(index + 2, level.length - index - 2);
+          setTimeout(function() {
+            $scope.scrollLeft();
+          }.bind(this), 10);
         });
       }
     }
 
     function closeFolder(index, end) {
-      level.splice(index, end);
+      $scope.scrollRight();
+      setTimeout(function() {
+        level.splice(index, end);
+      }.bind(this), 600);
     }
 
     function clearSelect(folder) {
@@ -131,9 +138,8 @@ angular.module('agroupApp')
       item.editing = false;
     }
 
-    function sendFile(file, folder, folderId, length) {
+    function sendFile(file, folder, folderId, length,completeQueue) {
       var groupId = $stateParams.group;
-      var completeQueue = [];
       panel.addFile(file, function(file, send) {
         var formData = new FormData();
         formData.append('groupId', groupId);
@@ -154,8 +160,9 @@ angular.module('agroupApp')
     $scope.onDrop = function(files, folder) {
       var index = level.indexOf(folder);
       var folderId = index > 0 ? level[index - 1].selectedItem.id : 0;
+      var completeQueue = [];
       files.forEach(function(file) {
-        sendFile(file, folder, folderId, files.length);
+        sendFile(file, folder, folderId, files.length, completeQueue);
       });
     };
 

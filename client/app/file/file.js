@@ -48,7 +48,12 @@ angular.module('agroupApp')
     return function(scope, element, attrs) {
       //window.element = element;
       scope.scrollLeft = function(){
-        element.scrollLeft(1000);
+        //element.scrollLeft(1000);
+        element.animate( { scrollLeft: '+=200' }, 400)
+      };
+      scope.scrollRight = function(){
+        //element.scrollLeft(1000);
+        element.animate( { scrollLeft: '-=200' }, 400)
       };
       //element.scrollLeft(1000);
     };
@@ -101,16 +106,16 @@ angular.module('agroupApp')
           icon = 'file-text';
           break;
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-          icon = 'file-o';
+          icon = ' app-icons ppt';
           break;
         case 'application/x-rar-compressed':
           icon = 'file-zip-o';
           break;
         case 'application/msword':
-          icon = 'file-word-o';
+          icon = ' app-icons word';
           break;
         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-          icon = 'file-word-o';
+          icon = ' app-icons word';
           break;
         case 'application/vnd.ms-excel':
           icon = 'file-excel-o'
@@ -122,7 +127,6 @@ angular.module('agroupApp')
           icon = 'file';
           break;
         default:
-          //icon = 'file';
       }
       return icon;
     }

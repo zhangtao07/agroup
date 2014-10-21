@@ -10,6 +10,7 @@ router.get('/previewUrl', controller.previewUrl);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/folder/:groupid/:folderid', controller.getFiles);
+router.post('/config', controller.getConfig);
 router.post('/preview/:id', controller.preview);
 router.post('/images/:groupid', controller.getMDimage);
 router.post('/', controller.create);

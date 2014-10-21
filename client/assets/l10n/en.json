@@ -23,6 +23,10 @@
   "edite": "Edite",
   "delete": "Delete",
   "refresh": "sync"
+},
+"files" : {
+  "preview" : "Preview",
+  "edit" : "Edit",
+  "download" : "Download"
 }
-
 }

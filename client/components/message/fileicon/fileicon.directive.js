@@ -13,7 +13,9 @@ angular.module('agroupApp')
       "video":"fa fa-file-video-o",
       "sound":"fa fa-file-sound-o",
       "text":"fa fa-file-text-o",
-      "file":"fa fa-file-o"
+      "file":"fa fa-file-o",
+      'folder': 'fa fa-folder',
+      'markdown': 'fa fa-file-text-o'
     }
 
     function getClassByFilename(filename){
@@ -49,7 +51,7 @@ angular.module('agroupApp')
       var className = null;
       if(/image/.test(mimetype)){
         className = classTypes['image'];
-      }else if(/ms[-]*word|officedocument/.test(mimetype)){
+      }else if(/ms[-]*word/.test(mimetype)){
         className = classTypes['word'];
       }else if(/ms[-]*excel|spreadsheetml/.test(mimetype)){
         className = classTypes['excel'];
@@ -57,7 +59,12 @@ angular.module('agroupApp')
         className = classTypes['ppt'];
       }else if(/pdf/.test(mimetype)){
         className = classTypes['pdf'];
+      }else if(/folder/.test(mimetype)){
+        className = classTypes['folder'];
+      }else if(/markdown/.test(mimetype)){
+        className = classTypes['markdown'];
       }
+      console.log(mimetype);
       return className;
     }
 

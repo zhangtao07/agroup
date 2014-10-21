@@ -35,7 +35,7 @@ define([
         var patchText = diff.patch_toText(patchList);
         firstLineAsTitle(newContent, fileDesc);
         socket.emit('patch', {
-          patch: patchText
+          patch: patchText || ''
         });
       });
 
@@ -91,7 +91,9 @@ define([
         //console.log(data);
         groupid = data.group;
         $('#my-avatar').attr('src', imgresize(data.user.avatar) || '/assets/images/avatar.jpg');
-        socket.emit('editor-join', data);
+        if(!viewerMode){
+          socket.emit('editor-join', data);
+        }
       });
 
       function getImgname(filepath) {

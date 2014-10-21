@@ -2,27 +2,17 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-//var File = require('./file.model');
-var marked = require('marked');
 var dc = require('../../editor/dataCenter.js');
 var Q = require('q');
-
 var config = require('../../config/environment')
 
-
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  highlight: function(code) {
-    return require('highlight.js').highlightAuto(code).value;
+exports.getConfig = function(req, res) {
+  if (req.session.user) {
+    return res.json(200, config.op);
+  } else {
+    return handleError(res, 'login first');
   }
-});
+}
 
 exports.preview = function(req, res) {
   var type = req.body.type;
@@ -32,37 +22,20 @@ exports.preview = function(req, res) {
     if (err) {
       return handleError(err);
     }
-    var result = '';
-    switch (type) {
-      case 'markdown':
-        result = file.getRealpath();
+    var data = {
+      err: err,
+      cover: file && file.getCover(),
+      filepath: file && file.getOnlinePath(),
+      width: file && file.width,
+      height: file && file.height
+    };
+    if(type === 'text'){
         fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
-          res.json(200, {
-            err: err,
-            data: marked(content),
-            width: file.width,
-            height: file.height
-          });
+          data.data = content;
+          res.json(200,data);
         });
-        break;
-      case 'pdf':
-        res.json(200, {
-          err: err,
-          data: file.getCover(),
-          pdf: file.getOnlinePath(),
-          width: file.width,
-          height: file.height
-        });
-        break;
-      default:
-        result = file.getOnlinePath();
-        res.json(200, {
-          err: err,
-          data: result,
-          width: file.width,
-          height: file.height
-        });
-        break;
+    }else{
+      res.json(200,data);
     }
   });
 };
