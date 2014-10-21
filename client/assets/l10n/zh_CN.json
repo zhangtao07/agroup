@@ -24,6 +24,11 @@
   "edite": "编辑",
   "delete": "删除",
   "refresh": "同步"
+},
+"files" : {
+  "preview" : "预览",
+  "edit" : "编辑",
+  "download" : "下载"
 }
 
 }

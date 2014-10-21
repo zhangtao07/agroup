@@ -5,8 +5,9 @@
       <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
       </a>
       <div>
-        <a class="btn btn-xs btn-default" ng-hide="!previewitem" ng-click="previewFile(previewitem)">Preview</a>
-        <a class="btn btn-xs btn-default" ng-show="previewitem && previewitem.type=='text/x-markdown'" ng-click="editFile(previewitem)">Edit</a>
+        <a class="btn btn-xs btn-default" ng-hide="!previewitem" ng-click="previewFile(previewitem)" translate="files.preview"></a>
+        <a class="btn btn-xs btn-default" ng-show="previewitem && previewitem.type=='text/x-markdown'" ng-click="editFile(previewitem)" translate="files.edit"></a>
+        <a id="p-download-btn" target="_blank" class="btn btn-xs btn-default" ng-show="previewitem && previewitem.type=='text/x-markdown'" translate="files.download"></a>
       </div>
       <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
     </div>

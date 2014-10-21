@@ -9,6 +9,8 @@ angular.module('agroupApp')
 
         var lp = $localStorage['file.lastpreview'] = $localStorage['file.lastpreview'] || {};
 
+        var downloadBtn = element.find('#p-download-btn');
+
         function getFile(file, type) {
           var defer = {
             parale: [],
@@ -36,14 +38,15 @@ angular.module('agroupApp')
             } else {
               getFile(file, 'image').success(function(res) {
                 file.previewsrc = res.data;
-                element.find('.preview-stage').html('<img class="area canvas" src="' + res.data + '"/>');
+                element.find('.preview-stage').html('<img class="area canvas" src="' + res.filepath + '"/>');
               });
             }
           },
           'text/x-markdown': function(file) {
             getFile(file, 'markdown').success(function(res) {
-              //element.find('.preview-stage').html('<iframe src=' + res.data + ' class=area /></iframe>');
-              var md = element.find('.preview-stage').html(res.data);
+              element.find('.preview-stage').html('<iframe src="/editor/' + file.group.id + '?file='+file.file_id+'&view=true&notitle=true" class=area /></iframe>');
+              //var md = element.find('.preview-stage').html(res.data);
+              downloadBtn.attr('href',res.filepath + '?filename='+ file.name);
               var img = md.find('img');
               if(img.length){
                 img.each(function(i,d){

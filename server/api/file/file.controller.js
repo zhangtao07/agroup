@@ -22,10 +22,10 @@ marked.setOptions({
   }
 });
 
-exports.getConfig = function(req,res){
-  if(req.session.user){
-    return res.json(200,config.op);
-  }else{
+exports.getConfig = function(req, res) {
+  if (req.session.user) {
+    return res.json(200, config.op);
+  } else {
     return handleError(res, 'login first');
   }
 }
@@ -38,46 +38,20 @@ exports.preview = function(req, res) {
     if (err) {
       return handleError(err);
     }
-    var result = '';
-    switch (type) {
-      case 'markdown':
-        result = file.getRealpath();
+    var data = {
+      err: err,
+      cover: file && file.getCover(),
+      filepath: file && file.getOnlinePath(),
+      width: file && file.width,
+      height: file && file.height
+    };
+    if(type === 'markdown'){
         fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
-          res.json(200, {
-            err: err,
-            data: marked(content),
-            width: file && file.width,
-            height:file && file.height
-          });
+          data.data = marked(content);
+          res.json(200,data);
         });
-        break;
-      case 'pdf':
-        res.json(200, {
-          err: err,
-          cover: file && file.getCover(),
-          filepath: file && file.getOnlinePath(),
-          width: file && file.width,
-          height:file && file.height
-        });
-        break;
-      case 'office':
-        res.json(200,{
-          err: err,
-          cover: file && file.getCover(),
-          filepath: file && file.getOnlinePath(),
-          width:file && file.width,
-          height:file && file.height
-        });
-        break;
-      default:
-        result = file.getOnlinePath();
-        res.json(200, {
-          err: err,
-          data: result,
-          width: file && file.width,
-          height:file && file.height
-        });
-        break;
+    }else{
+      res.json(200,data);
     }
   });
 };
@@ -251,15 +225,15 @@ exports.previewUrl = function(req, res) {
   req.models.fileversion.get(fileversionID, function(err, fileversion) {
     var type = filetype(fileversion.mimetype);
     var filepath = fileversion.getOnlinePath();
-    var pdf = filepath+".pdf";
+    var pdf = filepath + ".pdf";
     var filename = fileversion.filename;
     var pdfRedir = '/pdf?file=' + pdf + '&download=' + filepath + '?filename=' + filename;
     var redirUrl = "about:blank";
     if (/word|excel|ppt/.test(type)) {
-      if(config.owa_server){
-        var url = 'http://'+config.hostname+":"+config.port+filepath;
-        redirUrl = config.owa_server+'?src='+encodeURIComponent(url);
-      }else{
+      if (config.owa_server) {
+        var url = 'http://' + config.hostname + ":" + config.port + filepath;
+        redirUrl = config.owa_server + '?src=' + encodeURIComponent(url);
+      } else {
         redirUrl = pdfRedir;
       }
 

@@ -288,6 +288,9 @@ define([
 
                 if(window.viewerMode === true) {
                     document.body.innerHTML = bodyViewerHTML;
+                    if(getParam('notitle')){
+                        $('.navbar').hide();
+                    }
                 }
                 else {
                     document.body.innerHTML = bodyEditorHTML;
