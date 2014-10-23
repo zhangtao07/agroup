@@ -1,6 +1,6 @@
 <div ng-repeat="item in data.list" class="file-li" >
     <div ng-if="item.cover" ng-switch on="!!item.isImg">
-        <a class="img-container" ng-switch-when="true" blueimp-href="{{item.filepath}}" blueimp-cover="{{item.cover}}" blueimp-title="{{item.filename}}" blueimp-type="{{item.mimetype}}" ng-click="onGallery($event.target,$event)">
+        <a class="img-container" ng-switch-when="true" blueimp-href="{{item.filepath}}" blueimp-cover="{{item.cover}}" blueimp-title="{{item.filename}}" blueimp-type="{{item.mimetype}}" ng-click="onGallery($event)">
             <img class="imageitem-img img-thumbnail" image-resize="{{item.cover}}" image-resize-width="200" image-resize-height="200" title="{{item.filename}}"/>
             <i class="fa fa-play-circle-o" ng-show="item.isVideo"></i>
         </a>

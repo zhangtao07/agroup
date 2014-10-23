@@ -10,7 +10,8 @@ angular.module('agroupApp')
       },
       link: function(scope, element, attrs) {
 
-        scope.onGallery = function(el, event) {
+        scope.onGallery = function(event) {
+          var el = event.target;
           var parent = event.target.parentNode;
           var index;
           var $links = $(el).closest('msglist').find('[blueimp-href]');
