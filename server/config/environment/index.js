@@ -74,12 +74,16 @@ var all = {
     database: mysql.database
   }
 
-
-
 };
 
-var local = require('./local.js') || {};
+var localConfig;
+
+try {
+  localConfig = require('./local.js');
+} catch(e) {
+  localConfig = {};
+}
 
 // Export the config object based on the NODE_ENV
 // ==============================================
-module.exports = _.merge(_.merge(all, envConfig), local);
+module.exports = _.merge(_.merge(all, envConfig), localConfig);
