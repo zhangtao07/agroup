@@ -48,15 +48,15 @@ module.exports = function(orm, db) {
       getRealpath: function() {
         return config.root + config.upload_dir + '/' + this.filepath;
       },
-      getCover:function(){
-        var type = filetype(this.mimetype,this.filename);
+      getCover: function() {
+        var type = filetype(this.mimetype, this.filename);
 
         if (type == 'image') {
           return this.getOnlinePath();
-        }else if(/pdf|html5video/.test(type)){
-          return this.getOnlinePath()+".cover.jpg";
-        }else if(/word|excel|ppt/.test(type)){
-          return this.getOnlinePath()+".pdf.cover.jpg";
+        } else if (/pdf|html5video/.test(type)) {
+          return this.getOnlinePath() + ".cover.jpg";
+        } else if (/word|excel|ppt/.test(type)) {
+          return this.getOnlinePath() + ".pdf.cover.jpg";
         }
 
       },
@@ -71,26 +71,32 @@ module.exports = function(orm, db) {
           });
         }
       },
-      get: function(user,cb) {
+      get: function(cb) {
         var self = this;
-        var result = {
-          id: self.file_id,
-          filename: self.filename,
-          user: {
-            avatar: '/api/user/avatar/' + user.username,
-            nickname: user.nickname,
-          },
-          time: ago(self.updateDate),
-          content: ''
-        }
+        var user = this.getUser;
+        this.getUser(function(err, user) {
 
-        self.getFile(function(err,file){
-          result.filename = file.name;
-        });
+          var result = {
+            id: self.file_id,
+            filename: self.filename,
+            user: {
+              avatar: '/api/user/avatar/' + user.username,
+              nickname: user.nickname,
+            },
+            time: ago(self.updateDate),
+            content: ''
+          }
 
-        fs.readFile(this.getRealpath(), 'utf8', function(err, content) {
-          result.content = content;
-          cb(err,result);
+          self.getFile(function(err, file) {
+            result.filename = file.name;
+          });
+
+          fs.readFile(self.getRealpath(), 'utf8', function(err, content) {
+            result.content = content;
+            console.log(cb);
+            return cb && cb(err, result);
+          });
+
         });
       }
     }

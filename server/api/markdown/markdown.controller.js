@@ -118,7 +118,7 @@ function getFileversion(user, files, res, models, group, limit, offset) {
       var latestVersion = _.max(versions, function(version) {
         return version.createDate;
       });
-      latestVersion.get(user, function data(err, result) {
+      latestVersion.get(function data(err, result) {
         if (err) return errorHandler(res, err);
         //当前正在编辑的内容
         var cached = ed.getCache(result.id);
