@@ -2,7 +2,7 @@
 var exec = require('child_process').exec;
 
 exports.video2Thumbnail = function(input,output,callback){
-  exec('ffmpeg -i '+input+' -ss 00:00:01 -f image2 -vframes 1 '+output,function(error, stdout, stderr) {
+  exec('avconv -i '+input+' -ss 00:00:01 -f image2 -vframes 1 '+output,function(error, stdout, stderr) {
     var err = error || stderr;
     if (err) {
       console.info(err);
