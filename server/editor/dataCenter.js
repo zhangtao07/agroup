@@ -196,7 +196,7 @@ function createFolder(file,user){
       user_id: user.id,
       group_id: file.group_id
     };
-    db.models.folder.find(defaultFolder,function(err,data){
+    db.models.folder.find({ name : '笔记' , group_id: file.group_id },function(err,data){
       var defaultFolderCreated = data && data.length;
       if(defaultFolderCreated){
         createSubfile(db,user,file,data[0].id);
