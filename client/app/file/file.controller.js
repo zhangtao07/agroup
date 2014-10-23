@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', ['$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI',
-    function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI) {
+  .controller('FileCtrl', ['$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
+    function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
 
       //var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       //files: [],
@@ -24,7 +24,13 @@ angular.module('agroupApp')
       $scope.editItem = editItem;
       $scope.doneEditing = doneEditing;
       $scope.home = home;
-      init();
+      var groupName = $stateParams.name;
+
+      groupAPI.getGroupByName(groupName).success(function(res){
+        $scope.group = res.data;
+        init();
+      });
+
 
       function getFiles(item, folder, groupId, cb) {
         folderAPI.getFiles(groupId, item.id).success(function(files, status) {
@@ -41,7 +47,7 @@ angular.module('agroupApp')
       }
 
       function init() {
-        var group = $stateParams.group;
+        var group = $scope.group.id;
         var firstLevel = level[0];
         getFiles({
           id: 0
@@ -59,7 +65,7 @@ angular.module('agroupApp')
       }
 
       function selectItem(folder, item) {
-        var groupId = $stateParams.group;
+        var groupId = $scope.group.id;
         clearSelect(folder);
         item.selected = true;
         folder.selectedItem = item;
@@ -124,7 +130,7 @@ angular.module('agroupApp')
           parent_id: index > 0 ? level[index - 1].selectedItem.id : 0,
           type: content && content.mimetype || 'folder',
           file_id: fileid && fileid || 0,
-          group_id: $stateParams.group
+          group_id: $scope.group.id
         };
         $http.post('api/files/', data).success(function(d, status) {
           level[index].files.push(d);
@@ -146,7 +152,7 @@ angular.module('agroupApp')
       }
 
       function sendFile(file, folder, folderId, length, completeQueue) {
-        var groupId = $stateParams.group;
+        var groupId = $scope.group.id;
         panel.addFile(file, function(file, send) {
           var formData = new FormData();
           formData.append('groupId', groupId);

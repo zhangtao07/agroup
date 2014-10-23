@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MarkdownCtrl', ['$scope', '$http', '$stateParams', 'Modal','$location',function($scope, $http, $stateParams, Modal,$location) {
+  .controller('MarkdownCtrl', ['$scope', '$http', '$stateParams', 'Modal','$location','groupAPI',function($scope, $http, $stateParams, Modal,$location,groupAPI) {
 
     $scope.markdowns = [];
     function success(data, status) {
@@ -14,7 +14,7 @@ angular.module('agroupApp')
       });
     }
 
-    $scope.group = $stateParams.group;
+    //$scope.group = $stateParams.group;
 
     var confirm = Modal.confirm.delete;
     var dialog  = Modal.dialog;
@@ -46,7 +46,7 @@ angular.module('agroupApp')
 
     $scope.loadList = function(pageno){
       $scope.hasMore = true;
-      var group = $stateParams.group;
+      var group = $scope.group.id;
       pagenation.offset = pageno * pagenation.limit;
       $scope.pageno++;
       $http.get('/api/markdowns/'+group,{ params:pagenation}).success(success);
@@ -54,16 +54,21 @@ angular.module('agroupApp')
 
     $scope.hasMore = true;
 
-    init();
+    var groupName = $stateParams.name;
+    groupAPI.getGroupByName(groupName).success(function(res){
+      $scope.group = res.data;
+      init();
+    });
+
 
     function init() {
-      var group = $stateParams.group;
+      var group = $scope.group.id;
       $http.get('/api/markdowns/'+group).success(success);
     }
 
-    window.addEventListener("message", receiveMessage, false);
-    function receiveMessage(event) {
-      init();
-    }
+    //window.addEventListener("message", receiveMessage, false);
+    //function receiveMessage(event) {
+      //init();
+    //}
 
   }]);
