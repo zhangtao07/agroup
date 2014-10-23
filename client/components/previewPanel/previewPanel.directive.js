@@ -129,7 +129,6 @@ angular.module('agroupApp')
               pdf(item.pdf);
               break;
             default:
-              debugger;
               if(isOfficeFile(item)){
                 window.open(folderAPI.office.view(currentFile.id), '_blank');
               }else{
