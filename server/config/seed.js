@@ -10,6 +10,11 @@ module.exports = function(db, cb) {
         }, function() {
           cb && cb();
         });
+        db.models.group.create({
+          name: "fex"
+        }, function() {
+          cb && cb();
+        });
       }
     });
 

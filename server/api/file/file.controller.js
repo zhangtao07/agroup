@@ -208,6 +208,9 @@ exports.previewUrl = function(req, res) {
   var fileversionID = req.query.id;
   var repreviewUrltype = req.query.type || 'view';
   req.models.fileversion.get(fileversionID, function(err, fileversion) {
+    if(err){
+      return;
+    }
     var type = filetype(fileversion.mimetype);
     var filepath = fileversion.getOnlinePath();
     var filename = fileversion.filename;
