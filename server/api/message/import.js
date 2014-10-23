@@ -33,9 +33,13 @@ function processPdf(pdf) {
 
   Q.nfcall(tool.pdfToConver, pdf, 300, 25, pdf + '.cover.jpg');
 
-  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
+//  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
 
-  return Q.nfcall(tool.getPDFText, pdf);
+  return Q.nfcall(function(){
+    return null;
+  });
+
+//  return Q.nfcall(tool.getPDFText, pdf);
 
 }
 
@@ -101,7 +105,10 @@ var jschardet = require("jschardet");
 var istextorbinary = require('istextorbinary');
 
 function extractPlainFileText(file) {
-  return Q.promise(function(resolve) {
+  return Q.nfcall(function(){
+    return false;
+  });
+  /*return Q.promise(function(resolve) {
     istextorbinary.isText(file, null, function(err, result) {
       if (result) {
         Q.nfcall(fs.readFile, file).then(function(buffer) {
@@ -122,7 +129,7 @@ function extractPlainFileText(file) {
         return charsetConverter.convert(buffer).toString();
       }
     }
-  });
+  });*/
 }
 /**
  *
