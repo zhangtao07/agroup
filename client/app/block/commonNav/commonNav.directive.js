@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('commonNav', function (userAPI) {
+  .directive('commonNav', ['userAPI',function (userAPI) {
     return {
       templateUrl: 'app/block/commonNav/commonNav.html',
       restrict: 'EA',
@@ -17,4 +17,4 @@ angular.module('agroupApp')
         });
       }
     };
-  });
+  }]);

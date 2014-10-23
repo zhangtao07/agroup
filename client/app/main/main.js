@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .config(function($stateProvider) {
+  .config(['$stateProvider',function($stateProvider) {
     $stateProvider
       .state('app', {
         url: '',
@@ -9,4 +9,4 @@ angular.module('agroupApp')
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
       });
-  });
+  }]);

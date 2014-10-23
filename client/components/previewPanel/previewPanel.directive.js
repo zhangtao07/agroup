@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http, $state,pdf,$localStorage,folderAPI) {
+  .directive('previewPanel', ['$http', '$state','pdf','$localStorage','folderAPI',function($http, $state,pdf,$localStorage,folderAPI) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
@@ -151,4 +151,4 @@ angular.module('agroupApp')
         };
       }
     };
-  });
+  }]);

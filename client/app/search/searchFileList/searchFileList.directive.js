@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('agroupApp').directive('searchFileList', function(searchAPI) {
+angular.module('agroupApp').directive('searchFileList', ['searchAPI',function(searchAPI) {
   return {
     templateUrl: 'app/search/searchFileList/searchFileList.html',
     restrict: 'EA',
@@ -63,4 +63,4 @@ angular.module('agroupApp').directive('searchFileList', function(searchAPI) {
     }
 
   }
-});
+}]);

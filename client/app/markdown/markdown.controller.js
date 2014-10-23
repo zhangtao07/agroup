@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MarkdownCtrl', function($scope, $http, $stateParams, Modal,$location) {
+  .controller('MarkdownCtrl', ['$scope', '$http', '$stateParams', 'Modal','$location',function($scope, $http, $stateParams, Modal,$location) {
 
     $scope.markdowns = [];
     function success(data, status) {
@@ -66,4 +66,4 @@ angular.module('agroupApp')
       init();
     }
 
-  });
+  }]);

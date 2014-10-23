@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI) {
+  .controller('FileCtrl', ['$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI',function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI) {
 
     var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       files: [],
@@ -166,4 +166,4 @@ angular.module('agroupApp')
       });
     };
 
-  });
+  }]);

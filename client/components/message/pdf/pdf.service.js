@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('agroupApp').factory('pdf', function($document, $compile,$rootScope) {
+angular.module('agroupApp').factory('pdf',['$document', '$compile','$rootScope',function($document, $compile,$rootScope) {
 
   return function(file, download) {
     var template = angular.element('<pdf></pdf>');
@@ -17,4 +17,4 @@ angular.module('agroupApp').factory('pdf', function($document, $compile,$rootSco
 
   }
 
-});
+}]);

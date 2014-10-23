@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('agroupApp').controller('SearchCtrl', function($scope, $stateParams,$state,$rootScope) {
+angular.module('agroupApp').controller('SearchCtrl', ['$scope', '$stateParams','$state','$rootScope',function($scope, $stateParams,$state,$rootScope) {
 
   $scope.keyword = $scope._keyword = $stateParams['keyword'];
   $scope.$emit('searchKeyword', $scope.keyword);
@@ -14,5 +14,5 @@ angular.module('agroupApp').controller('SearchCtrl', function($scope, $statePara
     })
   }
 
-});
+}]);
 

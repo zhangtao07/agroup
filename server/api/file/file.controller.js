@@ -29,7 +29,7 @@ exports.preview = function(req, res) {
       width: file && file.width,
       height: file && file.height
     };
-    if(type === 'text'){
+    if(type === 'text' && file){
         fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
           data.data = content;
           res.json(200,data);
