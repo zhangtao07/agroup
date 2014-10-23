@@ -24,7 +24,7 @@ exports.preview = function(req, res) {
     }
     var data = {
       err: err,
-      id:file.id,
+      id:file && file.id,
       cover: file && file.getCover(),
       filepath: file && file.getOnlinePath(),
       width: file && file.width,
