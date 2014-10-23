@@ -49,7 +49,7 @@ module.exports = function(orm, db) {
         return config.root + config.upload_dir + '/' + this.filepath;
       },
       getCover:function(){
-        var type = filetype(this.mimetype);
+        var type = filetype(this.mimetype,this.filename);
 
         if (type == 'image') {
           return this.getOnlinePath();
