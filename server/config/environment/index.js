@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
 var _ = require('lodash');
 
 function requiredProcessEnv(name) {
@@ -77,9 +78,8 @@ var all = {
 
 };
 
+var local = require('./local.js') || {};
 
 // Export the config object based on the NODE_ENV
 // ==============================================
-module.exports = _.merge(
-  all, envConfig
-);
+module.exports = _.merge(_.merge(all, envConfig), local);
