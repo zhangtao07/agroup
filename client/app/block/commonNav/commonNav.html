@@ -5,7 +5,7 @@
     </li>
 
     <li ui-sref-active="active" ng-repeat="group in groups">
-        <a href ui-sref="app.group({name:group.name})" ng-click="">
+        <a href ui-sref="app.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">
             <i class="glyphicon glyphicon-file icon text-success"></i>
             <span class="font-bold">{{group.name}}</span>
         </a>
@@ -16,7 +16,7 @@
         <span translate="aside.nav.components.COMPONENTS">Components</span>
     </li>
 
-    <li ui-sref-active="active">
+    <li ui-sref-active="active" >
         <a href ui-sref="app.markdown({group:__currentGroupId})">
             <i class="glyphicon glyphicon-file icon text-success"></i>
             <span translate="aside.nav.components.MDS">Markdowns</span>
@@ -30,17 +30,20 @@
         </a>
     </li>
 
-    <li ui-sref-active="active">
+    <li disabled ui-sref-active="active">
         <a>
             <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
             <span translate="aside.nav.components.TASKS">Tasks</span>
+            <span>（敬请期待.）</span>
         </a>
     </li>
 
-    <li ui-sref-active="active">
+    <!--disabled-->
+    <li disabled ui-sref-active="active">
         <a>
             <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
             <span translate="aside.nav.components.LINKS">Links</span>
+            <span>（敬请期待.）</span>
         </a>
     </li>
 

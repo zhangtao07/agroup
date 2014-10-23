@@ -21,7 +21,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
             scope.uploadpanel.addFile(file, function(file, send) {
               var formData = new FormData();
               formData.append('groupId', groupId);
-              formData.append('file', file);
+              formData.append('file', file,file.name);
               send('api/message/upload', formData);
             }, function(fileId) {
               fileIds.push(fileId);
@@ -87,7 +87,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
                 var item = items[i];
                 var file = item.getAsFile();
                 if (!file.name) {
-                  file.name = "未命名文件";
+                  file.name = "屏幕截图.jpg";
                 }
                 files.push(file);
               }
