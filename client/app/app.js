@@ -100,7 +100,7 @@ var app = angular.module('agroupApp', [
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
       $urlRouterProvider
-        .otherwise('/group/Fex讨论组');
+        .otherwise('/group/playground');
 
       $locationProvider.html5Mode(true);
 
