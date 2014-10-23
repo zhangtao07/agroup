@@ -7,7 +7,9 @@ angular.module('agroupApp')
       restrict: 'EA',
       link: function(scope, element, attrs) {
 
-        var lp = $localStorage['file.lastpreview'] = $localStorage['file.lastpreview'] || {};
+        //var lp = $localStorage['file.lastpreview'] = $localStorage['file.lastpreview'] || {};
+
+        var lp = {};
 
         var downloadBtn = element.find('#p-download-btn');
         var currentFile = {};
