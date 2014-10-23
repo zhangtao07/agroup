@@ -9,7 +9,7 @@ angular.module('agroupApp').controller('GroupCtrl',['groupAPI','$stateParams','$
     $scope.group = res.data;
 
     $rootScope.__currentGroupId = res.data.id;
-
+    $rootScope.__currentGroupName = res.data.name;
   });
 
 }]);

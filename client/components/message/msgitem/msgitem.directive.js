@@ -7,7 +7,7 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
     var text = '';
     switch (data.type) {
       case 'link':
-        text = '分享了1个连接';
+        text = '分享了 1 个连接';
         break;
       case 'file':
         var action = '';
@@ -16,10 +16,10 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
             action = '分享';
             break;
         }
-        text = action + '了' + data.content.list.length + '个文件';
+        text = action + '了 ' + data.content.list.length + ' 个文件';
         break;
       case 'plain':
-        text = '输入了1段文字';
+        text = '输入了 1 段文字';
         break;
       case 'mk':
         var action = '';
@@ -31,7 +31,7 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
             action = '更新';
             break;
         }
-        text = action + '了' + data.content.list.length + '个笔记';
+        text = action + '了 ' + data.content.list.length + ' 个笔记';
         break;
     }
     return text;
