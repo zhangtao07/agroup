@@ -14,7 +14,7 @@ module.exports = {
     host: "127.0.0.1",
     database: "agroup",
     user: "root",
-    password: "end",
+    password: "1111",
     port: 3306
   },
   op: {
@@ -22,7 +22,5 @@ module.exports = {
     view: '/op/view.aspx?src=',
     embed: '/op/embed.aspx?src='
   },
-
-  owa_server: 'http://172.22.65.38/',
-  hostname:'zzm.com'
+  hostname:'agroup.baidu.com'
 };

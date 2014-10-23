@@ -17,7 +17,6 @@ module.exports = {
     password: "root",
     port: 3306
   },
-  owa_server: 'http://172.22.65.38/op/view.aspx',
   op: {
     server :'http://172.22.65.38',
     view: '/op/view.aspx?src=',

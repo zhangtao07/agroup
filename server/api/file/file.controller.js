@@ -24,6 +24,7 @@ exports.preview = function(req, res) {
     }
     var data = {
       err: err,
+      id:file.id,
       cover: file && file.getCover(),
       filepath: file && file.getOnlinePath(),
       width: file && file.width,
@@ -205,16 +206,16 @@ var filetype = require('../../components/filetype');
 
 exports.previewUrl = function(req, res) {
   var fileversionID = req.query.id;
-  console.info(fileversionID);
+  var repreviewUrltype = req.query.type || 'view';
   req.models.fileversion.get(fileversionID, function(err, fileversion) {
     var type = filetype(fileversion.mimetype);
     var filepath = fileversion.getOnlinePath();
     var filename = fileversion.filename;
     var redirUrl = "about:blank";
     if (/word|excel|ppt/.test(type)) {
-      if(config.owa_server){
+      if(config.op){
         var url = 'http://'+config.hostname+":"+config.port+filepath;
-        redirUrl = config.owa_server+'?src='+encodeURIComponent(url);
+        redirUrl = config.op.server+config.op[repreviewUrltype]+encodeURIComponent(url);
       }else{
         redirUrl = '/pdf?file=' + filepath + '.pdf&download=' + filepath + '?filename=' + filename;
       }
