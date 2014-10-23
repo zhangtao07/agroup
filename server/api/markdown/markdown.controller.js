@@ -97,7 +97,14 @@ exports.index = function(req, res) {
       }]
     }).order('-createDate').limit(limit).offset(offset)
     .run(function(err, files) {
-      getFileversion(user, files, res, req.models, group, limit, offset);
+      if(files.length){
+        getFileversion(user, files, res, req.models, group, limit, offset);
+      }else{
+          return res.status(200).json({
+            list: [],
+            hasMore: false
+          });
+      }
     });
 }
 
