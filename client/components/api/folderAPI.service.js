@@ -2,10 +2,6 @@
 
 angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
   function(apiRoot, $http) {
-    var op;
-    $http.post(apiRoot + 'api/files/config').success(function(data) {
-      op = data;
-    });
     return {
       getFiles: function(groupId, folderId) {
         return $http.get(apiRoot + "api/files/folder/" + groupId + '/' + folderId);
@@ -21,14 +17,13 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
         });
       },
       office: {
-        embed: function(filepath, width, height) {
+        embed: function(fv_id, width, height) {
           width = width || '100%';
           height = height || '100%';
-          var uri = op.server + op.embed + location.origin + filepath;
-          return '<iframe src="' + uri + '" width="' + width + '" height="' + height + '" frameborder="0" class=area /></iframe>';
+          return '<iframe src="api/files/previewUrl?id=' + fv_id + '" width="' + width + '" height="' + height + '" frameborder="0" class=area /></iframe>';
         },
-        view: function(filepath) {
-          return op.server + op.view + location.origin + filepath;
+        view: function(fv_id) {
+          return 'api/files/previewUrl?id=' + fv_id;
         }
       }
 

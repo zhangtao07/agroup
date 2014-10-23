@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('commonHeader', function ($rootScope,$state) {
+  .directive('commonHeader', ['$rootScope','$state',function ($rootScope,$state) {
     return {
       templateUrl: 'app/block/commonHeader/commonHeader.html',
       restrict: 'EA',
@@ -18,4 +18,4 @@ angular.module('agroupApp')
         }
       }
     };
-  });
+  }]);

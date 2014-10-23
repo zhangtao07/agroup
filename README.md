@@ -12,7 +12,7 @@ gm
 
 gs
 
-ffmpeg
+libav
 
 mac 下：
 

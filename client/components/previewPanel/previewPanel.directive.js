@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('previewPanel', function($http, $state,pdf,$localStorage,folderAPI) {
+  .directive('previewPanel', ['$http', '$state','pdf','$localStorage','folderAPI',function($http, $state,pdf,$localStorage,folderAPI) {
     return {
       templateUrl: 'components/previewPanel/previewPanel.html',
       restrict: 'EA',
@@ -62,7 +62,7 @@ angular.module('agroupApp')
           },
           office: function(file){
             getFile(file, 'office').success(function(res) {
-              element.find('.preview-stage').html(folderAPI.office.embed(res.filepath));
+              element.find('.preview-stage').html(folderAPI.office.embed(res.id));
               downloadBtn.attr('href',res.filepath + '?filename='+ file.name);
               currentFile = res;
             });
@@ -127,8 +127,9 @@ angular.module('agroupApp')
               pdf(item.pdf);
               break;
             default:
+              debugger;
               if(isOfficeFile(item)){
-                window.open(folderAPI.office.view(currentFile.filepath), '_blank');
+                window.open(folderAPI.office.view(currentFile.id), '_blank');
               }else{
                 window.open(currentFile.filepath, '_blank');
               }
@@ -151,4 +152,4 @@ angular.module('agroupApp')
         };
       }
     };
-  });
+  }]);

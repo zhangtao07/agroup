@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('fileitem', function(pdf) {
+  .directive('fileitem', ['pdf',function(pdf) {
     return {
       templateUrl: 'components/message/fileitem/fileitem.html',
       restrict: 'EA',
@@ -10,7 +10,8 @@ angular.module('agroupApp')
       },
       link: function(scope, element, attrs) {
 
-        scope.onGallery = function(el, event) {
+        scope.onGallery = function(event) {
+          var el = event.target;
           var parent = event.target.parentNode;
           var index;
           var $links = $(el).closest('msglist').find('[blueimp-href]');
@@ -49,6 +50,7 @@ angular.module('agroupApp')
 
         scope.data.list.forEach(function(file) {
           file.isImg = /^(image|video\/(mp4|webm|ogg))/.test(file.mimetype);
+          file.isVideo = /^(video\/(mp4|webm|ogg))/.test(file.mimetype);
         });
 
         scope.onCoverLoad = function(item) {
@@ -75,4 +77,4 @@ angular.module('agroupApp')
         };
       }
     };
-  });
+  }]);
