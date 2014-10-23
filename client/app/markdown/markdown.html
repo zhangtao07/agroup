@@ -10,7 +10,7 @@
 
   <div class="btn-group">
 
-    <a ng-href="/editor/{{group}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default">
+    <a ng-href="/editor/{{group.id}}/create" target="_blank" class="btn m-b-xs btn-sm btn-default">
       <i class="fa fa-plus"></i>
       <!--<span translate="markdown.create"></span>-->
     </a>
@@ -25,10 +25,10 @@
         <div class="panel-heading">
           <div class="media">
             <span class="pull-right">
-              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/editor/{{group.id}}?file={{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
               <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
               <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
-              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group.id}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
               <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
             <span class="pull-left thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}" ><img style="width:40px;height:40px" image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
