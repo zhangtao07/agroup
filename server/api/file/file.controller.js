@@ -211,7 +211,7 @@ exports.previewUrl = function(req, res) {
     if(err){
       return;
     }
-    var type = filetype(fileversion.mimetype);
+    var type = filetype(fileversion.mimetype,fileversion.filename);
     var filepath = fileversion.getOnlinePath();
     var filename = fileversion.filename;
     var redirUrl = "about:blank";
