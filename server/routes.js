@@ -64,6 +64,6 @@ module.exports = function(app) {
   app.route('/*')
     .get(function(req, res) {
       console.info("send");
-      res.sendFile(app.get('appPath') + '/index.html');
+      res.sendfile(app.get('appPath') + '/index.html');
     });
 };
