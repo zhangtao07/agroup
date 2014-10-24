@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('fileicon', function (fileIcon) {
+  .directive('fileicon', ['fileIcon',function (fileIcon) {
     return {
       restrict: 'E',
       replace:true,
@@ -13,4 +13,4 @@ angular.module('agroupApp')
         element.addClass(className);
       }
     };
-  }).$inject('fileIcon');
+  }]);
