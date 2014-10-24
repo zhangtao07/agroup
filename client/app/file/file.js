@@ -126,6 +126,9 @@ angular.module('agroupApp')
         case 'application/octet-stream':
           icon = 'file';
           break;
+        case 'folder':
+          icon = 'folder';
+          break;
         default:
       }
       return icon;

@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', ['$rootScope','$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
-    function($rootScope,$scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
+  .controller('FileCtrl', ['$rootScope','$scope','fileIcon','$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
+    function($rootScope,$scope,fileIcon,$stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
 
       //var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       //files: [],
       //parent_id: 0
       //}];
+
+      $scope.getIcon = function(item){
+        return fileIcon.getClassByMimetype(item.type) || fileIcon.getClassByFilename(item.name) || 'fa fa-file';
+      }
 
       var level = [{
         files: [],
