@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', ['$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
-    function($scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
+  .controller('FileCtrl', ['$rootScope','$scope', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
+    function($rootScope,$scope, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
 
       //var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       //files: [],
@@ -27,6 +27,7 @@ angular.module('agroupApp')
       var groupName = $stateParams.name;
 
       groupAPI.getGroupByName(groupName).success(function(res){
+        $rootScope.__currentGroupName = res.data.name;
         $scope.group = res.data;
         init();
       });

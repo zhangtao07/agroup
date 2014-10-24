@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MarkdownCtrl', ['$scope', '$http', '$stateParams', 'Modal','$location','groupAPI',function($scope, $http, $stateParams, Modal,$location,groupAPI) {
+  .controller('MarkdownCtrl', ['$rootScope','$scope', '$http', '$stateParams', 'Modal','$location','groupAPI',function($rootScope,$scope, $http, $stateParams, Modal,$location,groupAPI) {
 
     $scope.markdowns = [];
     function success(data, status) {
@@ -56,6 +56,7 @@ angular.module('agroupApp')
 
     var groupName = $stateParams.name;
     groupAPI.getGroupByName(groupName).success(function(res){
+      $rootScope.__currentGroupName = res.data.name;
       $scope.group = res.data;
       init();
     });
