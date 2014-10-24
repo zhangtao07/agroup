@@ -1,16 +1,18 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', ['$rootScope','$scope','fileIcon','$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI','groupAPI',
-    function($rootScope,$scope,fileIcon,$stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
+  .controller('FileCtrl', ['$rootScope', '$scope', 'fileIcon', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI', 'groupAPI',
+    function($rootScope, $scope, fileIcon, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
 
       //var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
       //files: [],
       //parent_id: 0
       //}];
 
-      $scope.getIcon = function(item){
-        return fileIcon.getClassByMimetype(item.type) || fileIcon.getClassByFilename(item.name) || 'fa fa-file';
+      $scope.getIcon = function(item) {
+        if (item) {
+          return fileIcon.getClassByMimetype(item.type) || fileIcon.getClassByFilename(item.name) || 'fa fa-file';
+        }
       }
 
       var level = [{
@@ -30,7 +32,7 @@ angular.module('agroupApp')
       $scope.home = home;
       var groupName = $stateParams.name;
 
-      groupAPI.getGroupByName(groupName).success(function(res){
+      groupAPI.getGroupByName(groupName).success(function(res) {
         $rootScope.__currentGroupName = res.data.name;
         $scope.group = res.data;
         init();
@@ -88,18 +90,17 @@ angular.module('agroupApp')
             nextLevel.parent_id = item.id;
             $scope.previewFolder(nextLevel.files, nextLevel);
             level.splice(index + 2, level.length - index - 2);
-            setTimeout(function() {
-              $scope.scrollLeft();
-            }.bind(this), 10);
+            //setTimeout(function() {
+            $scope.scrollLeft();
+            //}.bind(this), 10);
           });
         }
       }
 
       function closeFolder(index, end) {
-        $scope.scrollRight();
-        setTimeout(function() {
+        $scope.scrollRight(function() {
           level.splice(index, end);
-        }.bind(this), 600);
+        });
       }
 
       function clearSelect(folder) {

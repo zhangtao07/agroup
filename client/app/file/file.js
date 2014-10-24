@@ -47,15 +47,17 @@ angular.module('agroupApp')
   .directive('scrollTo', function() {
     return function(scope, element, attrs) {
       //window.element = element;
-      scope.scrollLeft = function(){
+      scope.scrollLeft = function(cb) {
         //element.scrollLeft(1000);
-        element.animate( { scrollLeft: '+=200' }, 400)
+        element.animate({
+          scrollLeft: '+=200'
+        }, 400, cb)
       };
-      scope.scrollRight = function(){
-        //element.scrollLeft(1000);
-        element.animate( { scrollLeft: '-=200' }, 400)
+      scope.scrollRight = function(cb) {
+        element.animate({
+          scrollLeft: '-=200'
+        }, 400, cb);
       };
-      //element.scrollLeft(1000);
     };
   })
   .directive('fileEditing', function() {
@@ -82,9 +84,9 @@ angular.module('agroupApp')
             element.removeClass('editing');
             element.attr('contenteditable', false);
             var content = element.text();
-            if(content){
+            if (content) {
               scope.item.name = content;
-            }else{
+            } else {
               element.text(scope.item.name);
             }
           }
