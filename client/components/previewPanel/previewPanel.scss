@@ -3,6 +3,33 @@
   padding:0;
   background: #f6f6f6;
 }
+
+.info-container{
+  .file-icon{
+    font-size: 60px;
+  }
+  text-align:center;
+  position:absolute;
+  width:100%;
+  height:200px;
+  top:50%;
+  margin-top:-100px;
+}
+
+.info-area{
+  display: inline-block;
+  margin:0 auto;
+  font-size: 14px;
+}
+
+.file-info tr td:first-child{
+  font-weight: weighter;
+  text-align: right;
+}
+.file-info tr td:last-child{
+  padding-left: 10px;
+  text-align: left;
+}
 .preview-stage .area.canvas{
   display: inherit;
 }

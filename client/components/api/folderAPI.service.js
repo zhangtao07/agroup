@@ -17,16 +17,18 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
         });
       },
       office: {
-        embed: function(fv_id, width, height) {
-          width = width || '100%';
-          height = height || '100%';
-          return '<iframe src="api/files/previewUrl?id=' + fv_id + '" width="' + width + '" height="' + height + '" frameborder="0" class=area /></iframe>';
+        embed: function(fv_id) {
+          return apiRoot + 'api/files/previewUrl?id=' + fv_id;
         },
         view: function(fv_id) {
-          return 'api/files/previewUrl?id=' + fv_id;
+          return apiRoot + 'api/files/previewUrl?id=' + fv_id;
         }
+      },
+      getPreview: function(file, type) {
+        return $http.post(apiRoot + 'api/files/preview/' + file.file_id, {
+          type: type
+        });
       }
-
     };
   }
 ]);

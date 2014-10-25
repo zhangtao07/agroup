@@ -1,9 +1,11 @@
 <ul class="breadcrumb bg-white b-a bread-nav">
   <li ng-click="home()"><a href=""><i class="fa fa-home"></i> {{ group.name }}</a></li>
   <li ng-repeat="folder in level" ng-class="{'active':$last}" ng-click="selectItem(folder,folder.selectedItem)">
-    <span ng-class="getIcon(folder.selectedItem)"></span>
-    <!--<span class="fa fa-"></span>-->
-    <a href="">{{ folder.selectedItem.name }}</a>
+    <span ng-show="folder.selectedItem">
+      <span ng-class="getIcon(folder.selectedItem)"></span>
+      <!--<span class="fa fa-"></span>-->
+      <a href="">{{ folder.selectedItem.name }}</a>
+    </span>
   </li>
 </ul>
 

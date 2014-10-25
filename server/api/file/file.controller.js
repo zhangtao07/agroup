@@ -32,7 +32,7 @@ exports.preview = function(req, res) {
     };
     if(type === 'text' && file){
         fs.readFile(file.getRealpath(), 'utf8', function(err, content) {
-          data.data = content;
+          data.content = content;
           res.json(200,data);
         });
     }else{

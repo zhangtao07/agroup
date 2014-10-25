@@ -90,14 +90,13 @@ angular.module('agroupApp')
             nextLevel.parent_id = item.id;
             $scope.previewFolder(nextLevel.files, nextLevel);
             level.splice(index + 2, level.length - index - 2);
-            //setTimeout(function() {
             $scope.scrollLeft();
-            //}.bind(this), 10);
           });
         }
       }
 
       function closeFolder(index, end) {
+        level[index].selectedItem = null;
         $scope.scrollRight(function() {
           level.splice(index, end);
         });
@@ -170,7 +169,6 @@ angular.module('agroupApp')
           level[index].files.push(fd);
           completeQueue.push(fileID);
           $scope.selectItem(folder, fd);
-          //$scope.preview(fd);
           if (completeQueue.length === length) {
             messageAPI.uploadEnd(groupId, completeQueue.join(','));
           }

@@ -47,11 +47,10 @@ angular.module('agroupApp')
   .directive('scrollTo', function() {
     return function(scope, element, attrs) {
       //window.element = element;
-      scope.scrollLeft = function(cb) {
-        //element.scrollLeft(1000);
+      scope.scrollLeft = function() {
         element.animate({
           scrollLeft: '+=200'
-        }, 400, cb)
+        }, 400)
       };
       scope.scrollRight = function(cb) {
         element.animate({

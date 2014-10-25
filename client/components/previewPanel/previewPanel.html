@@ -1,21 +1,51 @@
 <!--<div>this is the previewPanel directive</div>-->
 <div class="vbox bg-white-only preview-panel">
-  <div class="wrapper-sm b-b" ng-show="previewitem">
+  <div class="wrapper-sm b-b" ng-show="filePreviewType">
     <div class="m-t-n-xxs m-b-n-xxs m-l-xs">
       <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
       </a>
       <div>
-        <a class="btn btn-xs btn-default" ng-click="lookUp(previewitem)" translate="files.preview"></a>
-        <a class="btn btn-xs btn-default" ng-show="previewitem.type=='text/x-markdown'" ng-click="editFile(previewitem)" translate="files.edit"></a>
-        <a id="p-download-btn" target="_blank" class="btn btn-xs btn-default" translate="files.download"></a>
+        <a class="btn btn-xs btn-default" ng-hide="filetype=='file'" ng-click="lookup(filetype,lookuppath)"
+        translate="files.preview"></a>
+        <a class="btn btn-xs btn-default" ng-show="isMarkdown" ng-href="{{ editpath }}"
+        target="_blank" translate="files.edit"></a>
+        <a id="p-download-btn" target="_blank" ng-href="{{ downloadpath }}" class="btn btn-xs btn-default"
+        translate="files.download"></a>
       </div>
       <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
     </div>
   </div>
   <div class="row-row">
-    <div class="cell preview-stage">
-      <div class="cell-inner ">
+    <div ng-show="filePreviewType" class="cell preview-stage" ng-switch="filePreviewType">
+
+
+      <div ng-switch-default class="info-container">
+         <fileicon class="file-icon" filename="file" ></fileicon>
+        <hr/>
+        <div class="info-area" >
+          <table class="file-info" border="0" cellspacing="5" cellpadding="5">
+            <tr>
+              <td>文件名称:</td>
+              <td >{{ previewfile.name }}</td>
+            </tr>
+            <tr>
+              <td>创建时间:</td>
+              <td>{{ previewfile.createDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            </tr>
+            <tr>
+              <td>创建者:</td>
+              <td> {{ previewfile.user.nickname }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
+      <pre ng-switch-when="text"><code ng-bind-html="previewcontent"></code></pre>
+      <video ng-switch-when="video" class="area canvas" controls autoplay ng-src="{{ previewvideo }}"></video>
+      <iframe ng-switch-when="outsource" ng-src="{{previewpath}}" frameborder="0" class=area
+        width=100% height=100%></iframe>
+      <span ng-switch-when="image" class="img-res" image-resize="{{previewimg}}" imageresize-width="100%"
+        imageresize-height="100%">
+      </div>
+
     </div>
-  </div>
 </div>
