@@ -10,7 +10,6 @@ angular.module('agroupApp')
 
           scope.preview = function(file) {
             var type = getType(file);
-            scope.previewfile = file;
             scope.filetype = type;
             scope.filePreviewType = type;
             scope.isMarkdown = false;
@@ -30,6 +29,9 @@ angular.module('agroupApp')
             } else {
               folderAPI.getPreview(file, type).success(function(fv) {
                 scope.lookuppath = fv.filepath;
+                scope.previewfile = file;
+                scope.previewfile.filepath = fv.filepath;
+                scope.previewfile.cover = fv.cover;
                 scope.downloadpath = fv.filepath + '?filename=' + file.name;
                 switch (type) {
                   case 'office':
@@ -45,6 +47,7 @@ angular.module('agroupApp')
                     scope.previewcontent = hljs.highlightAuto(fv.content).value;
                     break;
                   case 'video':
+                    //scope.previewimg = fv.cover;
                     scope.previewvideo = fv.filepath;
                     break;
                   default:
@@ -82,10 +85,22 @@ angular.module('agroupApp')
             }
           };
 
-          scope.lookup = function(type,filepath){
-            if(type === 'pdf'){
+          scope.lookup = function(type, filepath,previewfile) {
+            var isImage = /video|image/.test(type);
+            if (type === 'pdf') {
               pdf(filepath);
-            }else{
+            } else if (isImage) {
+              var obj = {
+                href: filepath,
+                title: previewfile.name,
+                type: previewfile.type,
+                thumbnail: filepath
+              }
+              if (type === 'video') {
+                obj.poster = previewfile.cover;
+              }
+              blueimp.Gallery([obj]);
+            } else {
               window.open(filepath, '_blank');
             }
           }

@@ -5,8 +5,9 @@
       <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i>
       </a>
       <div>
-        <a class="btn btn-xs btn-default" ng-hide="filetype=='file'" ng-click="lookup(filetype,lookuppath)"
-        translate="files.preview"></a>
+        <a class="btn btn-xs btn-default" ng-hide="filetype=='file'" ng-click="lookup(filetype,lookuppath,previewfile)"
+        translate="files.preview">
+        </a>
         <a class="btn btn-xs btn-default" ng-show="isMarkdown" ng-href="{{ editpath }}"
         target="_blank" translate="files.edit"></a>
         <a id="p-download-btn" target="_blank" ng-href="{{ downloadpath }}" class="btn btn-xs btn-default"
@@ -40,12 +41,9 @@
         </div>
       </div>
       <pre ng-switch-when="text"><code ng-bind-html="previewcontent"></code></pre>
-      <video ng-switch-when="video" class="area canvas" controls autoplay ng-src="{{ previewvideo }}"></video>
-      <iframe ng-switch-when="outsource" ng-src="{{previewpath}}" frameborder="0" class=area
-        width=100% height=100%></iframe>
-      <span ng-switch-when="image" class="img-res" image-resize="{{previewimg}}" imageresize-width="100%"
-        imageresize-height="100%">
+      <video ng-switch-when="video" class="area canvas" controls ng-src="{{ previewvideo }}"></video>
+      <iframe ng-switch-when="outsource" ng-src="{{previewpath}}" frameborder="0" class=area width=100% height=100%></iframe>
+      <span ng-switch-when="image" class="img-res" image-resize="{{previewimg}}" imageresize-width="100%" imageresize-height="100%">
       </div>
-
     </div>
 </div>

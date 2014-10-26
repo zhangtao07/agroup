@@ -82,7 +82,7 @@ angular.module('agroupApp')
           if (index === level.length - 2) {
             closeFolder(index + 1, level.length - index);
           }
-          $scope.preview(item);
+          $scope.preview(item,folder);
         } else {
           getFiles(item, folder, groupId, function(files) {
             var nextLevel = level[index + 1] = level[index + 1] || {};
