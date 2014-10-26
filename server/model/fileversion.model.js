@@ -80,8 +80,9 @@ module.exports = function(orm, db) {
             id: self.file_id,
             filename: self.filename,
             user: {
+              id: user.id,
               avatar: '/api/user/avatar/' + user.username,
-              nickname: user.nickname,
+              nickname: user.nickname
             },
             time: ago(self.updateDate),
             content: ''

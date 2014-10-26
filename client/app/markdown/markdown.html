@@ -29,7 +29,7 @@
               <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
               <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
               <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group.id}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
-              <a tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
+              <a ng-show="md.user.id==me.id" tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
             <span class="pull-left thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}" ><img style="width:40px;height:40px" image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
             <div class="media-body">

@@ -53,6 +53,7 @@ angular.module('agroupApp')
     }
 
     $scope.hasMore = true;
+    $scope.me = $rootScope.__user;
 
     var groupName = $stateParams.name;
     groupAPI.getGroupByName(groupName).success(function(res){
@@ -66,10 +67,5 @@ angular.module('agroupApp')
       var group = $scope.group.id;
       $http.get('/api/markdowns/'+group).success(success);
     }
-
-    //window.addEventListener("message", receiveMessage, false);
-    //function receiveMessage(event) {
-      //init();
-    //}
 
   }]);
