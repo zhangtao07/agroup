@@ -41,9 +41,12 @@
         </div>
       </div>
       <pre ng-switch-when="text"><code ng-bind-html="previewcontent"></code></pre>
-      <video ng-switch-when="video" class="area canvas" controls ng-src="{{ previewvideo }}"></video>
+      <!--<video ng-switch-when="video" class="area canvas" controls ng-src="{{ previewvideo }}"></video>-->
+      <span ng-click="lookup(filetype,lookuppath,previewfile)" ng-switch-when="video" class="img-res p-video" image-resize="{{ previewvideo }}" imageresize-width="100%" imageresize-height="100%">
+        <i class="fa fa-play-circle-o"></i>
+      </span>
       <iframe ng-switch-when="outsource" ng-src="{{previewpath}}" frameborder="0" class=area width=100% height=100%></iframe>
-      <span ng-switch-when="image" class="img-res" image-resize="{{previewimg}}" imageresize-width="100%" imageresize-height="100%">
+      <span ng-click="lookup(filetype,lookuppath,previewfile)" ng-switch-when="image" class="img-res" image-resize="{{previewimg}}" imageresize-width="100%" imageresize-height="100%">
       </div>
     </div>
 </div>

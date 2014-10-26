@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
-  function(apiRoot, $http) {
+angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
+  function(apiRoot, $http, $q) {
     return {
       getFiles: function(groupId, folderId) {
         return $http.get(apiRoot + "api/files/folder/" + groupId + '/' + folderId);
@@ -28,6 +28,11 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http',
         return $http.post(apiRoot + 'api/files/preview/' + file.file_id, {
           type: type
         });
+      },
+      imageGallary: function(files){
+        return $q.all(_.map(files,function(file){
+          return $http.post(apiRoot + 'api/files/preview/' + file.file_id, { file : file });
+        }));
       }
     };
   }

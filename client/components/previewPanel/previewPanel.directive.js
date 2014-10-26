@@ -8,7 +8,14 @@ angular.module('agroupApp')
         restrict: 'EA',
         link: function(scope, element, attrs) {
 
-          scope.preview = function(file) {
+          var gallary = [];
+
+          scope.preview = function(file, fd) {
+            if (fd) {
+              gallary = _.filter(fd.files, function(d) {
+                return /image|video/.test(d.type) && file !== d;
+              });
+            }
             var type = getType(file);
             scope.filetype = type;
             scope.filePreviewType = type;
@@ -48,7 +55,8 @@ angular.module('agroupApp')
                     break;
                   case 'video':
                     //scope.previewimg = fv.cover;
-                    scope.previewvideo = fv.filepath;
+                    //scope.previewvideo = fv.filepath;
+                    scope.previewvideo = fv.cover;
                     break;
                   default:
                     scope.previewpath = null;
@@ -85,21 +93,37 @@ angular.module('agroupApp')
             }
           };
 
-          scope.lookup = function(type, filepath,previewfile) {
+          scope.lookup = function(type, filepath, previewfile) {
             var isImage = /video|image/.test(type);
             if (type === 'pdf') {
               pdf(filepath);
             } else if (isImage) {
-              var obj = {
+              var assets = [{
                 href: filepath,
                 title: previewfile.name,
                 type: previewfile.type,
-                thumbnail: filepath
-              }
-              if (type === 'video') {
-                obj.poster = previewfile.cover;
-              }
-              blueimp.Gallery([obj]);
+                thumbnail: previewfile.cover ||filepath,
+                poster: previewfile.cover
+              }];
+              folderAPI.imageGallary(gallary).then(function success(result) {
+                _.each(result,function(d){
+                  var file = d.config.data.file;
+                  var fv = d.data;
+                  assets.push({
+                    href: fv.filepath,
+                    title: file.name,
+                    type: file.type,
+                    thumbnail: fv.cover || fv.filepath,
+                    poster: fv.cover
+                  });
+                });
+                blueimp.Gallery(assets,{
+                  carousel:true ,
+                  closeOnEscape: true,
+                  toggleSlideshowOnSpace: true,
+                  enableKeyboardNavigation: true
+                });
+              });
             } else {
               window.open(filepath, '_blank');
             }
