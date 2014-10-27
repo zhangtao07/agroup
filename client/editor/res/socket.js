@@ -21,21 +21,44 @@ define([
         editor.removeUser(user);
       });
 
+      var preHash,postHash;
       socket.on('server:patch', function(message) {
         var patch = message.patch;
         var patches = diff.patch_fromText(patch);
         var results = diff.patch_apply(patches, editor.getValue());
         var content = results[0];
         editor.syncValueNoWatch(content, message.user);
+        preHash = message.preHash;
+        postHash = message.postHash;
         //editor.setValueNoWatch(content);
       });
+
+      //var newContent , oldContent = '';
+      //eventMgr.addListener('onPeriodicRun', function(){
+        //var newContent = editor.getValue();
+          //console.log(newContent,oldContent);
+        //if(newContent !== oldContent){
+          //var patchList = diff.patch_make(oldContent, newContent);
+          //var patchText = diff.patch_toText(patchList);
+          //firstLineAsTitle(newContent, fileDesc);
+          //socket.emit('patch', {
+            //patch: patchText || '',
+            //preHash: preHash || '',
+            //postHash: postHash || ''
+          //});
+          //oldContent = newContent;
+        //}
+      //});
 
       eventMgr.addListener('onContentChanged', function(fileDesc, newContent, oldContent) {
         var patchList = diff.patch_make(oldContent, newContent);
         var patchText = diff.patch_toText(patchList);
         firstLineAsTitle(newContent, fileDesc);
+        console.log(preHash,postHash);
         socket.emit('patch', {
-          patch: patchText || ''
+          patch: patchText || '',
+          preHash: preHash || '',
+          postHash: postHash || ''
         });
       });
 
