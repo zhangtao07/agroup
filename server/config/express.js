@@ -31,26 +31,18 @@ module.exports = function(app) {
   app.use(function(req, res, next) {
     models(function(err, db) {
       if (err) return next(err);
-
       req.models = db.models;
       req.db = db;
       next();
-
-
     });
-  })
-  // Persist sessions with mongoStore
-  // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
+  });
 
   app.use(session({
-    key: 'session_cookie_name',
-    secret: 'session_cookie_secret',
-    store: new SessionStore(config.sessionStorage)
-  }))
-  /*app.use(session({
-   secret: config.secrets.session,
-   store: new mongoStore({ mongoose_connection: mongoose.connection })
-   }));*/
+    key: 'agroup',
+    secret: 'webfe-fex-end',
+    store: new SessionStore(config.sessionStorage),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 } //for one year
+  }));
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

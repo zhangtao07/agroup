@@ -23,6 +23,14 @@ var rootPath = path.normalize(__dirname + '/../../..');
 
 var envConfig = require('./' + getNodeENV() + '.js') || {};
 
+var localConfig;
+
+try {
+  localConfig = require('./local.js');
+} catch(e) {
+  localConfig = {};
+}
+
 var mysql = envConfig.mysql;
 
 var all = {
@@ -31,7 +39,7 @@ var all = {
   // Root path of server
   root: rootPath,
 
-  hostname:'zzm.com',
+  hostname: 'localhost',
 
   // Server port
   port: process.env.PORT || 9000,
@@ -44,15 +52,6 @@ var all = {
   // List of user roles
   userRoles: ['guest', 'user', 'admin'],
 
-  // MongoDB connection options
-  mongo: {
-    options: {
-      db: {
-        safe: true
-      }
-    }
-  },
-
   // Default auth is fake
   auth: 'fake',
 
@@ -64,26 +63,19 @@ var all = {
 
   getAvatar:function(name){
     return all.root + all.upload_dir + '/' + name + '.jpg';
-  },
-
-  sessionStorage: {
-    host: mysql.host,
-    port: mysql.port || 3306,
-    user: mysql.user,
-    password: mysql.password,
-    database: mysql.database
   }
-
 };
 
-var localConfig;
+var config = _.merge(_.merge(all, envConfig), localConfig);
 
-try {
-  localConfig = require('./local.js');
-} catch(e) {
-  localConfig = {};
+config['sessionStorage'] = {
+  host: config['mysql'].host,
+  port: config['mysql'].port || 3306,
+  user: config['mysql'].user,
+  password: config['mysql'].password,
+  database: config['mysql'].database
 }
 
 // Export the config object based on the NODE_ENV
 // ==============================================
-module.exports = _.merge(_.merge(all, envConfig), localConfig);
+module.exports = config;
