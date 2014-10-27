@@ -64,6 +64,7 @@ define([
 
       function syncTitle(txt) {
         $('.file-title-navbar').text(txt);
+        socket.emit('changeFilename', txt + '.md');
       }
 
 
