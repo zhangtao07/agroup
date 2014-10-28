@@ -468,3 +468,27 @@ body.rtl {
         direction: rtl;
     }
 }
+
+.dragzone{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  border: 2px dashed #333;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-content: center;
+  align-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  z-index: 999;
+}
+.dragzone .dragTip{
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 auto;
+}
