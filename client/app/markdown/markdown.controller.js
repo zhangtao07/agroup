@@ -58,6 +58,7 @@ angular.module('agroupApp')
     var groupName = $stateParams.name;
     groupAPI.getGroupByName(groupName).success(function(res){
       $rootScope.__currentGroupName = res.data.name;
+      $rootScope.__currentGroupId = res.data.id;
       $scope.group = res.data;
       init();
     });

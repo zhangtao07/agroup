@@ -6,6 +6,10 @@
   overflow: hidden;
   overflow-x: hidden;
 
+  img{
+    max-width: 100%;
+  }
+
   * {
     font-size: .5em;
   }
