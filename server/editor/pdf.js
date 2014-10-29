@@ -100,11 +100,9 @@ exports.export = function(req, res, next) {
 
   // Use a temp file as wkhtmltopdf can't access /dev/stdout on Amazon EC2 for some reason
   var filePath = path.join(os.tmpDir(), Date.now() + '.pdf');
-  console.log(filePath);
   var binPath = process.env.WKHTMLTOPDF_PATH || 'wkhtmltopdf';
   params.push('--run-script', waitForJavaScript.toString() + 'waitForJavaScript()');
   params.push('--window-status', 'done');
-  console.log(params.concat('-', filePath));
   var wkhtmltopdf = spawn(binPath, params.concat('-', filePath), {
     stdio: [
       'pipe',
@@ -126,7 +124,6 @@ exports.export = function(req, res, next) {
     if (code) {
       return onUnknownError();
     }
-    console.log('close : ', code);
     var readStream = fs.createReadStream(filePath);
     readStream.on('open', function() {
       readStream.pipe(res);
@@ -136,7 +133,6 @@ exports.export = function(req, res, next) {
     });
     readStream.on('error', onUnknownError);
   });
-  //console.log(req.body);
   req.pipe(wkhtmltopdf.stdin);
 
 
