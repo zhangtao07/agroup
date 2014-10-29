@@ -1,7 +1,7 @@
 define([], function() {
     var constants = {};
     constants.VERSION = "4.1.1";
-    constants.MAIN_URL = "https://localhost:3000/";
+    constants.MAIN_URL = "http://agroup.baidu.com/editor/";
     constants.GOOGLE_ANALYTICS_ACCOUNT_ID = "UA-39556145-1";
     constants.GOOGLE_API_KEY = "AIzaSyAeCU8CGcSkn0z9js6iocHuPBX4f_mMWkw";
     constants.GOOGLE_DRIVE_APP_ID = "241271498917";
@@ -26,7 +26,7 @@ define([], function() {
     constants.DOWNLOAD_IMPORT_URL = "/downloadImport";
     constants.PICASA_IMPORT_IMG_URL = "/picasaImportImg";
     constants.SSH_PUBLISH_URL = '/sshPublish';
-    constants.PDF_EXPORT_URL = "/pdfExport";
+    constants.PDF_EXPORT_URL = "/editor/pdfExport";
 
     // Site dependent
     constants.BASE_URL = "http://localhost/";

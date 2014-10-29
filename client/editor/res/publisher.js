@@ -360,15 +360,15 @@ define([
                         //});
                     });
                     task.onRun(function() {
-                        if(!token) {
-                            return task.chain();
-                        }
+                        // if(!token) {
+                        //     return task.chain();
+                        // }
                         var xhr = new XMLHttpRequest();
                         xhr.open('POST', constants.PDF_EXPORT_URL + '?' + $.param({
                             token: token,
                             options: settings.pdfOptions
                         }), true);
-                        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         xhr.responseType = 'blob';
                         xhr.onreadystatechange = function() {
                             if(this.readyState == 4) {
@@ -378,7 +378,7 @@ define([
                                 else {
                                     eventMgr.onError("Error when trying to generate PDF: " + this.statusText);
                                 }
-                    task.chain();
+                                task.chain();
                             }
                         };
                         xhr.send(content);
