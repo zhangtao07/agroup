@@ -45,7 +45,7 @@ define([
       var files = (evt.dataTransfer || evt.target).files;
       providerMap.agroup.uploadFile(files, function done(data){
         //console.log(data);
-        var imageLink = data.name;
+        var imageLink = location.origin + (data.cover || data.filepath);
         // Generate an insertLinkCallback by clicking the
         // pagedown button but without showing the dialog
         core.catchModal = true;

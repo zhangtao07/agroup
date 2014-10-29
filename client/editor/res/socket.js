@@ -139,9 +139,9 @@ define([
         });
       }
 
-      eventMgr.addListener('onPreviewFinished', function(data) {
-        correctImgpath();
-      });
+      //eventMgr.addListener('onPreviewFinished', function(data) {
+        //correctImgpath();
+      //});
 
       return socket;
     });

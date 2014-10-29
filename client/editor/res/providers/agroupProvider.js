@@ -22,8 +22,8 @@ define([
         processData: false,
         contentType: false
       }).done(function(data){
-        callback(data.folder);
-        //getFilepath(data.folder).done(callback);
+        //callback(data.folder);
+        getFilepath(data.folder).done(callback);
       });
     });
   }
