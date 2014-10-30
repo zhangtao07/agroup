@@ -19,5 +19,6 @@ module.exports = {
     server :'http://172.22.65.38',
     view: '/op/view.aspx?src=',
     embed: '/op/embed.aspx?src='
-  }
+  },
+  hostname:'localhost:9000'
 };

@@ -6,6 +6,8 @@ var md5 = require('MD5');
 var config = require("../config/environment");
 var _ = require('lodash');
 var observe = require('../components/group.observe');
+var mdtool = require('./tool');
+var covtool = require('../tools/tool.js');
 var cache = {};
 var database;
 var basepath = config.root + config.upload_dir + '/markdown';
@@ -162,8 +164,9 @@ function readFromDisk(file, fv, cb) {
 
 function createFileversion(file,isinit,broadFilecreate,user) {
   getDB(function(err, db) {
+    var filepath = path.join('markdown/', md5(file.content || file.name)) + '.md';
     var fv = {
-      filepath: path.join('markdown/', md5(file.content || file.name)) + '.md',
+      filepath: filepath,
       filename: file.name,
       mimetype: 'text/x-markdown',
       size: 0,
@@ -174,15 +177,20 @@ function createFileversion(file,isinit,broadFilecreate,user) {
     if (file.filepath !== fv.filepath) {
       db.models.fileversion.create(fv, function(err, sfv) {
         if(!isinit){
-          if(broadFilecreate){
-            db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.file_id],markdownMessage);
+          if(broadFilecreate && file.name && file.content){
+              mdtool.markdown2pdf(file.name,file.content,getFileRealpath(fv.filepath),function(pdf){
+                covtool.pdfToConver(pdf,300,25, pdf+'.cover.jpg',function(jpg){
+                  db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.file_id],markdownMessage);
+                });
+              });
           }else{
             //db.models.message.createMkMessage(user.id,file.group_id,'update',[sfv.id],markdownMessage);
           }
         }
         if (err) throw err;
       });
-      fs.writeFile(getFileRealpath(fv.filepath), file.content || '', 'utf8');
+      fs.writeFile(getFileRealpath(fv.filepath), file.content || '', 'utf8',function(){
+      });
     }
   });
 }

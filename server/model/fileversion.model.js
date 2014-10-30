@@ -55,7 +55,7 @@ module.exports = function(orm, db) {
           return this.getOnlinePath();
         } else if (/pdf|html5video/.test(type)) {
           return this.getOnlinePath() + ".cover.jpg";
-        } else if (/word|excel|ppt/.test(type)) {
+        } else if (/word|excel|ppt|markdown/.test(type)) {
           return this.getOnlinePath() + ".pdf.cover.jpg";
         }
 
@@ -94,7 +94,6 @@ module.exports = function(orm, db) {
 
           fs.readFile(self.getRealpath(), 'utf8', function(err, content) {
             result.content = content;
-            console.log(cb);
             return cb && cb(err, result);
           });
 

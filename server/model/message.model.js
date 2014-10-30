@@ -59,7 +59,7 @@ module.exports = function(orm, db) {
                 if (ftype == "pdf") {
                   content.pdf = content.filepath;
                 }
-                if (/word|excel|ppt/.test(ftype)) {
+                if (/word|excel|ppt|markdown/.test(ftype)) {
                   content.pdf = content.filepath + ".pdf";
                 }
                 list.push(content);

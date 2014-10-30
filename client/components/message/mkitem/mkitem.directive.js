@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('mkitem', function () {
+  .directive('mkitem', ['pdf',function (pdf) {
     return {
       templateUrl: 'components/message/mkitem/mkitem.html',
       restrict: 'EA',
@@ -10,7 +10,9 @@ angular.module('agroupApp')
         group: '=group'
       },
       link: function (scope, element, attrs) {
-
+        scope.onimgclick = function(data) {
+          pdf(data.pdf);
+        };
       }
     };
-  });
+  }]);

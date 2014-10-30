@@ -16,6 +16,8 @@ function getTypeFromMimetype(mimetype){
     type = 'pdf';
   }else if(/^video\/(mp4|webm|ogg)$/.test(mimetype)){
     type = "html5video";
+  }else if(/markdown/.test(mimetype)){
+    type = "markdown";
   }
   return type;
 }

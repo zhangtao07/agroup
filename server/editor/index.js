@@ -5,6 +5,7 @@ var router = express.Router();
 var dataCenter = require('./dataCenter');
 
 router.post('/pdfExport', require('./pdf').export);
+//router.post('/pdfToImage', require('./pdf').toImage);
 
 router.get('/viewer', function(req, res) {
   res.render('viewer.html');
