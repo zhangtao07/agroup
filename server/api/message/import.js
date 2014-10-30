@@ -33,29 +33,29 @@ function processPdf(pdf) {
 
   Q.nfcall(tool.pdfToConver, pdf, 300, 25, pdf + '.cover.jpg');
 
-//  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
+  //  Q.nfcall(tool.pdfToImages, pdf, 300, 50, imagesPath);
 
-  return Q.nfcall(function(){
+  return Q.nfcall(function() {
     return null;
   });
 
-//  return Q.nfcall(tool.getPDFText, pdf);
+  //  return Q.nfcall(tool.getPDFText, pdf);
 
 }
 
-function video2Thumbnail(mimetype,file,callback){
+function video2Thumbnail(mimetype, file, callback) {
   var type = filetype(mimetype);
   var promise = null;
-  if(type == "html5video"){
+  if (type == "html5video") {
     console.info("html5");
-    promise = Q.nfcall(tool.video2Thumbnail,file,file+'.cover.jpg');
+    promise = Q.nfcall(tool.video2Thumbnail, file, file + '.cover.jpg');
   }
-  if(promise){
-    promise.then(function(){
-      callback(null,file+'.cover.jpg');
+  if (promise) {
+    promise.then(function() {
+      callback(null, file + '.cover.jpg');
     });
-  }else{
-    callback(null,null);
+  } else {
+    callback(null, null);
   }
 }
 
@@ -76,21 +76,31 @@ function generatePreview(mimetype, file, callback) {
         resolve(pdf);
       });
     });
+  } else if (/markdown/.test(type)) {
+
+    getPdf = Q.promise(function(resolve) {
+      var pdf = file + '.pdf';
+      Q.nfcall(tool.md2pdf, file, pdf).then(function() {
+        console.log(pdf);
+        resolve(pdf);
+      });
+    });
   }
 
 
-  if(getPdf){
+  if (getPdf) {
     getPdf.then(function(pdf) {
       processPdf(pdf).then(function(text) {
         callback(null, text);
       });
     });
-  }else{
+  } else {
     callback(null, null);
   }
 
 
 }
+
 function chineseSegment(text) {
 
   var utf8segments = [];
@@ -105,50 +115,50 @@ var jschardet = require("jschardet");
 var istextorbinary = require('istextorbinary');
 
 function extractPlainFileText(file) {
-  return Q.nfcall(function(){
-    return false;
-  });
-  /*return Q.promise(function(resolve) {
-    istextorbinary.isText(file, null, function(err, result) {
-      if (result) {
-        Q.nfcall(fs.readFile, file).then(function(buffer) {
-          var str = bufferToString(buffer);
-          resolve(str);
-        });
-      } else {
-        resolve(null);
-      }
+    return Q.nfcall(function() {
+      return false;
     });
+    /*return Q.promise(function(resolve) {
+      istextorbinary.isText(file, null, function(err, result) {
+        if (result) {
+          Q.nfcall(fs.readFile, file).then(function(buffer) {
+            var str = bufferToString(buffer);
+            resolve(str);
+          });
+        } else {
+          resolve(null);
+        }
+      });
 
-    function bufferToString(buffer) {
-      var charset = jschardet.detect(buffer).encoding;
-      try {
-        return buffer.toString(charset);
-      } catch (x) {
-        var charsetConverter = new Iconv(charset, "utf8");
-        return charsetConverter.convert(buffer).toString();
+      function bufferToString(buffer) {
+        var charset = jschardet.detect(buffer).encoding;
+        try {
+          return buffer.toString(charset);
+        } catch (x) {
+          var charsetConverter = new Iconv(charset, "utf8");
+          return charsetConverter.convert(buffer).toString();
+        }
       }
-    }
-  });*/
-}
-/**
- *
- * @param models
- * @param args
- * @returns {*}
- */
+    });*/
+  }
+  /**
+   *
+   * @param models
+   * @param args
+   * @returns {*}
+   */
 
 module.exports = function(models, args) {
-  var fileId = args.fileId,//not required
-    userId = args.userId,//required
-    groupId = args.groupId,//required
-    sha1 = args.sha1,//required
-    filepath = args.filepath,//required
-    mimetype = args.mimetype,//required
-    filename = args.filename,//required
-    fileSize = args.size,//required
-    encoding = args.encoding,//required
-    folderId = args.folderId;//not required
+  var fileId = args.fileId, //not required
+    userId = args.userId, //required
+    groupId = args.groupId, //required
+    sha1 = args.sha1, //required
+    filepath = args.filepath, //required
+    mimetype = args.mimetype, //required
+    filename = args.filename, //required
+    fileSize = args.size, //required
+    encoding = args.encoding, //required
+    folderId = args.folderId; //not required
 
   return Q.Promise(function getFileId(resolve) {
     if (fileId) {
@@ -169,7 +179,10 @@ module.exports = function(models, args) {
           user_id: userId,
           group_id: groupId
         }).then(function(folder) {
-          resolve({file: file, folder: folder});
+          resolve({
+            file: file,
+            folder: folder
+          });
         });
 
       });
@@ -219,15 +232,19 @@ module.exports = function(models, args) {
           fileVersion.height = dimen.height;
         }
         Q.nfcall(models.fileversion.create, fileVersion).then(function(fileversion) {
-          resolve({file: data.file, fv: fileversion, folder: data.folder});
-          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile), Q.nfcall(video2Thumbnail,mimetype,saveFile)]).then(function(result) {
+          resolve({
+            file: data.file,
+            fv: fileversion,
+            folder: data.folder
+          });
+          Q.all([extractPlainFileText(saveFile), Q.nfcall(generatePreview, mimetype, saveFile), Q.nfcall(video2Thumbnail, mimetype, saveFile)]).then(function(result) {
             var filetext = result[2] || result[1] || result[0];
             if (filetext) {
               Q.nfcall(models.filefulltext.create, {
                 utf8segments: chineseSegment(filetext),
                 text: filetext,
                 fileversion_id: fileversion.id
-              }).fail(function(err){
+              }).fail(function(err) {
                 console.info(err);
               });
 

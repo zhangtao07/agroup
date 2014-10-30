@@ -1,5 +1,10 @@
-
 var exec = require('child_process').exec;
+var editortool = require('../editor/tool.js');
+var path = require('path');
+var temp = require("temp");
+var mkdirp = require('mkdirp');
+var config = require("../config/environment/");
+var fs = require('fs');
 
 exports.video2Thumbnail = function(input,output,callback){
   exec('avconv -i '+input+' -ss 00:00:01 -f image2 -vframes 1 '+output,function(error, stdout, stderr) {
@@ -26,6 +31,15 @@ exports.office2pdf = function(input, output, callback) {
     }
   });
 }
+
+exports.md2pdf = function(input, output, callback){
+  var filename = path.basename(input);
+  console.log(input);
+  console.log(filename);
+  fs.readFile(input,'utf8',function(err,content){
+    editortool.markdown2pdf(filename,content,output,callback);
+  });
+};
 
 exports.resize = function(input,output,width,height,callback){
   var argSize = width + 'x' + height;
@@ -54,11 +68,6 @@ exports.crop = function(input,output,gravity,width,height,callback){
 }
 
 
-var path = require('path');
-var temp = require("temp");
-var mkdirp = require('mkdirp');
-var config = require("../config/environment/");
-var fs = require('fs');
 
 exports.getPDFText = function(pdf,callback){
   var jar = __dirname+'/pdfbox.jar';

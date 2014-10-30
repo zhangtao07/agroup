@@ -178,7 +178,7 @@ function createFileversion(file,isinit,broadFilecreate,user) {
       db.models.fileversion.create(fv, function(err, sfv) {
         if(!isinit){
           if(broadFilecreate && file.name && file.content){
-              mdtool.markdown2pdf(file.name,file.content,getFileRealpath(fv.filepath),function(pdf){
+              mdtool.markdown2pdf(file.name,file.content,getFileRealpath(fv.filepath) + '.pdf' ,function(err,pdf){
                 covtool.pdfToConver(pdf,300,25, pdf+'.cover.jpg',function(jpg){
                   db.models.message.createMkMessage(user.id,file.group_id,'create',[sfv.file_id],markdownMessage);
                 });

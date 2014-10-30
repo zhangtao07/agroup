@@ -6,7 +6,8 @@ angular.module('agroupApp')
       templateUrl: 'components/message/fileitem/fileitem.html',
       restrict: 'EA',
       scope: {
-        'data': '=data'
+        'data': '=data',
+        'group': '=group'
       },
       link: function(scope, element, attrs) {
 
@@ -51,6 +52,7 @@ angular.module('agroupApp')
         scope.data.list.forEach(function(file) {
           file.isImg = /^(image|video\/(mp4|webm|ogg))/.test(file.mimetype);
           file.isVideo = /^(video\/(mp4|webm|ogg))/.test(file.mimetype);
+          file.isMK = /markdown/.test(file.mimetype);
         });
 
         scope.onCoverLoad = function(item) {
@@ -71,6 +73,11 @@ angular.module('agroupApp')
 
         }
         scope.onimgclick = function(data) {
+          var isMkdown = /markdown/.test(data.mimetype);
+          if(isMkdown){
+            pdf(data.pdf);
+            return
+          }
           if (data.pdf) {
             window.open('/api/files/previewUrl?id=' + data.fv_id, '_blank');
           }

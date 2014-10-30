@@ -6,6 +6,7 @@ var async = require('async');
 var markdown = require("markdown").markdown;
 var marked = require('marked');
 var ed = require('../../editor/dataCenter');
+var orm = require('orm');
 
 
 marked.setOptions({
@@ -89,7 +90,7 @@ exports.index = function(req, res) {
 
   req.models.file.find({
       group_id: group,
-      mimetype: 'text/x-markdown',
+      mimetype: orm.like('%markdown'),
       or: [{
         status: 'vision'
       },{

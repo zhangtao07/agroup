@@ -53,9 +53,8 @@ function str2writstream(str){
   return stream;
 }
 
-exports.markdown2pdf = function(filename,content,filepath,callback) {
-    var tmphtml = path.join(os.tmpDir(), Date.now() + '.pdf');
-    var pdfpath = filepath + '.pdf';
+exports.markdown2pdf = function(filename,content,pdfpath,callback) {
+    //var pdfpath = filepath + '.pdf';
     var binPath = process.env.WKHTMLTOPDF_PATH || 'wkhtmltopdf';
     var params = getParams(settings.pdfOptions);
     var wkhtmltopdf = spawn(binPath, params.concat('-', pdfpath), {
@@ -87,7 +86,7 @@ exports.markdown2pdf = function(filename,content,filepath,callback) {
         console.log(code);
         return;
       }
-      return callback && callback(pdfpath);
+      return callback && callback(null,pdfpath);
     });
     str2readstream(html).pipe(wkhtmltopdf.stdin);
     //str2readstream(html).pipe(process.stdout);
