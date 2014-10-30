@@ -1,4 +1,4 @@
-<div ng-repeat="item in data.list" class="file-li" >
+<div ng-repeat="item in data.list" class="file-li grid-box" >
     <div ng-if="item.cover" ng-switch on="!!item.isImg">
         <a class="img-container" ng-switch-when="true" blueimp-href="{{item.filepath}}" blueimp-cover="{{item.cover}}" blueimp-title="{{item.filename}}" blueimp-type="{{item.mimetype}}" ng-click="onGallery($event)">
             <img class="imageitem-img img-thumbnail" image-resize="{{item.cover}}" image-resize-width="200" image-resize-height="200" title="{{item.filename}}"/>
@@ -28,13 +28,13 @@
       <a ng-switch-when="true" ng-href="/editor/{{ group.id }}?file={{item.file_id}}&view=true" target="_blank"
         style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
         <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
-        <span>{{item.filename}}</span>
+        <span class="long-name">{{item.filename}}</span>
       </a>
 
         <a ng-switch-default ng-href="{{item.filepath}}?filename={{item.filename}}" target="_blank"
            style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
             <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
-            <span>{{item.filename}}</span>
+            <span class="long-name">{{item.filename}}</span>
         </a>
     </p>
 </div>

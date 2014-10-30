@@ -74,6 +74,21 @@ background-color: #e4eaec!important;
   background-position: center center;
 }
 
+.long-name{
+  max-width: 200px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.grid-box{
+  margin: 0 20px;
+}
+
+
 // Component styles are injected through grunt
 // injector
 @import 'access/signin/signin.scss';
