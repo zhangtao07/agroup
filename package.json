@@ -43,6 +43,7 @@
     "express-session": "~1.0.2",
     "googlediff": "^0.1.0",
     "highlight.js": "^8.2.0",
+    "http-proxy": "git://github.com/nodejitsu/node-http-proxy",
     "iconv": "~2.1.4",
     "image-size": "latest",
     "imagemagick": "latest",
@@ -70,6 +71,7 @@
     "socketio-jwt": "^2.0.2",
     "string": "~2.1.0",
     "temp": "latest",
+    "tough-cookie": "^0.12.1",
     "underscore": "^1.7.0",
     "unirest": "^0.2.7"
   },

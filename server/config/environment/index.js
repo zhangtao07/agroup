@@ -31,7 +31,6 @@ try {
   localConfig = {};
 }
 
-var mysql = envConfig.mysql;
 
 var all = {
   env: process.env.NODE_ENV,
@@ -67,14 +66,6 @@ var all = {
 };
 
 var config = _.merge(_.merge(all, envConfig), localConfig);
-
-config['sessionStorage'] = {
-  host: config['mysql'].host,
-  port: config['mysql'].port || 3306,
-  user: config['mysql'].user,
-  password: config['mysql'].password,
-  database: config['mysql'].database
-}
 
 // Export the config object based on the NODE_ENV
 // ==============================================

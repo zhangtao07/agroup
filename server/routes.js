@@ -11,26 +11,12 @@ var path = require('path');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/*', function(req, res, next) {
+    req.proxy(req.originalUrl.replace('api/',''));
+  });
   app.use('/api/search', require('./api/search'));
   app.use('/api/files', require('./api/file'));
   app.use('/api/markdowns', require('./api/markdown'));
-  app.use('/api/*', function(req, res, next) {
-    if (!req.session.user) {
-      errors[401](req, res);
-    } else {
-      next();
-    }
-
-  });
-
-  app.use('/editor/*', function(req, res, next) {
-    if (!req.session.user) {
-      res.redirect('/auth/login?url=' + req.originalUrl);
-    } else {
-      next();
-    }
-  });
-
   app.use('/static/image', require('./api/image'));
   app.use('/api/group', require('./api/group'));
   app.use('/api/message', require('./api/message'));
@@ -47,7 +33,7 @@ module.exports = function(app) {
       res.sendFile(config.root + req.params[0]);
     }
   });
-  app.use('/editor', require('./editor'));
+  //app.use('/editor', require('./editor'));
   app.route('/pdf').get(function(req, res) {
     res.render('pdf.html');
   });

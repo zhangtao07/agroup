@@ -1,6 +1,6 @@
 'use strict';
 
-var File = require("../../model/file.model.js");
+//var File = require("../../model/file.model.js");
 var config = require("../../config/environment");
 var exec = require('child_process').exec;
 // Get list of images

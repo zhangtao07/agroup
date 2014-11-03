@@ -14,9 +14,9 @@ var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
-var session = require('express-session');
-var models = require('../model/');
-var SessionStore = require('express-mysql-session');
+//var session = require('express-session');
+//var SessionStore = require('express-mysql-session');
+var proxy = require('../proxy')
 module.exports = function(app) {
   var env = app.get('env');
 
@@ -29,20 +29,18 @@ module.exports = function(app) {
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(function(req, res, next) {
-    models(function(err, db) {
-      if (err) return next(err);
-      req.models = db.models;
-      req.db = db;
+    proxy(req,res,function(httpProxy){
+      req.proxy = httpProxy;
       next();
-    });
+    })
   });
 
-  app.use(session({
-    key: 'agroup',
-    secret: 'webfe-fex-end',
-    store: new SessionStore(config.sessionStorage),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 } //for one year
-  }));
+  //app.use(session({
+    //key: 'agroup',
+    //secret: 'webfe-fex-end',
+    //store: new SessionStore(config.sessionStorage),
+    //cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 } //for one year
+  //}));
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

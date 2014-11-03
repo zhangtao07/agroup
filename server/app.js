@@ -12,6 +12,10 @@ var express = require('express');
 var config = require('./config/environment');
 
 
+// Create your proxy server and set the target in the options.
+//
+
+
 // Connect to database
 //mongoose.connect(config.mongo.uri, config.mongo.options);
 
@@ -24,16 +28,13 @@ var socketio = require('socket.io')(server, {
 });
 
 
-require('./model/')(function(err, db) {
-  require("./config/seed")(db);
-});
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 
-require('./editor/fileSync')(socketio);
+//require('./editor/fileSync')(socketio);
 
-// Start server
+// Mock Server
 server.listen(config.port, config.ip, function() {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
 });
