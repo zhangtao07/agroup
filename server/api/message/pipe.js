@@ -8,6 +8,7 @@ var fs = require("fs");
 var exec = require('child_process').exec;
 var Q = require('q');
 var importFile = require('./import');
+var mime = require('mime');
 
 
 /**
@@ -48,12 +49,16 @@ function pipe(req) {
 
         f.on('end', function() {
           var d = shasum.digest('hex');
+          var ismarkdown = /\.md|mk|markdown$/.test(filename);
+          if(ismarkdown){
+            mimetype = 'text/x-markdown';
+          }
 
           var stat = fs.statSync(tempPath);
           result.files.push({
             filename: filename,
             mimetype: mimetype,
-            size: stat['size'],
+            size: stat.size,
             encoding: encoding,
             filepath: tempPath,
             sha1: d
