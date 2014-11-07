@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('commonNav', ['$rootScope','userAPI',
-    function($rootScope,userAPI) {
+  .directive('commonNav', ['$rootScope', 'userAPI',
+    function($rootScope, userAPI) {
       return {
         templateUrl: 'app/block/commonNav/commonNav.html',
         restrict: 'EA',
@@ -12,7 +12,7 @@ angular.module('agroupApp')
             var groups = res.data;
             $rootScope.__groups = groups;
             //for deep link navgation
-            $rootScope.$broadcast('groupReady',groups);
+            $rootScope.$broadcast('groupReady', groups);
             groups.forEach(function(group) {
               scope.groups.push(group);
             });

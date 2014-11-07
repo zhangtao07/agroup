@@ -9,9 +9,9 @@ module.exports = {
   },
   messageBroadcast: function(groupId,message){
     var self = this;
-    Q.nfcall(message.getMessage).then(function(data) {
-      self.groupBroadcast(groupId, data);
-    });
+    self.groupBroadcast(groupId, message);
+    //Q.nfcall(message.getMessage).then(function(data) {
+    //});
   }
 
 

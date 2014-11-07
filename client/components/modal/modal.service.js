@@ -49,19 +49,19 @@ angular.module('agroupApp')
             deleteModal = openModal({
               modal: {
                 dismissable: true,
-                title: 'Confirm Delete',
-                html: '<p>Are you sure you want to delete <strong>' + name + '</strong> ?</p>',
+                title: '提示',
+                html: '<p>亲,确定要删除 <strong>' + name + '</strong> ?</p>',
                 buttons: [
                   {
                     classes: 'btn-danger',
-                    text: 'Delete',
+                    text: '删除',
                     click: function(e) {
                       deleteModal.close(e);
                     }
                   },
                   {
                     classes: 'btn-default',
-                    text: 'Cancel',
+                    text: '取消',
                     click: function(e) {
                       deleteModal.dismiss(e);
                     }

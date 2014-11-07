@@ -49,7 +49,7 @@ angular.module('agroupApp')
 
         }
 
-        scope.data.list.forEach(function(file) {
+        scope.data.files.forEach(function(file) {
           file.isImg = /^(image|video\/(mp4|webm|ogg))/.test(file.mimetype);
           file.isVideo = /^(video\/(mp4|webm|ogg))/.test(file.mimetype);
           file.isMK = /markdown/.test(file.mimetype);
@@ -62,25 +62,22 @@ angular.module('agroupApp')
 
         scope.onCoverError = function(item) {
           if (!item._cover) {
-            item._cover = item.cover;
+            item._cover = item.coverUrl;
           }
           item.coverLoad = false;
           setTimeout(function() {
-            item.cover = item._cover + '?d=' + new Date().getTime();
+            item.coverUrl = item._cover + '?d=' + new Date().getTime();
             scope.$apply();
           }, 3000);
-
-
         }
+
         scope.onimgclick = function(data) {
           var isMkdown = /markdown/.test(data.mimetype);
           if(isMkdown){
-            pdf(data.pdf);
+            pdf(data.previewUrl.embed);
             return
           }
-          if (data.pdf) {
-            window.open('/api/files/previewUrl?id=' + data.fv_id, '_blank');
-          }
+          window.open(data.previewUrl.view, '_blank');
         };
       }
     };

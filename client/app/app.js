@@ -98,7 +98,7 @@ var app = angular.module('agroupApp', [
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
       $urlRouterProvider
-        .otherwise('/group/playground');
+        .otherwise('/fex/comments');
 
       $locationProvider.html5Mode(true);
 

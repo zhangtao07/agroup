@@ -4,7 +4,7 @@ angular.module('agroupApp')
   .config(['$stateProvider',function ($stateProvider) {
     $stateProvider
       .state('app.group', {
-        url: '/group/{name}',
+        url: '/{name}/comments',
         templateUrl: 'app/group/group.html',
         controller: 'GroupCtrl'
       });

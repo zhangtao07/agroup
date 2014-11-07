@@ -50,7 +50,7 @@
               parent.postMessage('sync','*');
             }
             // Use ?debug to serve original JavaScript files instead of minified
-            window.baseDir = 'res';
+            window.baseDir = '/editor/res';
             /*
               res-min 是编译目录，从源码中祛除,请执行 gulp 进行编译
             */
@@ -83,7 +83,7 @@
               return '/static/image/resize?url=' + url + '&width=' + width + '&height='+ height +'&gravity=center&type=resize'
             }
         </script>
-        <script src="res/require.js"></script>
+        <script src="/editor/res/require.js"></script>
         <!--script src="res/bower-libs/google-diff-match-patch/diff_match_patch.js"></script-->
         <!--<script src="libs/socket.io-1.1.0.js"></script>-->
     </head>

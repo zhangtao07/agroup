@@ -32,6 +32,7 @@
     "busboy": "latest",
     "composable-middleware": "^0.3.0",
     "compression": "~1.0.1",
+    "connect-restreamer": "^1.0.1",
     "cookie-parser": "~1.0.1",
     "crc": "^3.0.0",
     "dateformat": "latest",

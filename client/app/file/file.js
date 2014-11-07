@@ -14,7 +14,7 @@ angular.module('agroupApp')
   .config(function($stateProvider) {
     $stateProvider
       .state('app.file', {
-        url: '/file/{name}',
+        url: '/{name}/files',
         templateUrl: 'app/file/file.html',
         controller: 'FileCtrl'
       });

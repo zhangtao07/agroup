@@ -5,33 +5,33 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
 
   function getTitle(data) {
     var text = '';
-    switch (data.type) {
-      case 'link':
+    switch (data.content.type) {
+      case 'Link':
         text = '分享了 1 个连接';
         break;
-      case 'file':
+      case 'File':
         var action = '';
         switch (data.content.action) {
-          case 'create':
+          case 'Create':
             action = '分享';
             break;
         }
-        text = action + '了 ' + data.content.list.length + ' 个文件';
+        text = action + '了 ' + data.content.data.files.length + ' 个文件';
         break;
-      case 'plain':
+      case 'Text':
         text = '输入了 1 段文字';
         break;
-      case 'mk':
+      case 'MK':
         var action = '';
         switch (data.content.action) {
-          case 'create':
+          case 'Create':
             action = '创建';
             break;
-          case 'update':
+          case 'Update':
             action = '更新';
             break;
         }
-        text = action + '了 ' + data.content.list.length + ' 个笔记';
+        text = action + '了 ' + data.content.data.files.length + ' 个笔记';
         break;
     }
     return text;
@@ -49,7 +49,7 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
       scope.__user = $rootScope.__user;
       scope.onDel = function(item){
         Modal.confirm.delete(function(){
-          messageAPI.delete(item.id);
+          messageAPI.delete(scope.group.id,item.id);
         })('');
       }
       scope.title = getTitle(data);

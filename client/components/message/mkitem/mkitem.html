@@ -1,15 +1,14 @@
-<div ng-repeat="item in data.list" class='grid-box'>
+<div ng-repeat="item in data.files" class='grid-box'>
   <div ng-if="item.cover">
       <img ng-error="onCoverError(item)" ng-load="onCoverLoad(item)"
       ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.cover}}"
-      image-resize-width="200" image-resize-height="200" title="{{item.filename}}" style="cursor: pointer"/>
+      image-resize-width="200" image-resize-height="200" title="{{item.name}}" style="cursor: pointer"/>
   </div>
-
 
   <p style="margin-top: 10px;font-weight: bold;">
     <a ng-href="/editor/{{ group.id }}?file={{item.file_id}}&view=true" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
-      <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
-      <span class="long-name">{{item.filename}}</span>
+      <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.name}}"></fileicon>
+      <span class="long-name">{{item.name}}</span>
     </a>
     <!--<p> {{item}} </p>-->
     <!--<div class="m-b-lg">-->

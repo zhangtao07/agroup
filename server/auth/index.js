@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express');
-var config = require('../config/environment');
 var router = express.Router();
 
 router.use('/login', function login(req,res,next){

@@ -20,9 +20,9 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
           files.forEach(function(file) {
             scope.uploadpanel.addFile(file, function(file, send) {
               var formData = new FormData();
-              formData.append('groupId', groupId);
+              //formData.append('groupId', groupId);
               formData.append('file', file,file.name);
-              send('api/message/upload', formData);
+              send('api/group/'+ groupId +'/file/upload', formData);
             }, function(fileId) {
               fileIds.push(fileId);
               checkUploadDone();
@@ -110,8 +110,8 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
           }
 
 
-          socket.joinGroup(groupId, function(data) {
-            var obj = JSON.parse(data);
+          socket.joinGroup(groupId, function(res) {
+            var obj = JSON.parse(res).data;
             var exist = false;
             scope.msglist.forEach(function(item,i){
               if(item.id == obj.id){
@@ -132,16 +132,14 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
           scope.postText = '';
           scope.onPostMessage = function() {
-            $http.post('api/message/post', {
-              'groupId': groupId,
-              'message': scope.postText,
+            console.log(scope.postText);
+            $http.post('api/group/' + groupId + '/message/post', {
+              'text': scope.postText,
               'type': 'plain'
             }).success(function(data) {
               scope.postText = "";
 //              debugger;
               element.find(".list-container").get(0).scrollTop = 0;
-
-
             });
           }
         });

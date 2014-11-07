@@ -20,10 +20,11 @@
     "angular-animate": "latest",
     "github-markdown-css": "~1.1.1",
     "rangy-official": "~1.3.0-alpha.20140921",
-    "ng-error":"latest",
-    "ng-load":"latest",
-    "blueimp-gallery":"~2.15.1",
-    "highlightjs": "~8.3.0"
+    "ng-error": "latest",
+    "ng-load": "latest",
+    "blueimp-gallery": "~2.15.1",
+    "highlightjs": "~8.3.0",
+    "pagedown-extra": "git@github.com:jmcmanus/pagedown-extra.git"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

@@ -1,12 +1,65 @@
 var config = require('./config/environment');
 var httpProxy = require('http-proxy');
-var proxy = new httpProxy.createProxyServer({});
+var options = {
+  target: {
+    host: config.service.host,
+    port: config.service.port
+  }
+};
 
-exports = module.exports = function(req, res, cb) {
-  var apiUrl = 'http://' + config.service.host + ':' + config.service.port;
-  cb(function(url) {
-    url = url || req.originalUrl;
-    console.log('proxing : ',apiUrl + url);
-    proxy.web(req,res, {target: apiUrl + url});
+var request = require('request');
+
+
+//exports = module.exports =  function(req,res,next){
+  //var rootURL = 'http://' + config.service.host + ':' + config.service.port;
+  //console.log("value");
+    //request.get({
+      //url: rootURL + req.originalUrl.replace('/api',''),
+      //headers: req.headers
+    //}).pipe(res);
+    //[>
+    //, function(err, response, body) {
+      //res.writeHead(response.statusCode,response.headers);
+      //res.end(body);
+    //});
+    //*/
+//};
+
+exports = module.exports = function(req, res, next) {
+  var proxy = new httpProxy.createProxyServer(options);
+
+  var events = {
+    data: [],
+    error: []
+  };
+  var exports = {
+    on: function(id, fn) {
+      events[id] = events[id] || [];
+      events[id].push(fn);
+    }
+  };
+
+  proxy.on('error', function(e) {
+    var args = [].slice.call(arguments);
+    if (events.error.length) {
+      events.data.forEach(function(d) {
+        d.apply(null, args);
+      });
+    }
   });
+
+  proxy.on('proxyRes', function(proxyRes, req, res) {
+    //console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+    proxyRes.on('data', function(chunk) {
+      if (events.data.length) {
+        events.data.forEach(function(d) {
+          d.call(null, chunk);
+        });
+      }
+    })
+  });
+  req.url = req.originalUrl.replace('api/', '');
+  proxy.web(req, res);
+  //proxy.close();
+  return exports;
 }

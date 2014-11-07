@@ -8,7 +8,8 @@ var express = require('express');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var compression = require('compression');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
+//var restreamer = require('connect-restreamer');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
@@ -16,7 +17,6 @@ var path = require('path');
 var config = require('./environment');
 //var session = require('express-session');
 //var SessionStore = require('express-mysql-session');
-var proxy = require('../proxy')
 module.exports = function(app) {
   var env = app.get('env');
 
@@ -24,16 +24,11 @@ module.exports = function(app) {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(compression());
-  app.use(bodyParser.urlencoded({ limit: '50mb' ,extended: false }));
-  app.use(bodyParser.json());
+  //app.use(bodyParser.urlencoded({ limit: '50mb' ,extended: false }));
+  //app.use(bodyParser.json());
+  //app.use(restreamer());
   app.use(methodOverride());
   app.use(cookieParser());
-  app.use(function(req, res, next) {
-    proxy(req,res,function(httpProxy){
-      req.proxy = httpProxy;
-      next();
-    })
-  });
 
   //app.use(session({
     //key: 'agroup',

@@ -5,7 +5,7 @@
   app.hideAside = false;
   app.hideFooter = true;
   app.content.classname = 'app-content-full';
-  " class="md-container" infinite-scroll="loadList(pageno)" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
+  " class="md-container" infinite-scroll="loadList()" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
 
 
   <div class="btn-group">
@@ -14,10 +14,10 @@
       <i class="fa fa-plus"></i>
       <!--<span translate="markdown.create"></span>-->
     </a>
-    <a class="btn m-b-xs btn-sm btn-default " ng-click="sync()">
-      <i class="fa fa-refresh"></i>
-      <!--<span translate="markdown.refresh"></span>-->
-    </a>
+    <!--<a class="btn m-b-xs btn-sm btn-default " ng-click="sync()">-->
+      <!--<i class="fa fa-refresh"></i>-->
+      <!--[><span translate="markdown.refresh"></span><]-->
+    <!--</a>-->
   </div>
   <div class="col-md-12 markdown-list" >
     <section class="col-md-4" ng-repeat="md in markdowns" ng-animate="{enter:'animate-enter',leave: 'animate-leave'}">
@@ -25,25 +25,23 @@
         <div class="panel-heading">
           <div class="media">
             <span class="pull-right">
-              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/editor/{{group.id}}?file={{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
-              <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}" ng-href="/editor/{{group}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
-              <!--<a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-click="view(md)"><i class="fa fa-eye fa-fw m-r-xs"></i></a>-->
-              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/editor/{{group.id}}?file={{md.id}}&view=true" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/{{group.name}}/md/edit/{{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/{{group.name}}/md/view/{{md.id}}" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
               <a ng-show="md.user.id==me.id" tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
             <span class="pull-left thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}" ><img style="width:40px;height:40px" image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
             <div class="media-body">
-              <div><a href="" popover="{{ md.filename }}" popover-trigger="mouseenter" class='md-filename'>{{ md.filename }}</a>
+              <div><a href="" popover="{{ md.name }}" popover-trigger="mouseenter" class='md-filename'>{{ md.name }}</a>
               </div>
               <span class="text-muted ng-binding">
                 <i class="fa fa-clock-o"></i>
-                {{ md.time }}
+                {{ md.updateTime | date:'MM-dd HH:mm:ss' }}
               </span>
             </div>
           </div>
         </div>
         <div class="panel-body relative">
-          <div class="md-content" ng-bind-html="md.content"></div>
+          <div class="md-content" ng-bind-html="md2html(md.content)"></div>
           <div class="m-b m-t writer-pannel">
             <a ng-repeat="writer in md.writers" href="" class="avatar thumb-xs m-r-xs">
               <img style="width:20px;height:20px;" class="w-a" image-resize-width="20" image-resize-height="20" image-resize="{{ writer.avatar }}" alt="...">

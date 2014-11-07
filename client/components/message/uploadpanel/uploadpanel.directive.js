@@ -67,11 +67,12 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
             var res = JSON.parse(xhr.responseText);
-            if (res.status == "ok") {
+            if (res.status == 200) {
               item.percent = 100;
               item.status = "complete";
               scope.$apply();
-              return onfinish && onfinish(res.fileId,res.folder);
+              var data = res.data;
+              return onfinish && onfinish(data.id,data.folder);
             }
           }
         };
