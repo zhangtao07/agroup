@@ -29,5 +29,14 @@
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
+  },
+  "overrides": {
+    "pagedown-extra": {
+      "main": [
+        "pagedown/Markdown.Converter.js",
+        "pagedown/Markdown.Sanitizer.js",
+        "Markdown.Extra.js"
+      ]
+    }
   }
 }
