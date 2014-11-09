@@ -32,7 +32,7 @@ require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 
-//require('./editor/fileSync')(socketio);
+require('./editor/fileSync')(socketio);
 
 // Mock Server
 server.listen(config.port, config.ip, function() {

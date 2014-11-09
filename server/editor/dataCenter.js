@@ -61,57 +61,57 @@ exports.getCache = function(fileid) {
 exports.readFile = function(fileid, cb) {
   var cachedfile = cache[fileid];
   if (cachedfile) return cb && cb(cachedfile);
-  getDB(function(err, db) {
-    db.models.file.get(fileid, function(err, file) {
-      file.getFileversion(function(err, fvs) {
-        readFromDisk(file, _.max(fvs, 'id'), cb);
-      });
-    });
-  });
+  //getDB(function(err, db) {
+    //db.models.file.get(fileid, function(err, file) {
+      //file.getFileversion(function(err, fvs) {
+        //readFromDisk(file, _.max(fvs, 'id'), cb);
+      //});
+    //});
+  //});
 };
 
 function updateFile(file,user){
   getDB(function(err, db) {
     var filename = defaultFileName(user || {nickname:'agroup'});
-    db.models.file.get(file.id, function(err, f) {
-      //TBD
-      if(f.status === 'init'){
-        f.status = 'vision';
-      }
-      f.name = file.name || filename;
-      f.user_id = user.id;
-      f.save();
-    });
-    db.models.folder.find({file_id:file.id}, function(err, fds) {
-      _.each(fds,function(fd){
-        fd.name = file.name || filename;
-        fd.user_id = user.id;
-        fd.save();
-      });
-    });
+    //db.models.file.get(file.id, function(err, f) {
+      ////TBD
+      //if(f.status === 'init'){
+        //f.status = 'vision';
+      //}
+      //f.name = file.name || filename;
+      //f.user_id = user.id;
+      //f.save();
+    //});
+    //db.models.folder.find({file_id:file.id}, function(err, fds) {
+      //_.each(fds,function(fd){
+        //fd.name = file.name || filename;
+        //fd.user_id = user.id;
+        //fd.save();
+      //});
+    //});
   });
 }
 
 /* 创建markdown */
 exports.createFile = function(group, user, cb) {
-  getDB(function(err, db) {
-    var file = db.models.file;
-    file.create([{
-      name: '',//defaultFileName(user),
-      mimetype: 'text/x-markdown',
-      createDate: new Date(),
-      status: 'init',
-      user_id: user.id,
-      group_id: group
-    }], function(err, files) {
-      _.each(files, function(file) {
-        cache[file.id] = file;
-        createFileversion(file,true);
-        createFolder(file,user);
-        return cb && cb(err,file.id);
-      });
-    });
-  });
+  //getDB(function(err, db) {
+    //var file = db.models.file;
+    //file.create([{
+      //name: '',//defaultFileName(user),
+      //mimetype: 'text/x-markdown',
+      //createDate: new Date(),
+      //status: 'init',
+      //user_id: user.id,
+      //group_id: group
+    //}], function(err, files) {
+      //_.each(files, function(file) {
+        //cache[file.id] = file;
+        //createFileversion(file,true);
+        //createFolder(file,user);
+        //return cb && cb(err,file.id);
+      //});
+    //});
+  //});
 };
 
 function markdownMessage(err,message){
@@ -122,14 +122,14 @@ exports.checkFile = function(fileid, cb) {
   if (cache[fileid]) {
     cb(null,cache[fileid]);
   } else {
-    getDB(function(err, db) {
-      var file = db.models.file;
-      file.exists({
-        id: fileid
-      }, function(err, exists) {
-        cb(err, exists);
-      });
-    });
+    //getDB(function(err, db) {
+      //var file = db.models.file;
+      //file.exists({
+        //id: fileid
+      //}, function(err, exists) {
+        //cb(err, exists);
+      //});
+    //});
   }
 };
 

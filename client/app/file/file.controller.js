@@ -40,9 +40,9 @@ angular.module('agroupApp')
 
 
       function getFiles(item, folder, groupId, cb) {
-        folderAPI.getFiles(groupId, item.id).success(function(files, status) {
+        folderAPI.getFiles(groupId, item.id).success(function(res, status) {
           return cb && cb(
-            _.each(files, function(d) {
+            _.each(res.data, function(d) {
               var isSelected = folder && folder.selectedItem && folder.selectedItem.id === +d.id;
               if (isSelected) {
                 d.selected = true;
@@ -57,7 +57,6 @@ angular.module('agroupApp')
         var group = $scope.group.id;
         var firstLevel = level[0];
         getFiles({
-          id: 0
         }, firstLevel, group, function(files) {
           firstLevel.files = files;
           if (!files.length) {
@@ -78,7 +77,7 @@ angular.module('agroupApp')
         folder.selectedItem = item;
         var index = level.indexOf(folder);
 
-        if (item.type !== 'folder') {
+        if (item.type !== 'Folder') {
           if (index === level.length - 2) {
             closeFolder(index + 1, level.length - index);
           }
@@ -163,7 +162,7 @@ angular.module('agroupApp')
           formData.append('groupId', groupId);
           formData.append('file', file);
           formData.append('folderId', folderId);
-          send('api/message/upload', formData);
+          send('api/group/'+groupId+'/file/upload', formData);
         }, function(fileID, fd) {
           var index = level.indexOf(folder);
           level[index].files.push(fd);

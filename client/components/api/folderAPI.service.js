@@ -4,7 +4,7 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
   function(apiRoot, $http, $q) {
     return {
       getFiles: function(groupId, folderId) {
-        return $http.get(apiRoot + "api/group/" + groupId + "/folder/" + folderId);
+        return $http.get(apiRoot + "api/group/" + groupId + "/folder/get" ,{ params : { id: folderId}});
       },
       getMDimage: function(groupId, folder, filepath) {
         var path = [];
