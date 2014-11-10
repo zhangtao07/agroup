@@ -14,12 +14,6 @@ angular.module('agroupApp')
 
       $scope.markdowns = [];
 
-      function showList(data, status) {
-        $scope.hasMore = data.total > (data.page - 1) * data.size + data.count;
-        data.list.forEach(function(md) {
-          $scope.markdowns.push(md);
-        });
-      }
 
       $scope.md2html = mdToHtml;
       function mdToHtml(md) {
@@ -53,21 +47,11 @@ angular.module('agroupApp')
         })(md.name);
       };
 
-      $scope.view = function(md) {
-        dialog(function() {})(md.content);
-      }
-
-      $scope.sync = function() {
-        $scope.markdowns = [];
-        init();
-      };
-
       var pagenation = {
         page: 0,
         size: 9
       }
 
-      //$scope.hasMore = true;
       $scope.me = $rootScope.__user;
 
       var groupName = $stateParams.name;
@@ -75,22 +59,21 @@ angular.module('agroupApp')
         $rootScope.__currentGroupName = res.data.name;
         $rootScope.__currentGroupId = res.data.id;
         $scope.group = res.data;
-        init();
+        $scope.loadList();
       });
 
-
-      function init() {
-        var group = $scope.group.id;
-        markdownAPI.getList($scope.group.id, pagenation.page, pagenation.size).success(showList);
-      }
-
-
-      $scope.loadList = function(pageno) {
+      $scope.loadList = function() {
         $scope.hasMore = true;
         var group = $scope.group;
-        markdownAPI(group.id, pagenation.page++, pagenation.size).success(showList);
+        markdownAPI.getList(group.id, pagenation.page++, pagenation.size).success(showList);
       }
 
+      function showList(data, status) {
+        $scope.hasMore = data.total > (data.page - 1) * data.size + data.count;
+        data.list.forEach(function(md) {
+          $scope.markdowns.push(md);
+        });
+      }
 
     }
   ]);
