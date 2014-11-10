@@ -4,7 +4,7 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
   function(apiRoot, $http, $q) {
     return {
       getFiles: function(groupId, folderId) {
-        return $http.get(apiRoot + "api/group/" + groupId + "/folder/get" ,{ params : { id: folderId}});
+        return $http.get(apiRoot + "api/group/" + groupId + "/folder/get" ,{ params : { pid: folderId || 0}});
       },
       getMDimage: function(groupId, folder, filepath) {
         var path = [];
@@ -24,8 +24,8 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
           return apiRoot + 'api/files/previewUrl?id=' + fv_id;
         }
       },
-      getPreview: function(file, type) {
-        return $http.post(apiRoot + 'api/files/preview/' + file.file_id, {
+      getPreview: function(groupId,file, type) {
+        return $http.post(apiRoot + 'api/group/' + groupId +'/file/preview/' + file.id, {
           type: type
         });
       },

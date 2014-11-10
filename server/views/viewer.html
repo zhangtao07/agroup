@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html<%- cache ? ' manifest="cache.manifest"' : '' %>>
+<html<%- cache ? ' manifest="/editor/cache.manifest"' : '' %>>
 
     <head>
         <title>AGroup 笔记</title>
@@ -14,6 +14,9 @@
 
             // Use ?debug to serve original JavaScript files instead of minified
             window.baseDir = '/editor/res';
+            var group = {
+              name : location.pathname.replace(/\/(\w+).*/,'$1')
+            }
             /*
               res-min 是编译目录，从源码中祛除,请执行 gulp 进行编译
             */

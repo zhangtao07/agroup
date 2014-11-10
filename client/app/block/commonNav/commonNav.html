@@ -1,53 +1,54 @@
 <!-- first -->
 <ul class="nav">
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span translate="aside.nav.GROUPS">Groups</span>
-    </li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.GROUPS">Groups</span>
+  </li>
 
-    <li ui-sref-active="active" ng-repeat="group in groups">
-        <a href ui-sref="app.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">
-            <i class="glyphicon glyphicon-file icon text-success"></i>
-            <span class="font-bold">{{group.name}}</span>
-        </a>
-    </li>
-    <li class="line dk"></li>
+  <li ui-sref-active="active" ng-repeat="group in groups">
+    <a href ui-sref="app.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">
+      <i class="glyphicon glyphicon-file icon text-success"></i>
+      <span class="font-bold">{{group.name}}</span>
+    </a>
+  </li>
+  <li class="line dk"></li>
 
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span translate="aside.nav.components.COMPONENTS">Components</span>
-    </li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span class="font-bold">{{ __currentGroupName }}</span>
+    <span translate="aside.nav.components.COMPONENTS">Components</span>
+  </li>
 
-    <li ui-sref-active="active" >
-        <a href ui-sref="app.markdown({name:__currentGroupName})">
-            <i class="glyphicon glyphicon-file icon text-success"></i>
-            <!--<span>{{__currentGroupName}}</span>-->
-            <span translate="aside.nav.components.MDS">Markdowns</span>
-        </a>
-    </li>
+  <li ui-sref-active="active">
+    <a href ui-sref="app.markdown({name:__currentGroupName})">
+      <i class="glyphicon glyphicon-file icon text-success"></i>
+      <!--<span>{{__currentGroupName}}</span>-->
+      <span translate="aside.nav.components.MDS">Markdowns</span>
+    </a>
+  </li>
 
-    <li ui-sref-active="active">
-        <a ui-sref="app.file({name:__currentGroupName})">
-            <i class="glyphicon glyphicon-folder-close icon text-info-lter"></i>
-            <!--<span>{{ __currentGroupName }}</span>-->
-            <span translate="aside.nav.components.FILES">Files</span>
-        </a>
-    </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.file({name:__currentGroupName})">
+      <i class="glyphicon glyphicon-folder-close icon text-info-lter"></i>
+      <!--<span>{{ __currentGroupName }}</span>-->
+      <span translate="aside.nav.components.FILES">Files</span>
+    </a>
+  </li>
 
-    <li disabled ui-sref-active="active">
-        <a>
-            <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
-            <span translate="aside.nav.components.TASKS">Tasks</span>
-            <span>（敬请期待.）</span>
-        </a>
-    </li>
+  <li disabled ui-sref-active="active">
+    <a>
+      <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
+      <span translate="aside.nav.components.TASKS">Tasks</span>
+      <span>（敬请期待.）</span>
+    </a>
+  </li>
 
-    <!--disabled-->
-    <li disabled ui-sref-active="active">
-        <a>
-            <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
-            <span translate="aside.nav.components.LINKS">Links</span>
-            <span>（敬请期待.）</span>
-        </a>
-    </li>
+  <!--disabled-->
+  <li disabled ui-sref-active="active">
+    <a>
+      <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
+      <span translate="aside.nav.components.LINKS">Links</span>
+      <span>（敬请期待.）</span>
+    </a>
+  </li>
 
 </ul>
 <!-- / third -->

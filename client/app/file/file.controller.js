@@ -10,8 +10,20 @@ angular.module('agroupApp')
       //}];
 
       $scope.getIcon = function(item) {
-        if (item) {
-          return fileIcon.getClassByMimetype(item.type) || fileIcon.getClassByFilename(item.name) || 'fa fa-file';
+        if(!item) return;
+        if(item.file){
+          return fileIcon.getClassByMimetype(item.file.mimetype) || fileIcon.getClassByFilename(item.file.name);
+        }else if(item.folder){
+          return fileIcon.getClassByMimetype('Folder');
+        }
+      }
+
+      $scope.getName = function(item){
+        if(!item) return;
+        if(item.file){
+          return item.file.name;
+        }else if(item.folder){
+          return item.folder.name;
         }
       }
 
@@ -77,13 +89,13 @@ angular.module('agroupApp')
         folder.selectedItem = item;
         var index = level.indexOf(folder);
 
-        if (item.type !== 'Folder') {
+        if (item.file) {
           if (index === level.length - 2) {
             closeFolder(index + 1, level.length - index);
           }
-          $scope.preview(item,folder);
-        } else {
-          getFiles(item, folder, groupId, function(files) {
+          $scope.preview(item.file,folder);
+        } else if(item.folder){
+          getFiles(item.folder, folder, groupId, function(files) {
             var nextLevel = level[index + 1] = level[index + 1] || {};
             nextLevel.files = files;
             nextLevel.parent_id = item.id;

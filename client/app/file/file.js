@@ -63,13 +63,14 @@ angular.module('agroupApp')
     return {
       restrict: 'A',
       link: function(scope, element, attr) {
-        element.text(scope.item.name);
+        var item = scope.item.file || scope.item.folder;
+        element.text(item.name);
 
         element.bind('keydown keypress', function(event) {
           if (event.which === 13) {
             element.blur();
           } else if (event.which === 27) {
-            element.text(scope.item.name);
+            element.text(item.name);
             select(element[0]);
           }
         });
@@ -84,9 +85,9 @@ angular.module('agroupApp')
             element.attr('contenteditable', false);
             var content = element.text();
             if (content) {
-              scope.item.name = content;
+              item.name = content;
             } else {
-              element.text(scope.item.name);
+              element.text(item.name);
             }
           }
         });

@@ -24,7 +24,8 @@
     "ng-load": "latest",
     "blueimp-gallery": "~2.15.1",
     "highlightjs": "~8.3.0",
-    "pagedown-extra": "git@github.com:jmcmanus/pagedown-extra.git"
+    "pagedown-extra": "git@github.com:jmcmanus/pagedown-extra.git",
+    "moment": "~2.8.3"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
@@ -36,6 +37,12 @@
         "pagedown/Markdown.Converter.js",
         "pagedown/Markdown.Sanitizer.js",
         "Markdown.Extra.js"
+      ]
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/zh-cn.js"
       ]
     }
   }

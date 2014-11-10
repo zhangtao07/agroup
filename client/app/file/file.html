@@ -4,7 +4,7 @@
     <span ng-show="folder.selectedItem">
       <span ng-class="getIcon(folder.selectedItem)"></span>
       <!--<span class="fa fa-"></span>-->
-      <a href="">{{ folder.selectedItem.name }}</a>
+      <a href="" ng-bind-html="getName(folder.selectedItem)"></a>
     </span>
   </li>
 </ul>
@@ -30,11 +30,13 @@
               <a stop-event ng-repeat="item in folder.files"  ng-dblclick="editItem(item,folder)" class="list-group-item m-l hover-anchor b-a no-select m-l-none"
                 ng-class="{'focus ': item.selected}" ng-click="selectItem(folder,item)">
                 <span tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" stop-event ng-click="deleteItem(folder,item)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
-                <span class="block" ng-class="{'m-n': item.selected }">
-                  <!--<fileicon  mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>-->
-                  <!--<span class="fa fa-{{ item.type | fileicon }}"></span>-->
-                  <fileicon mimetype="{{item.type}}" filename="{{item.name}}"></fileicon>
+                <span ng-if="item.file" class="block" ng-class="{'m-n': item.selected }">
+                  <fileicon mimetype="{{item.file.mimetype}}" filename="{{item.file.name}}"></fileicon>
                   <em class="text-eclipse" ng-blur="doneEditing(item)" file-editing class="file-ml" ng-blur="doneEditing(item)"></em></span>
+                <span ng-if="item.folder" class="block" ng-class="{'m-n': item.selected }">
+                  <fileicon mimetype="Folder" filename="{{item.folder.name}}"></fileicon>
+                  <em class="text-eclipse" ng-blur="doneEditing(item)" file-editing class="file-ml" ng-blur="doneEditing(item)"></em></span>
+
                 <!--<input stop-event type="text" class="form-control pos-abt" ng-show="item.editing" file-editing ng-blur="doneEditing(item)" ng-model="item.name" style="top:3px;left:2px;width:98%;padding-left:25px;" >-->
               </a>
             </div>

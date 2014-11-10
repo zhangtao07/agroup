@@ -5,46 +5,48 @@
   app.hideAside = false;
   app.hideFooter = true;
   app.content.classname = 'app-content-full';
-  " class="md-container" infinite-scroll="loadList()" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
+  " class="md-container" infinite-scroll="loadList()" infinite-scroll-disabled="!hasMore"
+infinite-scroll-immediate-check="false">
 
 
-  <div class="col-md-12 markdown-list" >
-    <div class="new-md col-md-4 panel panel-default">
+  <div class="col-md-12 markdown-list">
+    <div class="new-md col-md-4 panel no-border">
       <a ng-href="/editor/{{group.id}}/create" target="_blank" class="">
-        <i class="icon-plus"></i>
+        <i class="fa fa-plus"></i>
         <!--<span translate="markdown.create"></span>-->
       </a>
     </div>
     <section class="col-md-4" ng-repeat="md in markdowns" ng-animate="{enter:'animate-enter',leave: 'animate-leave'}">
-      <div class="panel panel-default" draggable=false>
+      <div class="panel no-border" draggable=false>
         <div class="panel-heading">
           <div class="media">
+            <a href="" class='pull-left md-filename'>{{ md.name }}</a>
             <span class="pull-right">
               <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/{{group.name}}/md/edit/{{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
               <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/{{group.name}}/md/view/{{md.id}}" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
               <a ng-show="md.user.id==me.id" tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
-            <span class="pull-left thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}" ><img style="width:40px;height:40px" image-resize-width="40" image-resize-height="40" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
-            <div class="media-body">
-              <div><a href="" popover="{{ md.name }}" popover-trigger="mouseenter" class='md-filename'>{{ md.name }}</a>
-              </div>
-              <span class="text-muted ng-binding">
-                <i class="fa fa-clock-o"></i>
-                {{ md.updateTime | date:'MM-dd HH:mm:ss' }}
-              </span>
-            </div>
           </div>
         </div>
-        <div class="panel-body relative">
+        <div class="panel-body relative bg-light lter">
           <div class="md-content" ng-bind-html="md2html(md.content)"></div>
           <div class="m-b m-t writer-pannel">
-            <a ng-repeat="writer in md.writers" href="" class="avatar thumb-xs m-r-xs">
-              <img style="width:20px;height:20px;" class="w-a" image-resize-width="20" image-resize-height="20" image-resize="{{ writer.avatar }}" alt="...">
-              <!--<i class="on b-white left"></i>-->
-            </a>
             <!--<span ng-show="{{md.writers}}" class="h5 m-l-sm">Editting</span>-->
           </div>
 
+        </div>
+        <div class="panel-footer">
+          <a ng-repeat="writer in md.writers" href="" class="avatar thumb-xs m-r-xs">
+            <img style="width:20px;height:20px;" class="w-a" image-resize-width="20" image-resize-height="20" image-resize="{{ writer.avatar }}" alt="...">
+            <!--<i class="on b-white left"></i>-->
+          </a>
+          <span class="thumb-sm" tooltip-html-unsafe="{{ md.user.nickname}}"><img style="width:20px;height:20px" image-resize-width="20" image-resize-height="20" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
+          <span class="text-muted pull-right">
+          <!--<i class="fa fa-fw m-r-xs text-info fa-bookmark"></i><span class="font-bold">37</span>-->
+          <!--<i class="fa fa-fw m-r-xs text-info fa-star m-l"></i><span class="font-bold">120</span>-->
+            <i class="fa fa-clock-o"></i>
+              {{ fromNow(md.updateTime) }}
+          </span>
         </div>
       </div>
     </section>

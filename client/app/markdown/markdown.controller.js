@@ -14,6 +14,17 @@ angular.module('agroupApp')
 
       $scope.markdowns = [];
 
+      $scope.fromNow = function(time){
+        var now = new Date();
+        var moreThen1Day = (now.getTime() - time) > 1000*60*60*24;
+        if(moreThen1Day){
+          //return moment(time).calendar();//.format('YYYY-MM-Do');
+          return moment(time).format('ll');
+        }else{
+          return moment(time).fromNow();
+        }
+
+      };
 
       $scope.md2html = mdToHtml;
       function mdToHtml(md) {
@@ -69,7 +80,7 @@ angular.module('agroupApp')
       }
 
       function showList(data, status) {
-        $scope.hasMore = data.total > (data.page - 1) * data.size + data.count;
+        $scope.hasMore = data.total > Math.abs((data.page - 1) * data.size + data.count);
         data.list.forEach(function(md) {
           $scope.markdowns.push(md);
         });
