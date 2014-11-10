@@ -3,11 +3,12 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var moment = require('moment');
 var config = require('../config/environment');
 var url = require('url');
 var _ = require('lodash');
 var Q = require('q');
-//var dataCenter = require('./dataCenter');
+var dataCenter = require('./dataCenter');
 
 router.post('/pdfExport', require('./pdf').export);
 //router.post('/pdfToImage', require('./pdf').toImage);
@@ -60,6 +61,24 @@ function getMD(headers, fileId, group) {
   })
 }
 
+
+function createMD(headers, group, user) {
+  return Q.Promise(function(resolve) {
+    var api = url.parse(
+      'http://' + config.service.host + ':' + config.service.port +
+      '/group/' + group.id + '/markdown/save');
+
+    request.post({
+      url: url.format(api),
+      headers: headers
+    }, function(err, response, body) {
+      resolve(body);
+    }).form({
+      filename: user.nickname + '_' + moment().format('YYYYMMDD_HHmmss') + '.md',
+    })
+  })
+}
+
 function getMe(headers) {
   return Q.Promise(function(resolve) {
     var me = url.parse(
@@ -77,68 +96,16 @@ function getMe(headers) {
 
 
 
-//router.get('/merge', function(req, res) {
-//res.render('merge.html');
-//});
-
-//router.get('/:group', function(req, res) {
-//var group = req.params.group;
-//var fileid = req.query.file;
-//var view = req.query.view;
-//var cache = true;
-//if (typeof req.query.debug !== 'undefined') {
-//cache = false;
-//}
-
-//if (!fileid) {
-//res.redirect('/');
-//} else {
-//dataCenter.checkFile(fileid, function(err, exists) {
-//if (exists) {
-//return view ? res.render('viewer.html', {
-//cache: cache
-//}) : res.render('editor.html', {
-//cache: cache
-//});
-//} else {
-//res.render('no-file.html');
-//}
-//})
-//}
-//});
-
-router.get('/:group/create', function(req, res) {
-  var group = req.params.group;
-
-  dataCenter.createFile(group, req.session.user, function(err, fileid) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.redirect('/editor/' + group + '?file=' + fileid);
-    }
+router.get('/create', function(req, res) {
+  var headers = req.headers;
+  var group = req.group;
+  getMe(headers).then(function(body){
+    var user = JSON.parse(body).data;
+    return createMD(headers,group,user)
+  }).then(function(body){
+    var md = JSON.parse(body).data;
+    res.redirect('/' + group.name + '/md/edit/' + md.id);
   });
 });
-
-//router.post('/:group', function(req, res) {
-//var group = req.params.group;
-//var fileid = req.query.file;
-//var user = req.session.user;
-
-//dataCenter.readFile(fileid, function(file) {
-//res.status(200).json({
-//fileid: fileid,
-//group: group,
-//title: file.name,
-//content: file.content || '',
-//user: {
-//id: user.id,
-//username: user.username,
-//nickname: user.nickname,
-//avatar: '/api/user/avatar/' + user.username
-//}
-//});
-//});
-//});
-
 
 module.exports = router;

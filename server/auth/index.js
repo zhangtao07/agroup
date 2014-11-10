@@ -2,14 +2,12 @@
 
 var express = require('express');
 var router = express.Router();
+var proxy = require('../proxy');
 
-router.use('/login', function login(req,res,next){
-  var url = req.query.url;
-  req.proxy('/user/login');
-});
-router.use('/logout', function(req, res, next) {
-  delete req.session.user;
-  res.redirect(req.query.url||"/")
+router.use('/', function login(req,res,next){
+  proxy(req,res).on('data',function(chunk){
+    console.log(111,chunk.toString());
+  })
 });
 
 module.exports = router;

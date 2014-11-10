@@ -13,7 +13,6 @@ var url = require('url');
 
 module.exports = function(app) {
 
-
   app.param('groupId', function(req, res, next, groupId) {
     req.group = {
       id: groupId
