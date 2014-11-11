@@ -37,7 +37,6 @@ exports.userLeave = function(headers,client) {
 }
 
 exports.setTitle = function(fileid, filename) {
-  console.log('setTitle',fileid);
   cache[fileid].name = filename;
 }
 
@@ -70,7 +69,6 @@ function pubMessage(err,message){
 exports.save = save;
 function save(headers,group,file,fileId) {
   file = file || {name:'',content:''};
-  console.log(file.name);
   return Q.Promise(function(resolve) {
     var api = url.parse(apiRoot + '/group/' + group.id + '/markdown/save');
     request.post({

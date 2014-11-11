@@ -39,6 +39,7 @@ router.post('/data/:fileId', function(req, res, next) {
     [getMe(headers), getMD(headers, fileId, group)], function(me, md) {
 
       dataCenter.cache(fileId);
+      console.log(md.filename);
       dataCenter.setTitle(fileId, md.filename);
       dataCenter.setContent(fileId, md.content);
 
@@ -61,7 +62,7 @@ function getMD(headers, fileId, group) {
       url: url.format(file),
       headers: headers
     }, function(err, response, body) {
-      var filename = response.headers['content-disposition'].replace(/.*filename=(.*);.*/, '$1');
+      var filename = decodeURIComponent(response.headers['content-disposition']).replace(/.*filename=(.*);.*/, '$1');
 
       resolve({
         filename: filename,
