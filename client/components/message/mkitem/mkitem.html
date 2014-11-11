@@ -1,4 +1,4 @@
-<div ng-repeat="item in data.files" class='grid-box'>
+<div ng-repeat="item in data.files" class='file-li grid-box'>
     <img ng-hide="!item.coverLoad" ng-error="onCoverError(item)" ng-load="onCoverLoad(item)"
     ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.coverUrl}}"
     image-resize-width="200" image-resize-height="200" title="{{item.name}}" style="cursor: pointer"
