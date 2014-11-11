@@ -72,7 +72,9 @@ angular.module('agroupApp').directive('uploadpanel', ['$q', function($q) {
               item.status = "complete";
               scope.$apply();
               var data = res.data;
-              return onfinish && onfinish(data.id,data.folder);
+              delete data.folder;
+              delete data.fileversion;
+              return onfinish && onfinish(data.id,data);
             }
           }
         };

@@ -92,9 +92,14 @@ angular.module('agroupApp')
           }
         });
 
-        scope.$watch('item.name', function(nv, ov) {
+        scope.$watch('item.file.name', function(nv, ov) {
           if (nv && ov && nv !== ov) {
-            return scope.updateItem && scope.updateItem(scope.item);
+            return scope.fileRename && scope.fileRename(item);
+          }
+        });
+        scope.$watch('item.folder.name', function(nv, ov) {
+          if (nv && ov && nv !== ov) {
+            return scope.folderRename && scope.folderRename(item);
           }
         });
       }

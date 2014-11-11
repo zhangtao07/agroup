@@ -3,6 +3,23 @@
 angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
   function(apiRoot, $http, $q) {
     return {
+      deleteFile: function(group,fileId){
+        return $http.post(apiRoot + "api/group/" + group.id + "/file/delete",{ id: fileId });
+      },
+      deleteFolder: function(group,folderId){
+        return $http.post(apiRoot + "api/group/" + group.id + "/folder/delete",{ id: folderId });
+      },
+      fileRename: function(group,fileId,name){
+        return $http.post(apiRoot + "api/group/" + group.id + "/file/rename",{ id: fileId , name : name });
+      },
+      folderRename: function(group,folderId,name){
+        return $http.post(apiRoot + "api/group/" + group.id + "/folder/rename",{ id: folderId , name : name });
+      },
+      createFolder: function(group,pid,name){
+        console.log(pid);
+        console.log(name);
+        return $http.post(apiRoot + "api/group/" + group.id + "/folder/create",{ pid: pid , name: name });
+      },
       getFiles: function(groupId, folderId) {
         return $http.get(apiRoot + "api/group/" + groupId + "/folder/get" ,{ params : { pid: folderId || 0}});
       },
