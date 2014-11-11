@@ -1,23 +1,22 @@
 <div ng-repeat="item in data.files" class='grid-box'>
-  <div ng-if="item.cover">
-      <img ng-error="onCoverError(item)" ng-load="onCoverLoad(item)"
-      ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.cover}}"
-      image-resize-width="200" image-resize-height="200" title="{{item.name}}" style="cursor: pointer"/>
-  </div>
+    <img ng-hide="!item.coverLoad" ng-error="onCoverError(item)" ng-load="onCoverLoad(item)"
+    ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.coverUrl}}"
+    image-resize-width="200" image-resize-height="200" title="{{item.name}}" style="cursor: pointer"
+    />
+
+    <div class="coverLoading" ng-hide="item.coverLoad">
+      <div class="progress-striped progress active progress-xs">
+        <div class="progress-bar  progress-bar-success" data-toggle="tooltip" data-original-title="100%"
+        style="width: 100%">
+          <span>处理中...</span>
+        </div>
+      </div>
+    </div>
 
   <p style="margin-top: 10px;font-weight: bold;">
-    <a ng-href="/editor/{{ group.id }}?file={{item.file_id}}&view=true" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
+    <a ng-href="/{{ group.name }}/md/view/{{item.id}}" target="_blank" style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
       <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.name}}"></fileicon>
       <span class="long-name">{{item.name}}</span>
     </a>
-    <!--<p> {{item}} </p>-->
-    <!--<div class="m-b-lg">-->
-      <!--Click here to-->
-      <!--<a  ng-href="/editor/1?file={{item.fileid}}&view=true" target="_blank" class="text-u-l">Preview</a>-->
-      <!--<a ng-href="/editor/1?file={{item.fileid}}&view=true" target="_blank" class="text-u-l">Edit</a>-->
-      <!--or-->
-      <!--<a  ng-href="{{item.filepath}}?filename={{item.filename}}" target="_blank" class="text-u-l">Download</a>-->
-    <!--</div>-->
-
   </p>
 </div>

@@ -74,7 +74,8 @@ angular.module('agroupApp')
         scope.onimgclick = function(data) {
           var isMkdown = /markdown/.test(data.mimetype);
           if(isMkdown){
-            pdf(data.previewUrl.embed);
+            var url = '/'+scope.group.name+'/md/view/' + data.id;
+            window.open(url, '_blank');
             return
           }
           window.open(data.previewUrl.view, '_blank');

@@ -21,7 +21,7 @@ angular.module('agroupApp').directive('msgitem', function($rootScope,Modal,messa
       case 'Text':
         text = '输入了 1 段文字';
         break;
-      case 'MK':
+      case 'MD':
         var action = '';
         switch (data.content.action) {
           case 'Create':

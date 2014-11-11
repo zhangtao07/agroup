@@ -22,16 +22,23 @@ exports.userJoin = function(client) {
   return writers.push(client.user);
 };
 
-exports.userLeave = function(headers,client) {
+exports.userLeave = function(headers, client) {
   var file = cache[client.fileid];
-  if(!file) return;
+  if (!file) return;
   var writers = file.writers;
-  _.remove(writers, function(writer){
+  _.remove(writers, function(writer) {
     return writer.id === client.user.id;
   });
 
   if (!writers.length) {
-    save(headers,client.group,file,client.fileid);
+    save(headers, client.group, file, client.fileid)
+      .then(function(body) {
+        var data = JSON.parse(body).data;
+        return sendMessage(headers, client.group, data.id, 'Update', 'MD');
+      })
+      .then(function(message) {
+        observe.messageBroadcast(client.group.id, message);
+      });
     delete cache[file.id];
   }
 }
@@ -53,22 +60,38 @@ exports.readFile = function(fileid, cb) {
   if (cachedfile) return cb && cb(cachedfile);
 };
 
-exports.cache = function(fileId){
+exports.cache = function(fileId) {
   cache[fileId] = cache[fileId] || {};
 }
 
-exports.getCache = function(fileId){
+exports.getCache = function(fileId) {
   return cache[fileId];
 }
 
-function pubMessage(err,message){
-  observe.messageBroadcast(message.group_id,message);
+function sendMessage(headers, group, fileids, action, type) {
+  return Q.Promise(function(resolve) {
+    var api = url.parse(apiRoot + '/group/' + group.id + '/message/file');
+    request.post({
+      url: url.format(api),
+      headers: headers
+    }, function(err, response, body) {
+      resolve(body);
+    }).form({
+      ids: fileids,
+      action: action,
+      type: type
+    })
+  })
 }
 
 
 exports.save = save;
-function save(headers,group,file,fileId) {
-  file = file || {name:'',content:''};
+
+function save(headers, group, file, fileId) {
+  file = file || {
+    name: '',
+    content: ''
+  };
   return Q.Promise(function(resolve) {
     var api = url.parse(apiRoot + '/group/' + group.id + '/markdown/save');
     request.post({
