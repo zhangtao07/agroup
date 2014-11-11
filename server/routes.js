@@ -31,6 +31,7 @@ module.exports = function(app) {
   });
 
   app.use('/api/group/:groupId/message/', require('./api/message'));
+  app.use('/api/group/:groupId/markdown/', require('./api/markdown'));
   // 其余API请求，走代理
   app.use('/api/*', require('./proxy'));
   app.use('/:groupName/md/', require('./editor'));

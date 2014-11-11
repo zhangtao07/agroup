@@ -31,7 +31,7 @@ angular.module('agroupApp')
 
             if (type === 'markdown') {
               scope.isMarkdown = true;
-              scope.previewpath = '/'+ scope.group.name + '/md/view/'  + file.id;
+              scope.previewpath = '/'+ scope.group.name + '/md/view/'  + file.id + '?notitle=true';
               //scope.lookuppath = '/editor/' + file.group.id + '?file=' + file.file_id + '&view=true';
               //scope.editpath = '/editor/' + file.group.id + '?file=' + file.file_id;
             } else {

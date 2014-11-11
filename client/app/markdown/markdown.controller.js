@@ -52,7 +52,7 @@ angular.module('agroupApp')
 
       $scope.remove = function(md) {
         confirm(function() {
-          $http.delete('/api/markdowns/' + md.id);
+          markdownAPI.deleteFile($scope.group.id,md.id);
           var i = $scope.markdowns.indexOf(md);
           $scope.markdowns.splice(i, 1);
         })(md.name);

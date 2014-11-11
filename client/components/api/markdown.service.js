@@ -10,8 +10,13 @@ angular.module('agroupApp').factory('markdownAPI', ['apiRoot', '$http',
           csize: 300
         }
         return $http.get(apiRoot + "api/group/" + groupId + "/markdown/list", {
-          params:params
+          params: params
         });
+      },
+      deleteFile: function(groupId, fileId) {
+        return $http.post(apiRoot + 'api/group/' + groupId + '/file/delete', {
+          id: fileId
+        })
       }
     };
   }
