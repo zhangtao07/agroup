@@ -7,10 +7,10 @@ angular.module('agroupApp')
     '$http',
     '$stateParams',
     'Modal',
-    '$location',
+    '$sce',
     'groupAPI',
     'markdownAPI',
-    function($rootScope, $scope, $http, $stateParams, Modal, $location, groupAPI, markdownAPI) {
+    function($rootScope, $scope, $http, $stateParams, Modal, $sce, groupAPI, markdownAPI) {
 
       $scope.markdowns = [];
 
@@ -44,7 +44,7 @@ angular.module('agroupApp')
           highlighter: "prettify"
         };
         Markdown.Extra.init(converter, extraOptions);
-        return converter.makeHtml(md);
+        return $sce.trustAsHtml(converter.makeHtml(md));
       }
 
       var confirm = Modal.confirm.delete;
@@ -70,17 +70,18 @@ angular.module('agroupApp')
         $rootScope.__currentGroupName = res.data.name;
         $rootScope.__currentGroupId = res.data.id;
         $scope.group = res.data;
-        $scope.loadList();
+        $scope.loadList(8);
       });
 
-      $scope.loadList = function() {
+      $scope.loadList = function(pagesize) {
         $scope.hasMore = true;
         var group = $scope.group;
-        markdownAPI.getList(group.id, pagenation.page++, pagenation.size).success(showList);
+        markdownAPI.getList(group.id, pagenation.page++, pagesize || pagenation.size).success(showList);
       }
 
       function showList(data, status) {
-        $scope.hasMore = data.total > Math.abs((data.page - 1) * data.size + data.count);
+        var m = data.count - (data.page+1) * data.size;
+        $scope.hasMore = data.page < data.total;
         data.list.forEach(function(md) {
           $scope.markdowns.push(md);
         });

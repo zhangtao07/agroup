@@ -3,9 +3,9 @@
 angular.module('agroupApp').factory('markdownAPI', ['apiRoot', '$http',
   function(apiRoot, $http) {
     return {
-      getList: function(groupId, offset, limit) {
+      getList: function(groupId, pageno, limit) {
         var params = {
-          page: Math.floor(offset / limit),
+          page: pageno,
           size: limit,
           csize: 300
         }
