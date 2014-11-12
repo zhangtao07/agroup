@@ -12,7 +12,7 @@ infinite-scroll-immediate-check="false">
   <div class="col-md-12 markdown-list">
     <section class=col-md-4>
       <div class="new-md  panel no-border">
-        <a ng-href="/{{group.name}}/md/create" target="_blank" class="">
+        <a ng-href="/{{module.group.name}}/md/create" target="_blank" class="">
           <i class="fa fa-plus"></i>
           <!--<span translate="markdown.create"></span>-->
         </a>
@@ -25,8 +25,8 @@ infinite-scroll-immediate-check="false">
             <span class="pull-left" tooltip-html-unsafe="{{ md.user.nickname}}"><img style="width:20px;height:20px" image-resize-width="20" image-resize-height="20" image-resize="{{ md.user.avatar }}" alt="..." class="img-circle"></span>
             <a href="" class='pull-left md-filename'>{{ md.name }}</a>
             <span class="pull-right">
-              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/{{group.name}}/md/edit/{{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
-              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/{{group.name}}/md/view/{{md.id}}" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.edite' | translate}}" ng-href="/{{module.group.name}}/md/edit/{{md.id}}" target="_blank"><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
+              <a tooltip-html-unsafe="{{ 'markdown.view' | translate}}"  ng-href="/{{module.group.name}}/md/view/{{md.id}}" target="_blank"><i class="fa fa-eye fa-fw m-r-xs"></i></a>
               <a ng-show="md.user.id==me.id" tooltip-html-unsafe="{{ 'markdown.delete' | translate}}" ng-click="remove(md)"><i class="fa fa-times fa-fw"></i></a>
             </span>
           </div>

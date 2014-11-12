@@ -15,7 +15,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
         var loadParams;
 
         function uploadFiles(files) {
-          var groupId = loadParams.groupId;
+          var groupId = scope.module.group.id;//loadParams.groupId;
           var fileIds = [];
           files.forEach(function(file) {
             scope.uploadpanel.addFile(file, function(file, send) {
@@ -39,7 +39,9 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
         }
 
-        scope.loadList = function(groupId, refresh) {
+        scope.loadList = function(group, refresh) {
+
+          var groupId = group.id;
 
           if (refresh) {
             loadParams = {
@@ -48,11 +50,11 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
               timestamp: null
             }
           }
-          if (!groupId) {
-            groupId = loadParams.groupId;
-          } else {
-            loadParams.groupId = groupId;
-          }
+          //if (!groupId) {
+            //groupId = loadParams.groupId;
+          //} else {
+            //loadParams.groupId = groupId;
+          //}
           messageAPI.getList(groupId, loadParams.timestamp, loadParams.offset, loadParams.limit).success(function(res) {
 
             var data = res.data;
@@ -76,7 +78,7 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
             return;
           }
           var groupId = group.id;
-          scope.loadList(groupId, true);
+          scope.loadList(group, true);
 
 
           scope.onpaste = function() {

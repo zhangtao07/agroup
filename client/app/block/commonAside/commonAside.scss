@@ -1,0 +1,13 @@
+@media (min-width: 768px){
+  .navbar-collapse, .app-content, .app-footer {
+    margin-left: 200px;
+    padding-left: 0 !important;
+  }
+}
+.app-aside-folded .navbar-collapse, .app-footer,.app-footer{
+    margin-left: 60px;
+    padding-left: 0 !important;
+}
+.navbar-brand{
+  text-transform: capitalize;
+}

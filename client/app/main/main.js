@@ -5,7 +5,7 @@ angular.module('agroupApp')
     $stateProvider
       .state('app', {
         url: '',
-        abstract: true,
+        //abstract: true,
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
       });

@@ -87,7 +87,9 @@ background-color: #e4eaec!important;
 .grid-box{
   width: 200px;
 }
-
+.pos-stc{
+  position: static !important;
+}
 
 // Component styles are injected through grunt
 // injector
@@ -100,6 +102,7 @@ background-color: #e4eaec!important;
 @import 'block/commonSettings/commonSettings.scss';
 @import 'file/file.scss';
 @import 'group/group.scss';
+@import 'home/home.scss';
 @import 'main/main.scss';
 @import 'markdown/markdown.scss';
 @import 'search/search.scss';

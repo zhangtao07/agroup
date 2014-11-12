@@ -7,7 +7,7 @@
         <i class="glyphicon glyphicon-align-justify"></i>
     </button>
     <!-- brand -->
-    <a href="#/" class="navbar-brand text-lt">
+    <a href="/" class="navbar-brand text-lt dropdown-toggle" aria-haspopup="true" aria-expanded="false">
       <span class="hidden-folded m-l-xs" style="position:relative">
         {{app.name}}
         <i class="jiao-biao">alpha</i>
@@ -16,9 +16,8 @@
     <!-- / brand -->
 </div>
 <!-- / navbar header -->
-
 <!-- navbar collapse -->
-<div class="collapse navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
+<div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
     <!-- buttons -->
     <div class="nav navbar-nav m-l-sm hidden-xs">
         <a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
@@ -43,7 +42,50 @@
     </form>-->
     <!-- / search form -->
 
+    <ul class="nav navbar-nav hidden-sm">
+      <li class="dropdown pos-stc">
+        <a href="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          <span>群组 : {{ module.group.name }}</span>
+          <span class="caret"></span>
+        </a>
+        <div class="dropdown-menu wrapper w-full bg-white">
+          <div class="row">
+            <div class="col-sm-4 b-l b-light" ng-repeat="col in collections">
+              <div class="m-l-xs m-t-xs m-b-xs font-bold">{{col.name}} <span class="label label-sm bg-primary">{{ col.groups.length }}</span></div>
+              <div class="row" style="font-size:20px;">
+                <div class="col-xs-6">
+                  <ul class="list-unstyled l-h-2x">
+                    <li ng-repeat="item in col.groups" ng-if="$even">
+                      <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
+                      <!--<img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="15" image-resize-height="15" title="" />-->
+                      <a href="/{{item.name}}/{{module.path}}">
+                        {{ item.name }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-xs-6">
+                  <ul class="list-unstyled l-h-2x">
+                    <li ng-repeat="item in col.groups" ng-if="$odd">
+                      <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
+                      <a href="/{{item.name}}/{{module.path}}">
+                        <!--<img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="15" image-resize-height="15" title="" />-->
+                        {{ item.name }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
     <!-- nabar right -->
+
+
     <ul class="nav navbar-nav navbar-right">
         <li class="hidden-xs">
             <a href="https://github.com/fex-team/agroup/issues/new" target="_blank">Q&A</a>

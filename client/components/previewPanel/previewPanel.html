@@ -8,7 +8,7 @@
         <a class="btn btn-xs btn-default" ng-hide="filetype=='file'" ng-click="lookup(previewfile)"
         translate="files.preview">
         </a>
-        <a class="btn btn-xs btn-default" ng-show="isMarkdown" ng-href="/{{ group.name }}/md/edit/{{ previewfile.id }}"
+        <a class="btn btn-xs btn-default" ng-show="isMarkdown" ng-href="/{{ module.group.name }}/md/edit/{{ previewfile.id }}"
         target="_blank" translate="files.edit"></a>
         <a id="p-download-btn" target="_blank" ng-href="{{ previewfile.downloadUrl }}" class="btn btn-xs btn-default"
         translate="files.download"></a>

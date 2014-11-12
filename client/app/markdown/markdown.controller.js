@@ -8,9 +8,9 @@ angular.module('agroupApp')
     '$stateParams',
     'Modal',
     '$sce',
-    'groupAPI',
     'markdownAPI',
-    function($rootScope, $scope, $http, $stateParams, Modal, $sce, groupAPI, markdownAPI) {
+    'groupAPI',
+    function($rootScope, $scope, $http, $stateParams, Modal, $sce, markdownAPI,groupAPI) {
 
       $scope.markdowns = [];
 
@@ -52,7 +52,7 @@ angular.module('agroupApp')
 
       $scope.remove = function(md) {
         confirm(function() {
-          markdownAPI.deleteFile($scope.group.id,md.id);
+          markdownAPI.deleteFile($scope.module.group.id,md.id);
           var i = $scope.markdowns.indexOf(md);
           $scope.markdowns.splice(i, 1);
         })(md.name);
@@ -65,19 +65,18 @@ angular.module('agroupApp')
 
       $scope.me = $rootScope.__user;
 
-      var groupName = $stateParams.name;
-      groupAPI.getGroupByName(groupName).success(function(res) {
-        $rootScope.__currentGroupName = res.data.name;
-        $rootScope.__currentGroupId = res.data.id;
-        $scope.group = res.data;
-        $scope.loadList(8);
-      });
 
       $scope.loadList = function(pagesize) {
         $scope.hasMore = true;
-        var group = $scope.group;
+        var group = $scope.module.group;
+        //这里如果封装成directive,就不会有空指针的这个分支
+        if(!group){
+          group = groupAPI.find($stateParams.name,$scope.collections);
+        }
         markdownAPI.getList(group.id, pagenation.page++, pagesize || pagenation.size).success(showList);
       }
+      $scope.loadList(8);
+
 
       function showList(data, status) {
         var m = data.count - (data.page+1) * data.size;
