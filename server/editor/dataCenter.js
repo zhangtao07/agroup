@@ -11,7 +11,6 @@ var request = require('request');
 var config = require("../config/environment");
 var observe = require('../components/group.observe');
 var mdtool = require('./tool');
-var covtool = require('../tools/tool.js');
 
 //variables
 var apiRoot = 'http://' + config.service.host + ':' + config.service.port;
