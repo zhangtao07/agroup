@@ -26,46 +26,54 @@ angular.module('agroupApp')
 
     $scope.createGroup = function() {
       var dialog = Modal.confirm.create;
-      dialog(function() {
+      var data = {
+        setgroup: false,
+        group: {
+          type: 'Public'
+        }
+      };
+      dialog(function ok() {
         //success
+        console.log(data.group);
       })({
-        data: {
-          setgroup: false
-        },
+        data: data,
         title: '创建群组',
-        size: 'lg',
+        //size: 'lg',
         templateUrl: 'app/main/group.html',
         ok: '创建',
         style: 'modal-primary'
       });
     }
 
-    function toLocal(imgpath,size) {
+    function toLocal(imgpath, size) {
       size = size || 240;
-      return '/static/image/resize?url=' + imgpath + '&width='+ size +'&height='+ size +'&gravity=center&type=resize';
+      return '/static/image/resize?url=' + imgpath + '&width=' + size + '&height=' + size + '&gravity=center&type=resize';
     }
 
     $scope.setGroup = function() {
       var dialog = Modal.confirm.create;
       var group = module.group;
       var data = {
-          setgroup: true,
-          group: {
-            name: group.name,
-            desc: group.desc,
-            logo: toLocal(group.logo),
-            logocroped: toLocal(group.logo),
-            displayName: group.displayName,
-            type: group.type
-          }
-        };
-      dialog(function() {
-        //success
-        console.log(data);
+        setgroup: true,
+        group: {
+          name: group.name,
+          desc: group.desc,
+          logo: toLocal(group.logo),
+          logocroped: toLocal(group.logo),
+          displayName: group.displayName,
+          type: group.type
+        }
+      };
+
+      dialog(function ok() {
+        group.desc = data.group.desc;
+        group.logo = data.group.logocroped; //data.group.logo;
+        group.displayName = data.group.displayName;
+        group.type = data.group.type;
       })({
         data: data,
         title: module.group.name,
-        size: 'lg',
+        //size: 'lg',
         templateUrl: 'app/main/group.html',
         ok: '保存',
         style: 'modal-danger'
