@@ -8,17 +8,19 @@ angular.module('agroupApp')
      * @param  {String} modalClass - (optional) class(es) to be applied to the modal
      * @return {Object}            - the instance $modal.open() returns
      */
-    function openModal(scope, modalClass) {
+    function openModal(scope, modalClass,size) {
       var modalScope = $rootScope.$new();
       scope = scope || {};
       modalClass = modalClass || 'modal-default';
+
 
       angular.extend(modalScope, scope);
 
       return $modal.open({
         templateUrl: 'components/modal/modal.html',
         windowClass: modalClass,
-        scope: modalScope
+        scope: modalScope,
+        size: size
       });
     }
 
@@ -72,6 +74,50 @@ angular.module('agroupApp')
 
             deleteModal.result.then(function(event) {
               del.apply(event, args);
+            });
+          };
+        },
+        create: function(ok) {
+          ok = ok || angular.noop;
+
+          /**
+           * Open a delete confirmation modal
+           * @param  {String} name   - name or info to show on modal
+           * @param  {All}           - any additional args are passed staight to ok callback
+           */
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                dismissable: true,
+                title: info.title,
+                html: info.content,
+                data: info.data,
+                templateUrl: info.templateUrl,
+                buttons: [
+                  {
+                    classes: 'btn-default',
+                    text: '取消',
+                    click: function(e) {
+                      createModal.dismiss(e);
+                    }
+                  },
+                  {
+                    classes: 'btn-primary',
+                    text: info.ok,
+                    click: function(e) {
+                      createModal.close(e);
+                    }
+                  }
+                ]
+              }
+            }, info.style,info.size,info.templateUrl);
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
             });
           };
         }

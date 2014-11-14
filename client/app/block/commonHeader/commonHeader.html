@@ -80,6 +80,9 @@
           </div>
         </div>
       </li>
+      <li ui-sref-active="active">
+        <a ng-click="createGroup()" href="">创建</a>
+      </li>
 
     </ul>
 
@@ -90,19 +93,18 @@
         <li class="hidden-xs">
             <a href="https://github.com/fex-team/agroup/issues/new" target="_blank">Q&A</a>
         </li>
-
-        <li class="dropdown hidden-sm" is-open="lang.isopen">
-            <a href class="dropdown-toggle" data-toggle="dropdown">
-                {{selectLang}} <b class="caret"></b>
-            </a>
-            <!-- dropdown -->
-            <ul class="dropdown-menu animated fadeInRight w">
-                <li ng-repeat="(langKey, label) in langs">
-                    <a ng-click="setLang(langKey, $event)" href>{{label}}</a>
-                </li>
-            </ul>
-            <!-- / dropdown -->
-        </li>
+        <!--<li class="dropdown hidden-sm" is-open="lang.isopen">-->
+            <!--<a href class="dropdown-toggle" data-toggle="dropdown">-->
+                <!--{{selectLang}} <b class="caret"></b>-->
+            <!--</a>-->
+            <!--[> dropdown <]-->
+            <!--<ul class="dropdown-menu animated fadeInRight w">-->
+                <!--<li ng-repeat="(langKey, label) in langs">-->
+                    <!--<a ng-click="setLang(langKey, $event)" href>{{label}}</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--[> / dropdown <]-->
+        <!--</li>-->
         <li class="hidden-xs">
             <a ui-fullscreen></a>
         </li>

@@ -1,5 +1,5 @@
 <div class="clearfix hidden-xs text-center hide show" id="aside-user">
-  <div class="dropdown wrapper">
+  <div class="dropdown wrapper" ng-click="setGroup()">
     <a ui-sref="app.page.profile" href="#/app/page/profile">
       <span class="thumb-lg w-auto-folded avatar m-t-sm">
         <img class="imageitem-img img-circle" image-resize="{{module.group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
@@ -9,13 +9,13 @@
       <span class="clear">
         <span class="block m-t-sm">
           <strong class="font-bold text-lt">{{ module.group.name }}</strong>
-          <b class="caret"></b>
+          <!--<b class="caret"></b>-->
         </span>
         <span class="text-muted text-xs block">{{ module.group.desc }}</span>
       </span>
     </a>
     <!-- dropdown -->
-    <ul class="dropdown-menu animated fadeInRight w hidden-folded">
+    <!-- ul class="dropdown-menu animated fadeInRight w hidden-folded">
       <li class="wrapper b-b m-b-sm bg-info m-t-n-xs">
         <span class="arrow top hidden-folded arrow-info"></span>
         <div>
@@ -41,7 +41,7 @@
       <li>
         <a ui-sref="access.signin" href="#/access/signin">Logout</a>
       </li>
-    </ul>
+    </ul -->
     <!-- / dropdown -->
   </div>
   <div class="line dk hidden-folded"></div>
@@ -54,7 +54,7 @@
   <!--</li>-->
 
   <!--<li ui-sref-active="active" ng-repeat="group in groups">-->
-    <!--<a href ui-sref="app.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">-->
+    <!--<a href ui-sref="app.message.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">-->
       <!--<i class="glyphicon glyphicon-file icon text-success"></i>-->
       <!--<span class="font-bold">{{group.name}}</span>-->
     <!--</a>-->
@@ -68,15 +68,15 @@
 
 
   <li ui-sref-active="active">
-    <a href ui-sref="app.group({name:module.group.name})" ng-class="{active: module.group.group ==group.id}">
-      <i class="glyphicon glyphicon-file icon text-success"></i>
+    <a href ui-sref="app.message({name:module.group.name})" ng-class="{active: module.group.group ==group.id}">
+      <i class="fa fa-comment text-primary-dker"></i>
       <span class="font-bold">消息</span>
     </a>
   </li>
 
   <li ui-sref-active="active">
     <a href ui-sref="app.markdown({name:module.group.name})">
-      <i class="glyphicon glyphicon-file icon text-success"></i>
+      <i class="glyphicon glyphicon-edit icon text-success"></i>
       <!--<span>{{module.group.name}}</span>-->
       <span translate="aside.nav.components.MDS">Markdowns</span>
     </a>
@@ -90,6 +90,14 @@
     </a>
   </li>
 
+  <li ui-sref-active="active">
+    <a ui-sref="app.links({name:module.group.name})">
+      <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
+      <span translate="aside.nav.components.LINKS">Links</span>
+      <!--<span>（敬请期待.）</span>-->
+    </a>
+  </li>
+
   <li disabled ui-sref-active="active">
     <a>
       <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
@@ -98,14 +106,6 @@
     </a>
   </li>
 
-  <!--disabled-->
-  <li disabled ui-sref-active="active">
-    <a>
-      <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
-      <span translate="aside.nav.components.LINKS">Links</span>
-      <span>（敬请期待.）</span>
-    </a>
-  </li>
 
 </ul>
 <!-- / third -->

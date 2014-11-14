@@ -22,6 +22,8 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
           name: '我的群组',
           groups: [{
             id: 1,
+            displayName: '大FEX-端组-硬的游戏',
+            type: 'Public',
             name: 'fex',
             desc: '简单可依赖',
             logo: 'http://127.0.0.1:8080/static/upload/1/02/5bdd6689a5ed33a7e102f6150fc3ac19ed4075.png',
@@ -44,9 +46,12 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
         var CON = 8;
         collections = _.each(collections, function(d, i) {
           for (var k = 0, len = CON; k < len; k++) {
+            var name = randString(5);
             d.groups.push({
               id: k,
-              name: randString(5),
+              displayName: 'DIS_' + name,
+              name: name,
+              type: 'Private',
               desc: randString(20),
               logo: 'http://127.0.0.1:8080/static/upload/1/02/5bdd6689a5ed33a7e102f6150fc3ac19ed4075.png',
               createAt: new Date()

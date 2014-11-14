@@ -18,7 +18,8 @@ var app = angular.module('agroupApp', [
     'ui.router',
     'ui.bootstrap',
     'app.directives',
-    'ngAnimate'
+    'ngAnimate',
+    'ngImgCrop'
   ]).config(["$provide",
     function($provide) {
       $provide.value("apiRoot", "");

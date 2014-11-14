@@ -1,0 +1,71 @@
+<form name="form-contact" class="form-validation ng-pristine ng-invalid ng-invalid-required">
+  <div class="panel panel-default no-border">
+    <!--<div class="panel-heading">-->
+    <!--<span class="h4">群组</span>-->
+    <!--</div>-->
+    <div class="panel-body">
+      <!--<p class="text-muted">Need support? please fill the fields below.</p>-->
+      <div class="form-group pull-in clearfix">
+        <div class="col-sm-6">
+          <label>群组名称</label>
+          <!--{{ modal.data.group }}-->
+          <input type="text" ng-model="modal.data.group.displayName" class="form-control ng-pristine ng-invalid ng-invalid-required"
+          placeholder="Agroup" ng-model="contact.name" required>
+        </div>
+        <div ng-if="!modal.data.setgroup" class="col-sm-6">
+          <label>群组地址(不可修改)</label>
+          <div>
+            <strong style="margin-right:5px;">http://agroup.baidu.com/</strong>
+            <input
+            style="display:inline-block;width:auto;" class="form-control ng-pristine ng-invalid ng-invalid-required">
+          </div>
+        </div>
+        <div ng-if="modal.data.setgroup" class="col-sm-6">
+          <label>群组地址</label>
+          <div>
+            <strong style="margin-right:5px;">http://agroup.baidu.com/{{modal.data.group.name}}</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label>群组简介</label>
+        <textarea class="form-control" rows="2" placeholder="比如 : 简单可依赖" ng-model="modal.data.group.desc"></textarea>
+      </div>
+      <div class="form-group pull-in clearfix">
+        <label>群组图标</label>
+        <div class="m-b">
+          <input type="file" id="fileInput" fileread="modal.data.group.logo">
+        </div>
+        <div class="col-sm-3">
+          <div style="width:200px;" class="wrapper-sm b-a bg-white m-r-xs m-b-xs">
+            <div class="bg-light" style="height:200px">
+              <img-crop image="modal.data.group.logo" result-image="modal.data.group.logocroped"
+              result-image-size="160" area-type="square">
+              </img-crop>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="inline bg-white wrapper-sm b-a">
+            <div class="bg-light">
+              <img class="img-circle" ng-src="{{modal.data.group.logocroped}}" width=120 height=120>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>群组权限</label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="groupType" value="Public" ng-model="modal.data.group.type">公开
+          </label>
+          <label>
+            <input type="radio" name="groupType" value="Private" ng-model="modal.data.group.type">私有
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

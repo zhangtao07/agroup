@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('GroupCtrl', function ($scope) {
+  .controller('LinksCtrl', function ($scope) {
     $scope.message = 'Hello';
   });
