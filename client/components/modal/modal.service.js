@@ -8,7 +8,7 @@ angular.module('agroupApp')
      * @param  {String} modalClass - (optional) class(es) to be applied to the modal
      * @return {Object}            - the instance $modal.open() returns
      */
-    function openModal(scope, modalClass,size) {
+    function openModal(scope, modalClass,size,backdrop) {
       var modalScope = $rootScope.$new();
       scope = scope || {};
       modalClass = modalClass || 'modal-default';
@@ -20,7 +20,9 @@ angular.module('agroupApp')
         templateUrl: 'components/modal/modal.html',
         windowClass: modalClass,
         scope: modalScope,
-        size: size
+        size: size,
+        keyboard: true,
+        backdrop: 'static'
       });
     }
 
