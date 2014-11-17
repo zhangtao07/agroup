@@ -1,6 +1,13 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MembersCtrl', function ($scope, $http) {
+  .controller('MembersCtrl', [
+    '$scope',
+    '$http',
+    'membersAPI',
+    function ($scope, $http, membersAPI) {
+      $scope.members = membersAPI.getMembers();
 
-  });
+
+    }
+  ]);

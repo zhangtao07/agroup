@@ -25,7 +25,7 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
             type: 'Public',
             name: 'fex',
             desc: '简单可依赖',
-            logo: 'http://127.0.0.1:8080/static/upload/1/02/5bdd6689a5ed33a7e102f6150fc3ac19ed4075.png',
+            logo: 'http://p.qq181.com/cms/1210/2012100413194979334.jpg',
             createAt: new Date()
           }]
         }, {
