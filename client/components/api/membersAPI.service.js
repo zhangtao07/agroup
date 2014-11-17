@@ -6,7 +6,7 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
       getMe: function() {
         return $http.get(apiRoot + "api/user/me"); },
       getGroups: function() {
-        return $http.get(apiRoot + "api/user/groups");
+        return $http.get(apiRoot + "api/user/groups ");
       },
       getMockGroups: function() {
         var deferred = $q.defer();

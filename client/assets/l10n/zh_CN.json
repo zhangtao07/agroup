@@ -14,7 +14,8 @@
       "MDS" : "笔记",
       "FILES" : "文件",
       "TASKS": "任务",
-      "LINKS": "链接"
+      "LINKS": "链接",
+      "MEMBERS": "成员"
     }
   }
 },

@@ -1,0 +1,28 @@
+.settings-content {
+  width: 100%;
+  position: relative;
+  .content-title {
+    padding: 10px;
+    margin-top: 0;
+    background: #fff;
+    border: 1px solid #dee5e7;
+  }
+  .profile {
+    width: 40%;
+    min-height: 300px;
+    position: relative;
+    margin: 30px auto;
+  }
+}
+
+//global
+.clickable {
+  color: #5ac3a5;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .settings-content .profile {
+    width: 96%;
+  }
+}

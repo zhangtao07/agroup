@@ -1,0 +1,22 @@
+<div class="portrait-panel">
+  <div class="panel-heading">
+    <button class="btn btn-default pp-border po-ab-rt-2 btn-info" ng-click="saveMyCroppedImage()">保存</button>
+    <button class="btn btn-default pp-border po-ab-rt" ng-click="hidePP()">取消</button>
+  </div>
+
+  <div class="panel-body">
+    <span class="choose-photo-btn" id="choose-photo-btn">
+        <button class="btn choose-photo">选择照片</button>
+        <input type="file" id="fileInput" class="btn choose-photo" />
+      </span>
+    <div style="height: 50px;"></div>
+    <div class="avatar-preview-panel hide">
+      <h5>头像预览</h5>
+      <img class="avatar-preview" ng-src="{{myCroppedImage}}" />
+    </div>
+    <div class="cropArea">
+      <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+    </div>
+
+  </div>
+</div>
