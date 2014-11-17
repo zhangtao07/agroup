@@ -29,7 +29,9 @@ angular.module('agroupApp')
       var data = {
         setgroup: false,
         group: {
-          type: 'Public'
+          type: 'Public',
+          logo: '',
+          logocroped: ''
         }
       };
       dialog(function ok() {
