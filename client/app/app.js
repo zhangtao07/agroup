@@ -108,7 +108,7 @@ var app = angular.module('agroupApp', [
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
         }
       }
-    ]
+  ]
   )
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     //$urlRouterProvider.otherwise('/fex/comments');

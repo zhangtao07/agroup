@@ -1,21 +1,26 @@
-<div class="container">
-  <h1>Agroup</h1>
-  <div ng-repeat="col in collections" class="col-md-12">
-    <p>{{ col.name }}</p>
-    <hr>
-    <div ng-repeat="group in col.groups" class="col-md-3">
-      <div class="panel b-light">
-        <div class="panel-body">
-          <a href="" class="thumb pull-left m-r">
-            <img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
-          </a>
-          <div class="clear">
-            <a href="/{{group.name}}/comments" class="text-info">{{ group.name }} <i class="fa fa-twitter"></i></a>
-            <small class="block text-muted">{{ group.desc }}</small>
-            <a href="" class="btn btn-xs btn-success m-t-xs">Follow</a>
-          </div>
+<div class="home" 
+  ng-init="
+    app.isHome=true;
+    app.hideAside=true;
+    app.content.classname='full-width';
+    app.settings.navbarCollapseColor='bg-black';
+    ">
+<div ng-repeat="col in collections" class="col-md-12 group-container">
+  <p>{{ col.name }}</p>
+  <hr>
+  <div ng-repeat="group in col.groups" class="col-md-3">
+    <div class="panel b-light">
+      <div class="panel-body">
+        <a href="" class="thumb pull-left m-r">
+          <img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
+        </a>
+        <div class="clear">
+          <a href="/{{group.name}}/comments" class="text-info">{{ group.name }} <i class="fa fa-twitter"></i></a>
+          <small class="block text-muted">{{ group.desc }}</small>
+          <a href="" class="btn btn-xs btn-success m-t-xs">Follow</a>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>

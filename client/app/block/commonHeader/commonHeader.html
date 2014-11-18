@@ -19,7 +19,7 @@
 <!-- navbar collapse -->
 <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
     <!-- buttons -->
-    <div class="nav navbar-nav m-l-sm hidden-xs">
+    <div class="nav navbar-nav m-l-sm hidden-xs" ng-hide="app.isHome">
         <a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
             <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
         </a>
@@ -42,8 +42,8 @@
     </form>-->
     <!-- / search form -->
 
-    <ul class="nav navbar-nav hidden-sm">
-      <li class="dropdown pos-stc">
+    <ul class="nav navbar-nav hidden-sm" >
+      <li class="dropdown pos-stc" ng-hide="app.isHome">
         <a href="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
           <span>群组 : {{ module.group.name }}</span>
           <span class="caret"></span>
@@ -81,7 +81,7 @@
         </div>
       </li>
       <li ui-sref-active="active">
-        <a ng-click="createGroup()" href="">创建</a>
+        <a ng-click="createGroup()" href="">创建群组</a>
       </li>
 
     </ul>
