@@ -91,6 +91,7 @@ var app = angular.module('agroupApp', [
           zh_CN: '中文',
           en: 'English'
         };
+        $translate.use('zh_CN');
         $rootScope.selectLang = $rootScope.langs[$translate.proposedLanguage()] || "中文";
         $rootScope.setLang = function(langKey, $event) {
           // set the current lang
@@ -106,10 +107,8 @@ var app = angular.module('agroupApp', [
           // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
         }
-
-
       }
-    ]
+  ]
   )
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     //$urlRouterProvider.otherwise('/fex/comments');

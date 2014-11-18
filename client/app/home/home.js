@@ -3,7 +3,7 @@
 angular.module('agroupApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('home', {
+      .state('app.groups', {
         url: '/groups',
         templateUrl: 'app/home/home.html',
         controller: 'HomeCtrl'
