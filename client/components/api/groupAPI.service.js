@@ -26,19 +26,19 @@ angular.module('agroupApp').factory('groupAPI', ['apiRoot','$http',
         });
       },
 
-      joinGroup: function(groupId){
+      join: function(groupId){
         return $http.post(apiRoot + 'api/group/' + groupId + '/join');
       },
 
-      quiteGroup: function(groupId){
+      quite: function(groupId){
         return $http.post(apiRoot + 'api/group/' + groupId + '/unjoin');
       },
 
-      collectGroup: function(groupId){
+      collect: function(groupId){
         return $http.post(apiRoot + 'api/group/' + groupId + '/collect');
       },
 
-      cancleCollect: function(groupId){
+      uncollect: function(groupId){
         return $http.post(apiRoot + 'api/group/' + groupId + '/uncollect');
       }
     };
