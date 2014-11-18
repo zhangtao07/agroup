@@ -10,13 +10,13 @@
           <label>群组名称</label>
           <!--{{ modal.data.group }}-->
           <input type="text" ng-model="modal.data.group.displayName" class="form-control ng-pristine ng-invalid ng-invalid-required"
-          placeholder="Agroup" ng-model="contact.name" required>
+          placeholder="Agroup" required>
         </div>
         <div ng-if="!modal.data.setgroup" class="col-sm-6">
           <label>群组地址(不可修改)</label>
           <div>
             <strong>http://agroup.baidu.com/</strong>
-            <input style="display:inline-block;width:80px;" class="form-control ng-pristine ng-invalid ng-invalid-required">
+            <input ng-model="modal.data.group.name" style="display:inline-block;width:80px;" class="form-control ng-pristine ng-invalid ng-invalid-required">
           </div>
         </div>
         <div ng-if="modal.data.setgroup" class="col-sm-6">

@@ -20,6 +20,13 @@ angular.module('agroupApp').factory('groupAPI', ['apiRoot','$http',
         });
       },
 
+      getHotGroup: function(page,size){
+        return $http.post(apiRoot + 'api/group/hot',{
+          page: page || 0,
+          size: size || 10
+        })
+      },
+
       checkName: function(name) {
         return $http.post(apiRoot + 'api/group/check/display',{
           display: name

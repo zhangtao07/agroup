@@ -26,7 +26,7 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
             type: 'Public',
             name: 'fex',
             desc: '简单可依赖',
-            logo: 'http://127.0.0.1:8080/static/upload/1/02/5bdd6689a5ed33a7e102f6150fc3ac19ed4075.png',
+            logo: 'http://cp01-ra-045.cp01.baidu.com:8087/static/file/1/9b/653c2a5a152dea3b77c84c962f364d7fe9b9c2.jpeg',
             createAt: new Date()
           }]
         }, {

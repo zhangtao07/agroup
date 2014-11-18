@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', function($scope, $location, Modal) {
-
-
+  .controller('MainCtrl', ['$scope','$location','Modal','groupAPI',function($scope, $location, Modal,groupAPI) {
     var path = $location.path();
     var groupName = path.replace(/\/(\w+)\/.*/, '$1');
     var data = [];
@@ -36,6 +34,12 @@ angular.module('agroupApp')
       };
       dialog(function ok() {
         //success
+        groupAPI.createGroup({
+          name: data.group.name,
+          type: data.group.type,
+          icon: data.group.logocroped,
+          display: data.displayName
+        })
         console.log(data.group);
       })({
         data: data,
@@ -81,4 +85,4 @@ angular.module('agroupApp')
         style: 'modal-danger'
       });
     }
-  });
+  }]);

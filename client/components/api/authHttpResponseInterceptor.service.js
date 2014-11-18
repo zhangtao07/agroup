@@ -9,9 +9,9 @@ angular.module('agroupApp').factory('authHttpResponseInterceptor', ['$q', '$wind
       responseError: function(rejection) {
 
         console.error("Response Error 401", rejection);
-        //if (!/\/signin/.test(location.href)) {
-          //$window.location.href = 'signin';
-        //}
+        if (rejection.status === 401 && !/\/signin/.test(location.href)) {
+          $window.location.href = 'signin';
+        }
         return $q.reject(rejection);
       }
     }
