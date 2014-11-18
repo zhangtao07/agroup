@@ -1,0 +1,46 @@
+<div class="settings-content" ng-init="showpanel=false">
+
+  <h5 class="content-title"><i class="icon-settings"></i> 个人设置</h5>
+
+  <div class="profile panel panel-default">
+    <div class="panel-heading">
+      <div class="clearfix">
+        <a href="" class="pull-left thumb-md avatar b-3x m-r">
+          <img ng-src="{{ my_profile.avatar }}" alt="...">
+        </a>
+        <div class="clear">
+          <div class="h3 m-t-xs m-b-xs">
+            {{ my_profile.nickname }}
+            <!--<i class="fa fa-circle text-success pull-right text-xs m-t-sm"></i>-->
+          </div>
+          <button type="" ng-click="showpanel = true" class="btn btn-sm btn-default"><i class="fa fa-edit"></i> 修改头像</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <form class="ng-pristine ng-valid ng-valid-required" name="my_profile_form" novalidate>
+        <div class="form-group {{ my_profile_form.nickname.$error.maxlength || my_profile_form.nickname.$error.minlength || my_profile_form.nickname.$error.required ? 'has-error':'' }}">
+          <label>昵称</label>
+          <input type="text" name="nickname" class="form-control" placeholder="2-15位" ng-maxlength="15" maxlength="15" ng-minlength="2" required ng-model="my_profile.nickname" value="{{ my_profile.nickname }}">
+        </div>
+        <div class="form-group">
+          <label>真实姓名</label>
+          <input type="text" name="username" value="{{ my_profile.realname }}" class="form-control" placeholder="选填">
+        </div>
+        <div class="form-group">
+          <label>邮箱</label>
+          <p class="form-control-static">{{ my_profile.email }}</p>
+        </div>
+        <button class="btn btn-sm btn-primary pull-right" type="submit" ng-click=" !my_profile_form.$invalid ? signupForm() : '' " ui-toggle-class="show inline" ng-show="!my_profile_form.$invalid" >
+          <span class="text">保存更改</span>
+          <span class="text-active">保存中...</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  <!--修改头像-->
+  <portraitpanel show="showpanel"  onpick="onpick(fileData)"></portraitpanel>
+</div>
+
+
+

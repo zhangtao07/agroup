@@ -4,8 +4,7 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
   function(apiRoot, $q,$http) {
     return {
       getMe: function() {
-        return $http.get(apiRoot + "api/user/me");
-      },
+        return $http.get(apiRoot + "api/user/me"); },
       getGroups: function() {
         return $http.get(apiRoot + "api/user/groups");
       },
@@ -26,7 +25,7 @@ angular.module('agroupApp').factory('userAPI', ['apiRoot', '$q', '$http',
             type: 'Public',
             name: 'fex',
             desc: '简单可依赖',
-            logo: 'http://cp01-ra-045.cp01.baidu.com:8087/static/file/1/9b/653c2a5a152dea3b77c84c962f364d7fe9b9c2.jpeg',
+            logo: 'http://p.qq181.com/cms/1210/2012100413194979334.jpg',
             createAt: new Date()
           }]
         }, {

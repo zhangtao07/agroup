@@ -22,7 +22,7 @@ angular.module('agroupApp')
         scope: modalScope,
         size: size,
         keyboard: true,
-        backdrop: 'static'
+        backdrop: backdrop || 'static'
       });
     }
 
@@ -116,7 +116,7 @@ angular.module('agroupApp')
                   }
                 ]
               }
-            }, info.style,info.size,info.templateUrl);
+            }, info.style,info.size);
 
             createModal.result.then(function(event) {
               ok.apply(event, args);
@@ -166,6 +166,43 @@ angular.module('agroupApp')
               ok.apply(event, args);
             });
           };
+      },
+
+      /* addMember modal */
+      addMember : {
+
+        create: function(ok) {
+          ok = ok || angular.noop;
+
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                dismissable: true,
+                title: info.title,
+                html: info.content,
+                data: info.data,
+                templateUrl: info.templateUrl,
+                buttons: [
+                  {
+                    classes: 'btn-default',
+                    text: '关闭',
+                    click: function (e) {
+                      createModal.dismiss(e);
+                    }
+                  }
+                ]
+              }
+            }, info.style,info.size,true);
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
+            });
+          };
+        }
       }
     };
   }]);

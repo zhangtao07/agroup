@@ -1,0 +1,14 @@
+<div class="userinfo-panel" >
+  <div class="panel-heading">
+    <img class="portrait" src="{{ userinfo.portrait }}" alt="..."/>
+    <h4>{{ userinfo.username }}</h4>
+    <i class="fa fa-times fa-fw pos-a-rt cursor-pointer" ng-click="closeUserinfoPanel()" ></i>
+  </div>
+  <div class="panel-body">
+    <ul class="userinfo-detail">
+      <li>邮箱：{{ userinfo.email }}</li>
+      <li>电话：{{ userinfo.phone }}</li>
+      <li>Hi号：{{ userinfo.hi }}</li>
+    </ul>
+  </div>
+</div>

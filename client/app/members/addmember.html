@@ -1,0 +1,25 @@
+
+<form class="form-inline ng-pristine ng-valid" role="form">
+  <h5>将下面的公共邀请链接通过BaiduHi、QQ等任何方式发给同事，点击链接即可加入团队。</h5>
+  <div class="form-group">
+    <input type="text" class="form-control" ng-value="modal.data.inviteUrl" style="margin-bottom: 10px;" />
+    <button type="submit" class="btn btn-info"  style="margin-bottom: 10px;" >复制链接</button>
+  </div>
+
+  <h5>也可将链接直接发送到ta的邮箱</h5>
+  <div class="form-group" ng-init="emailNumbers = [{email: '' }]">
+    <div class="invite-email-item" ng-repeat="item in emailNumbers">
+      <div class="input-group m-b">
+        <input type="text" class="form-control"  ng-model="item.email"/>
+        <span class="input-group-addon">@baidu.com</span>
+      </div>
+      <button class="btn btn-default"  style="margin-bottom: 15px;" ng-if="$index > 0" ng-click="emailNumbers.splice($index,1);">移除</button>
+    </div>
+
+    <div>
+      <button type="submit" class="btn btn-default" ng-click="emailNumbers.push({email: ''})">添加邮箱</button>
+      <button type="submit" class="btn btn-info">发送邀请</button>
+    </div>
+  </div>
+
+</form>
