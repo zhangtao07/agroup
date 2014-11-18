@@ -8,13 +8,13 @@ angular.module('agroupApp').factory('membersAPI', ['apiRoot', '$q', '$http',
         //api members
         var members = [{
           nickname: 'jalon',
-          username: '王知良',
+          realname: '王知良',
           avatar: 'http://fe.baidu.com/~nwind/angulr/img/a2.jpg',
           email: '8888@baidu.com',
           online: true
         }, {
           nickname: 'kkk',
-          username: '王大力',
+          realname: '王大力',
           avatar: 'http://fe.baidu.com/~nwind/angulr/img/a2.jpg',
           email: '6869865@baidu.com',
           online: false

@@ -1,5 +1,5 @@
 <div class="members-content">
-  <h5 class="content-title"><i class="icon-users"></i> background 成员</h5>
+  <h5 class="content-title"><i class="icon-users"></i> 成员 <span ng-click="addMember();" class="btn btn-addon btn-sm btn-default" style="margin-left: 10px;">+ 添加成员</span></h5>
   <div class="members-list">
     <div class="panel panel-default list-group-item list-item clearfix" ng-repeat="member in members">
       <div class="panel-heading">
@@ -17,18 +17,17 @@
         </div>
       </div>
       <div class="list-group no-radius alt">
-        <a class="list-group-item" href="">
+        <div class="list-group-item" href="">
           <i class="fa fa-user fa-fw text-muted"></i>
-          {{ member.username }}
-        </a>
-        <a class="list-group-item" href="">
+          {{ member.realname }}
+        </div>
+        <div class="list-group-item" href="">
           <i class="fa fa-envelope fa-fw text-muted"></i>
           {{ member.email }}
-        </a>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
 
 <userinfopanel></userinfopanel>

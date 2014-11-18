@@ -48,7 +48,7 @@ angular.module('agroupApp')
           var formData = new FormData();
           formData.append('id', $scope.my_profile.id);
           formData.append('nickname', $scope.my_profile.nickname);
-          formData.append('username', $scope.my_profile.username);
+          formData.append('realname', $scope.my_profile.realname);
           if(avatarImage != undefined) {
             formData.append('avatar', avatarImage);
             console.log(avatarImage);
