@@ -2,6 +2,7 @@
 
 angular.module('agroupApp')
   .controller('MainCtrl', ['$scope','$location','Modal','groupAPI',function($scope, $location, Modal,groupAPI) {
+
     var path = $location.path();
     var groupName = path.replace(/\/(\w+)\/.*/, '$1');
 
@@ -18,8 +19,8 @@ angular.module('agroupApp')
         };
       });
     }
-    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
       var data = [];
       _.each($scope.collections, function(d) {
         data = data.concat(d.groups);
@@ -28,9 +29,23 @@ angular.module('agroupApp')
       var gp = _.find(data, {
         name: toParams.name
       });
-      module.group = gp;
-      module.path = toState.url.split('/').slice(2).join('/')
+
+      groupAPI.find(toParams.name).success(function(res){
+        module.group = groupAPI.format({group:res.data.group});
+        module.relaction = {
+          joined: res.data.ingroup,
+          collected: res.data.collectgroup
+        };
+        module.path = toState.url.split('/').slice(2).join('/')
+        $scope.$broadcast('groupChanged',module.group,module.relaction,module.path);
+      });
     });
+
+    $scope.$on('$viewContentLoaded',function(event,viewConfig){
+      console.log(viewConfig);
+    });
+
+    window.scope = $scope;
 
     $scope.navgate = function(group) {
       $location.path('/' + group.name + '/' + module.path)
