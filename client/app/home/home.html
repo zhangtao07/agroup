@@ -12,12 +12,12 @@
     <div class="panel b-light">
       <div class="panel-body">
         <a href="" class="thumb pull-left m-r">
-          <img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
+          <img class="imageitem-img img-circle group-logo" image-resize="{{group.logo}}" image-resize-width="40" image-resize-height="40" title="" />
         </a>
         <div class="clear">
           <a href="/{{group.name}}/comments" class="text-info">{{ group.name }} <i class="fa fa-twitter"></i></a>
-          <small class="block text-muted">{{ group.desc }}</small>
-          <group-action group=group></group-action>
+          <small class="block text-muted">{{ group.desc }} &nbsp;</small>
+          <small class="text-muted clear text-ellipsis">{{group.lastMsg.content.data.text}} &nbsp;</small>
         </div>
       </div>
     </div>

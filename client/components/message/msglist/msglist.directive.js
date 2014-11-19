@@ -8,6 +8,9 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
     return {
       templateUrl: 'components/message/msglist/msglist.html',
       restrict: 'EA',
+      scope: {
+        group:'=group'
+      },
       link: function(scope, element, attrs) {
 
         scope.msglist = [];
@@ -70,16 +73,11 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
         }
 
         scope.uploadpanel = {}
-        attrs.$observe('group', function(group) {
+        scope.$watch('group', function(group,oldvalue) {
+          if(!group) return;
 
-          try {
-            group = JSON.parse(group);
-          } catch (e) {
-            return;
-          }
           var groupId = group.id;
           scope.loadList(group, true);
-
 
           scope.onpaste = function() {
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -134,7 +132,6 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
           scope.postText = '';
           scope.onPostMessage = function() {
-            console.log(scope.postText);
             $http.post('api/group/' + groupId + '/message/post', {
               'text': scope.postText,
               'type': 'plain'
