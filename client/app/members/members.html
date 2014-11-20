@@ -4,7 +4,7 @@
     <div class="panel panel-default list-group-item list-item clearfix" ng-repeat="member in members">
       <div class="panel-heading">
         <div class="clearfix">
-          <img class="pull-left thumb-md avatar b-3x m-r" src="http://fe.baidu.com/~nwind/angulr/img/a2.jpg" alt="...">
+          <img class="pull-left thumb-md avatar b-3x m-r" ng-src="{{ member.avatar }}" alt="...">
           <div class="clear">
             <div class="h3 m-t-xs m-b-xs">
               {{ member.nickname }}

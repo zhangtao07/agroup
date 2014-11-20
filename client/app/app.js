@@ -19,12 +19,15 @@ var app = angular.module('agroupApp', [
     'ui.bootstrap',
     'app.directives',
     'ngAnimate',
-    'ngImgCrop'
+    'ngImgCrop',
+    'ngClipboard'
   ]).config(["$provide",
     function($provide) {
       $provide.value("apiRoot", "");
     }
-  ]).run(['$rootScope', 'userAPI', '$q',
+  ]).config(['ngClipProvider', function(ngClipProvider) {
+  ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
+}]).run(['$rootScope', 'userAPI', '$q',
     function($rootScope, userAPI, $q) {
 
       $q.when(userAPI.getMe()).then(function(obj) {

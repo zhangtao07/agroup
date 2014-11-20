@@ -26,7 +26,9 @@
     "highlightjs": "~8.3.0",
     "pagedown-extra": "git@github.com:jmcmanus/pagedown-extra.git",
     "moment": "~2.8.3",
-    "ng-img-crop": "~0.2.0"
+    "ng-img-crop": "~0.2.0",
+    "zeroclipboard": "~2.1.6",
+    "ng-clip": "~0.2.4"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
@@ -44,6 +46,11 @@
       "main": [
         "moment.js",
         "locale/zh-cn.js"
+      ]
+    },
+    "zeroclipboard": {
+      "main": [
+        "dist/ZeroClipboard.min.js"
       ]
     }
   }
