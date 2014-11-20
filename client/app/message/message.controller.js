@@ -2,7 +2,9 @@
 
 angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', '$rootScope',
   function(messageAPI, $scope, $rootScope) {
-    $scope.loadList = function(group, refresh) {
+    function loadList(group, refresh) {
+
+      if(!group) return;
 
       var loadParams;
       var groupId = group.id;
@@ -29,10 +31,11 @@ angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', '
 
 
     $scope.$on('groupChanged',function(event,group) {
-      if(!group) return;
+      loadList(group, true);
+    });
 
-      var groupId = group.id;
-      $scope.loadList(group, true);
-    })
+    $scope.$on('moduleChanged',function(event,group) {
+      loadList(group, true);
+    });
   }
 ]);

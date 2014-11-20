@@ -51,8 +51,9 @@ angular.module('agroupApp')
       var dialog = Modal.dialog;
 
       $scope.remove = function(md) {
+        var group = $scope.module.group;
         confirm(function() {
-          markdownAPI.deleteFile($scope.module.group.id,md.id);
+          markdownAPI.deleteFile(group.id,md.id);
           var i = $scope.markdowns.indexOf(md);
           $scope.markdowns.splice(i, 1);
         })(md.name);
@@ -65,18 +66,18 @@ angular.module('agroupApp')
 
       $scope.me = $rootScope.__user;
 
-
-      $scope.loadList = function(pagesize) {
+      function loadList(group,pagesize) {
         $scope.hasMore = true;
-        var group = $scope.module.group;
-        //这里如果封装成directive,就不会有空指针的这个分支
-        if(!group){
-          group = groupAPI.find($stateParams.name,$scope.collections);
-        }
         markdownAPI.getList(group.id, pagenation.page++, pagesize || pagenation.size).success(showList);
       }
-      $scope.loadList(8);
 
+      $scope.$on('groupChanged',function(event,group) {
+        loadList(group,8);
+      });
+
+      $scope.$on('moduleChanged',function(event,group) {
+        loadList(group, 8);
+      });
 
       function showList(data, status) {
         var m = data.count - (data.page+1) * data.size;
