@@ -54,12 +54,15 @@ angular.module('agroupApp')
         });
       }
 
-      init();
-      function init() {
-        var group = $scope.module.group;
-        if (!group) {
-          group = groupAPI.find(groupName,$scope.collections);
-        }
+      $scope.$on('groupChanged',function(event,group) {
+        init(group);
+      });
+
+      $scope.$on('moduleChanged',function(event,group) {
+        init(group);
+      });
+
+      function init(group) {
         var firstLevel = level[0];
         getFiles({}, firstLevel, group.id, function(files) {
           firstLevel.files = files;

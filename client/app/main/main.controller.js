@@ -1,56 +1,56 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', ['$scope','$location','Modal','groupAPI',function($scope, $location, Modal,groupAPI) {
-
-    var path = $location.path();
-    var groupName = path.replace(/\/(\w+)\/.*/, '$1');
+  .controller('MainCtrl', ['$scope','$timeout','$location','Modal','groupAPI',function($scope, $timeout,$location, Modal,groupAPI) {
 
     var module = {};
     $scope.module = module;
 
-
-    if(groupName !== 'groups'){
-      groupAPI.find(groupName).success(function(res){
-        module.group = groupAPI.format({group:res.data.group});
-        module.relaction = {
-          joined: res.data.ingroup,
-          collected: res.data.collectgroup
-        };
-      });
+    function getPath(state){
+      return state.url.split('/').slice(2).join('/')
     }
 
+    /**
+     * angular-ui router 对二维url state change支持不完善，所以这里使用了如下
+     * hack技，
+     *
+     * 场景：
+     *  “｛组名｝／｛模块名｝”
+     *
+     *  组名变化时，通过angular-ui router 配置的各state中的controller将收到
+     *  groupChanged事件 : $scope.on('groupChanged',function(event,currentGroup){})
+     *  模块变化时,将接受到
+     *  moduleChanged事件 : $scope.on('moduleChanged',function(event,currentGroup){})
+     *
+     */
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      var data = [];
-      _.each($scope.collections, function(d) {
-        data = data.concat(d.groups);
-      })
+      var isHome = toParams.name === 'groups';
+      if(isHome) return;
 
-      var gp = _.find(data, {
-        name: toParams.name
-      });
+      var fromPath = getPath(fromState);
+      var toPath = getPath(toState);
+      module.path = toPath;
 
-      groupAPI.find(toParams.name).success(function(res){
-        module.group = groupAPI.format({group:res.data.group});
-        module.relaction = {
-          joined: res.data.ingroup,
-          collected: res.data.collectgroup
-        };
-        module.path = toState.url.split('/').slice(2).join('/')
-        $scope.$broadcast('groupChanged',module.group,module.relaction,module.path);
-      });
+      var isGroupChanging =  toParams.name !== fromParams.name;
+      var isModuleChanging = fromPath !== toPath;
+
+      //一级导航: 组切换
+      if(isGroupChanging){
+        groupAPI.find(toParams.name).success(function(res){
+          module.group = groupAPI.format({group:res.data.group});
+          module.relaction = {
+            joined: res.data.ingroup,
+            collected: res.data.collectgroup
+          };
+          $scope.$broadcast('groupChanged',module.group,module.relaction,module);
+        });
+      //二级导航: 组->模块切换, 二级导航时不需要重新同步group信息
+      }else if(isModuleChanging){
+        $timeout(function(){
+          $scope.$broadcast('moduleChanged',module.group,module.relaction,module);
+        },1)
+      }
     });
-
-    $scope.$on('$viewContentLoaded',function(event,viewConfig){
-      console.log(viewConfig);
-    });
-
-    window.scope = $scope;
-
-    $scope.navgate = function(group) {
-      $location.path('/' + group.name + '/' + module.path)
-    }
-
 
 
     $scope.createGroup = function() {
