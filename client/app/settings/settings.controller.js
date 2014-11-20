@@ -51,13 +51,17 @@ angular.module('agroupApp')
           xhr.open('POST', apiRoot + 'api/user/modify', true);
           $scope.subIng = true;
           xhr.onreadystatechange=function() {
-            if (xhr.readyState== 4 && xhr.status== 200 && JSON.parse(xhr.responseText).status == 200) {
-              $scope.$apply(function() {
+            if(xhr.readyState== 4 && xhr.status== 200) {
+              if (JSON.parse(xhr.responseText).status == 200) {
+                $scope.$apply(function() {
+                  $scope.subIng = false;
+                  alert('保存成功！');
+                });
+              }else {
+                console.log('提交失败，请重试！');//这里应该有个通知
+                alert('保存失败，请重试！');
                 $scope.subIng = false;
-              });
-            }else {
-              console.log('提交失败，请重试！');//这里应该有个通知
-              $scope.subIng = false;
+              };
             };
 
           };
