@@ -35,6 +35,7 @@ var app = angular.module('agroupApp', [
       });
 
       $q.when(userAPI.getMockGroups()).then(function(res){
+        console.log(res);
         $rootScope.collections = res.data;
       });
 

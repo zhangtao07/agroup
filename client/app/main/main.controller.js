@@ -1,28 +1,57 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', function($scope, $location, Modal) {
-
+  .controller('MainCtrl', ['$scope','$location','Modal','groupAPI',function($scope, $location, Modal,groupAPI) {
 
     var path = $location.path();
     var groupName = path.replace(/\/(\w+)\/.*/, '$1');
-    var data = [];
-    _.each($scope.collections, function(d) {
-      data = data.concat(d.groups);
-    })
 
     var module = {};
     $scope.module = module;
+
+
+    if(groupName !== 'groups'){
+      groupAPI.find(groupName).success(function(res){
+        module.group = groupAPI.format({group:res.data.group});
+        module.relaction = {
+          joined: res.data.ingroup,
+          collected: res.data.collectgroup
+        };
+      });
+    }
+
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      module.group = _.find(data, {
+      var data = [];
+      _.each($scope.collections, function(d) {
+        data = data.concat(d.groups);
+      })
+
+      var gp = _.find(data, {
         name: toParams.name
       });
-      module.path = toState.url.split('/').slice(2).join('/')
+
+      groupAPI.find(toParams.name).success(function(res){
+        module.group = groupAPI.format({group:res.data.group});
+        module.relaction = {
+          joined: res.data.ingroup,
+          collected: res.data.collectgroup
+        };
+        module.path = toState.url.split('/').slice(2).join('/')
+        $scope.$broadcast('groupChanged',module.group,module.relaction,module.path);
+      });
     });
+
+    $scope.$on('$viewContentLoaded',function(event,viewConfig){
+      console.log(viewConfig);
+    });
+
+    window.scope = $scope;
 
     $scope.navgate = function(group) {
       $location.path('/' + group.name + '/' + module.path)
     }
+
+
 
     $scope.createGroup = function() {
       var dialog = Modal.confirm.create;
@@ -36,7 +65,15 @@ angular.module('agroupApp')
       };
       dialog(function ok() {
         //success
-        console.log(data.group);
+        groupAPI.createGroup({
+          name: data.group.name,
+          type: data.group.type,
+          icon: data.group.logocroped,
+          display: data.group.displayName,
+          description: data.group.desc
+        }).success(function(res){
+          console.log(res);
+        });
       })({
         data: data,
         title: '创建群组',
@@ -47,11 +84,6 @@ angular.module('agroupApp')
       });
     }
 
-    function toLocal(imgpath, size) {
-      size = size || 240;
-      return '/static/image/resize?url=' + imgpath + '&width=' + size + '&height=' + size + '&gravity=center&type=resize';
-    }
-
     $scope.setGroup = function() {
       var dialog = Modal.confirm.create;
       var group = module.group;
@@ -60,8 +92,8 @@ angular.module('agroupApp')
         group: {
           name: group.name,
           desc: group.desc,
-          logo: toLocal(group.logo),
-          logocroped: toLocal(group.logo),
+          logo: '',
+          logocroped: '',
           displayName: group.displayName,
           type: group.type
         }
@@ -69,7 +101,9 @@ angular.module('agroupApp')
 
       dialog(function ok() {
         group.desc = data.group.desc;
-        group.logo = data.group.logocroped; //data.group.logo;
+        if(data.group.logo){
+          group.logo = data.group.logocroped;
+        }
         group.displayName = data.group.displayName;
         group.type = data.group.type;
       })({
@@ -81,4 +115,4 @@ angular.module('agroupApp')
         style: 'modal-danger'
       });
     }
-  });
+  }]);

@@ -2,7 +2,7 @@
   <div class="dropdown wrapper" ng-click="setGroup()">
     <a ui-sref="app.page.profile" href="#/app/page/profile">
       <span class="thumb-lg w-auto-folded avatar m-t-sm">
-        <img class="imageitem-img img-circle" image-resize="{{module.group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
+        <img class="imageitem-img img-circle group-logo" image-resize="{{module.group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
       </span>
     </a>
     <a href="" class="dropdown-toggle hidden-folded" aria-haspopup="true" aria-expanded="false">
@@ -15,7 +15,7 @@
       </span>
     </a>
   </div>
-  <group-action group="module.group"></group-action>
+  <group-action group="module.group" relaction="module.relaction"></group-action>
   <div class="line dk hidden-folded"></div>
 </div>
 

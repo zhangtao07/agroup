@@ -116,7 +116,7 @@ angular.module('agroupApp')
                   }
                 ]
               }
-            }, info.style,info.size,info.templateUrl);
+            }, info.style,info.size);
 
             createModal.result.then(function(event) {
               ok.apply(event, args);

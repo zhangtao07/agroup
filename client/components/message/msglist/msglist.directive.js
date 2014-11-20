@@ -39,50 +39,17 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
         }
 
-        scope.loadList = function(group, refresh) {
-
-          var groupId = group.id;
-
-          if (refresh) {
-            loadParams = {
-              limit: 20,
-              offset: 0,
-              timestamp: null
-            }
-          }
-          //if (!groupId) {
-            //groupId = loadParams.groupId;
-          //} else {
-            //loadParams.groupId = groupId;
-          //}
-          messageAPI.getList(groupId, loadParams.timestamp, loadParams.offset, loadParams.limit).success(function(res) {
-
-            var data = res.data;
-            data.list.forEach(function(row) {
-              scope.msglist.push(row);
-            });
-            scope.hasMore = data.hasMore;
-            loadParams.timestamp = data.timestamp;
-            loadParams.offset += loadParams.limit;
-
-          });
-
-        }
 
         scope.uploadpanel = {}
-        attrs.$observe('group', function(group) {
+        //scope.$watch('group',
+        scope.$on('mgroupChanged',function(e,group) {
+          if(!group) return;
 
-          try {
-            group = JSON.parse(group);
-          } catch (e) {
-            return;
-          }
           var groupId = group.id;
           scope.loadList(group, true);
 
-
           scope.onpaste = function() {
-            var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            var items = (window.event.clipboardData || window.event.originalEvent.clipboardData).items;
             var files = [];
             if (items) {
               for (var i = 0; i < items.length; i++) {
@@ -134,7 +101,6 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
 
           scope.postText = '';
           scope.onPostMessage = function() {
-            console.log(scope.postText);
             $http.post('api/group/' + groupId + '/message/post', {
               'text': scope.postText,
               'type': 'plain'
@@ -144,7 +110,8 @@ angular.module('agroupApp').directive('msglist', ['$http', 'socket', 'messageAPI
               element.find(".list-container").get(0).scrollTop = 0;
             });
           }
-        });
+        }
+       );
       }
     };
   }]);

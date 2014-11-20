@@ -10,9 +10,9 @@ module.exports = {
   },
   hostname:'localhost:6000',
   service:{
-    host : 'cp01-ra-045.cp01.baidu.com',
-    port : '8087'
-    //host : 'localhost',
-    //port: 8080
+    //host : 'cp01-ra-045.cp01.baidu.com',
+    //port : '8087'
+    host : 'localhost',
+    port: 8080
   }
 };
