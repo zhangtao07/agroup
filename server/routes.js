@@ -20,14 +20,23 @@ module.exports = function(app) {
     next();
   });
   app.param('groupName', function(req, res, next, groupName) {
-    var target = url.parse('http://' + config.service.host +':' +config.service.port + '/user/groups/');
-    request.get({
+    var target = url.parse('http://' + config.service.host +':' +config.service.port + '/group/getByDisplay/');
+    request.post({
       url: url.format(target),
-      headers: req.headers
+      headers:{
+        cookie : req.headers.cookie
+      }
     }, function(err, response, body) {
-      req.group = _.find(JSON.parse(body).data,{name:groupName});
+      if(response.statusCode === 200){
+        var data = JSON.parse(body);
+        if(data.status === 401){
+          res.redirect('/signin?url=' + req.headers.referer);
+        }else{
+          req.group = JSON.parse(body).data.group;
+        }
+      }
       next();
-    })
+    }).form().append('display',groupName)
   });
 
   app.use('/api/group/:groupId/message/', require('./api/message'));
