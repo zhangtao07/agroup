@@ -3,17 +3,18 @@
   <h5>将下面的公共邀请链接通过BaiduHi、QQ等任何方式发给同事，点击链接即可加入团队。</h5>
   <div class="form-group">
     <input type="text" class="form-control" ng-value="modal.data.inviteUrl" style="margin-bottom: 10px;" />
-    <button type="submit" class="btn btn-info"  style="margin-bottom: 10px;" >复制链接</button>
+    <button class="btn btn-default" clip-copy="modal.data.inviteUrl" ng-click="modal.data.copyUrlDone()" style="margin-bottom: 10px;" >复制链接</button>
+    <button class="btn btn-info" ng-click="modal.data.getNewInCode()" style="margin-bottom: 10px;" >重新生成</button>
   </div>
 
   <h5>也可将链接直接发送到ta的邮箱</h5>
   <div class="form-group" ng-init="emailNumbers = [{email: '' }]">
     <div class="invite-email-item" ng-repeat="item in emailNumbers">
       <div class="input-group m-b">
-        <input type="text" class="form-control"  ng-model="item.email"/>
+        <input type="text" class="form-control"  ng-model="item.email" placeholder="邮箱前缀"/>
         <span class="input-group-addon">@baidu.com</span>
       </div>
-      <button class="btn btn-default"  style="margin-bottom: 15px;" ng-if="$index > 0" ng-click="emailNumbers.splice($index,1);">移除</button>
+      <button class="btn btn-default"  style="margin-bottom: 15px;" ng-if="$index > 0" ng-click="emailNumbers.splice($index,1)">移除</button>
     </div>
 
     <div>

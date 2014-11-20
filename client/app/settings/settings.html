@@ -1,4 +1,4 @@
-<div class="settings-content" ng-init="showpanel=false">
+<div class="settings-content" ng-init="showpanel=false" >
 
   <h5 class="content-title"><i class="icon-settings"></i> 个人设置</h5>
 
@@ -25,13 +25,13 @@
         </div>
         <div class="form-group">
           <label>真实姓名</label>
-          <input type="text" name="username" value="{{ my_profile.realname }}" class="form-control" placeholder="选填">
+          <input type="text" name="username" ng-model="my_profile.realname" value="{{ my_profile.realname }}" class="form-control" placeholder="选填">
         </div>
         <div class="form-group">
           <label>邮箱</label>
           <p class="form-control-static">{{ my_profile.email }}</p>
         </div>
-        <button class="btn btn-sm btn-primary pull-right" type="submit" ng-click=" !my_profile_form.$invalid ? signupForm() : '' " ui-toggle-class="show inline" ng-show="!my_profile_form.$invalid" >
+        <button ng-init="subIng=false" class="btn btn-sm btn-primary pull-right {{ subIng ? 'active' : '' }}" type="submit" ng-click=" !my_profile_form.$invalid ? signupForm() : '' "  ng-show="!my_profile_form.$invalid" >
           <span class="text">保存更改</span>
           <span class="text-active">保存中...</span>
         </button>
