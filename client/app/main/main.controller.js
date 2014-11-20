@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', ['$scope','$timeout','$location','Modal','groupAPI',function($scope, $timeout,$location, Modal,groupAPI) {
+  .controller('MainCtrl', ['$scope','$timeout','$state','Modal','groupAPI',function($scope, $timeout,$state, Modal,groupAPI) {
 
     var module = {};
     $scope.module = module;
@@ -72,7 +72,7 @@ angular.module('agroupApp')
           display: data.group.displayName,
           description: data.group.desc
         }).success(function(res){
-          console.log(res);
+          $state.go('app.message',{ name : res.data.display });
         });
       })({
         data: data,
@@ -100,12 +100,20 @@ angular.module('agroupApp')
       };
 
       dialog(function ok() {
-        group.desc = data.group.desc;
-        if(data.group.logo){
-          group.logo = data.group.logocroped;
-        }
-        group.displayName = data.group.displayName;
-        group.type = data.group.type;
+
+        groupAPI.modifyGroup({
+          id: group.id,
+          name: data.group.name,
+          type: data.group.type,
+          icon: data.group.logo ? data.group.logocroped : '',
+          display: data.group.displayName,
+          description: data.group.desc
+        }).success(function(res){
+          group.displayName = res.data.name;
+          group.desc = res.data.description;
+          group.logo = res.data.icon;
+          group.type = res.data.type;
+        });
       })({
         data: data,
         title: module.group.name,

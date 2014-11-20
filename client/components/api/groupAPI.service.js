@@ -65,6 +65,20 @@ angular.module('agroupApp').factory('groupAPI', ['apiRoot','$http',
         });
       },
 
+      modifyGroup: function(group) {
+        var formdata = new FormData();
+        formdata.append('name',group.display);
+        formdata.append('type',group.type);
+        if(group.icon){
+          formdata.append('icon',dataURItoBlob(group.icon));
+        }
+        formdata.append('description',group.desc);
+        return $http.post(apiRoot + 'api/group/'+group.id+'/modify',formdata,{
+          transformRequest: angular.identity,
+          headers:{ 'Content-type': undefined }
+        });
+      },
+
       checkName: function(name) {
         return $http.post(apiRoot + 'api/group/check/display',{
           display: name
