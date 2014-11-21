@@ -15,9 +15,21 @@
           <img class="imageitem-img img-circle group-logo" image-resize="{{group.logo}}" image-resize-width="40" image-resize-height="40" title="" />
         </a>
         <div class="clear">
-          <a href="/{{group.name}}/comments" class="text-info">{{ group.name }} <i class="fa fa-twitter"></i></a>
+          <a href="/{{group.name}}/comments" class="text-info text-ellipsis">{{ group.displayName }}</a>
           <small class="block text-muted">{{ group.desc }} &nbsp;</small>
-          <small class="text-muted clear text-ellipsis">{{group.lastMsg.content.data.text}} &nbsp;</small>
+        </div>
+
+        <div class="info">
+          <img class="imageitem-img img-circle" image-resize="{{group.lastMsg.user.avatar}}" image-resize-width="15" image-resize-height="15" title="" />
+          <span>{{ group.lastMsg.user.nickname}} : </span>
+          <span ng-switch on="group.lastMsg.content.type">
+          <small ng-switch-default class="text-muted clear text-ellipsis">{{group.lastMsg.content.data.text}} &nbsp;</small>
+          </span>
+          <span class="text-muted pull-right">
+            <i class="fa fa-clock-o"></i>
+              {{ fromNow(group.lastMsg.createdAt) }}
+          </span>
+          <span class="clear"></span>
         </div>
       </div>
     </div>

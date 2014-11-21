@@ -6,6 +6,20 @@ angular.module('agroupApp')
     var module = {};
     $scope.module = module;
 
+
+    $scope.fromNow = function(time){
+      var now = new Date();
+      var moreThen1Day = (now.getTime() - time) > 1000*60*60*24;
+      if(moreThen1Day){
+        //return moment(time).calendar();//.format('YYYY-MM-Do');
+        return moment(time).format('ll');
+      }else{
+        return moment(time).fromNow();
+      }
+
+    };
+
+
     function getPath(state){
       return state.url.split('/').slice(2).join('/')
     }

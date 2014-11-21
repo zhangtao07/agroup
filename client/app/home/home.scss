@@ -2,10 +2,18 @@
   .group-container{
     padding-top:40px;
   }
-  
   .group-logo {
     width:40px;
     height:40px;
+  }
+
+  .info {
+    margin-top: 10px;
+    
+  }
+  .text-ellipsis{
+    display: inline-block;
+    vertical-align:middle;
   }
 
 }

@@ -7,6 +7,8 @@ angular.module('agroupApp')
 
       userAPI.getMockGroups().success(function(res){
         $scope.collections = res.data;
+        window.data = res.data;
       });
+
     }
   ]);

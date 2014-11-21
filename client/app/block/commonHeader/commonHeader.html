@@ -48,7 +48,7 @@
     <ul class="nav navbar-nav hidden-sm" >
       <li class="dropdown pos-stc" ng-hide="app.isHome" ng-click="getGroups()">
         <a href="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-          <span>群组 : {{ module.group.name }}</span>
+          <span class="long-name">群组 : {{ module.group.displayName }}</span>
           <span class="caret"></span>
         </a>
         <div class="dropdown-menu wrapper w-full bg-white">
@@ -59,10 +59,9 @@
                 <div class="col-xs-6">
                   <ul class="list-unstyled l-h-2x">
                     <li ng-repeat="item in col.groups" ng-if="$even">
-                      <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
-                      <!--<img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="15" image-resize-height="15" title="" />-->
-                      <a href="/{{item.name}}/{{module.path}}">
-                        {{ item.name }}
+                      <img class="imageitem-img img-circle" image-resize="{{item.logo}}" image-resize-width="15" image-resize-height="15" title="" />
+                      <a href="/{{item.name}}/{{module.path}}" class="long-name">
+                        {{ item.displayName }}
                       </a>
                     </li>
                   </ul>
@@ -70,10 +69,9 @@
                 <div class="col-xs-6">
                   <ul class="list-unstyled l-h-2x">
                     <li ng-repeat="item in col.groups" ng-if="$odd">
-                      <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
-                      <a href="/{{item.name}}/{{module.path}}">
-                        <!--<img class="imageitem-img img-circle" image-resize="{{group.logo}}" image-resize-width="15" image-resize-height="15" title="" />-->
-                        {{ item.name }}
+                      <img class="imageitem-img img-circle" image-resize="{{item.logo}}" image-resize-width="15" image-resize-height="15" title="" />
+                      <a href="/{{item.name}}/{{module.path}}" class="long-name">
+                        {{ item.displayName }}
                       </a>
                     </li>
                   </ul>
