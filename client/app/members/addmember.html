@@ -1,17 +1,21 @@
 
-<form class="form-inline ng-pristine ng-valid" role="form">
+<form class="ng-pristine ng-valid" role="form">
   <h5>将下面的公共邀请链接通过BaiduHi、QQ等任何方式发给同事，点击链接即可加入团队。</h5>
   <div class="form-group">
-    <input type="text" class="form-control" ng-value="modal.data.inviteUrl" style="margin-bottom: 10px;" />
+    <input type="text" readonly="readonly" class="form-control" ng-value="modal.data.inviteUrl" style="margin-bottom: 10px;" />
+  </div>
+  <div class="form-group">
     <button class="btn btn-default" clip-copy="modal.data.inviteUrl" ng-click="modal.data.copyUrlDone()" style="margin-bottom: 10px;" >复制链接</button>
     <button class="btn btn-info" ng-click="modal.data.getNewInCode()" style="margin-bottom: 10px;" >重新生成</button>
   </div>
+</form>
 
+<form class="form-inline ng-pristine ng-valid" name="inviteEmailForm">
   <h5>也可将链接直接发送到ta的邮箱</h5>
-  <div class="form-group" ng-init="emailNumbers = [{email: '' }]">
+  <div class="form-group" ng-init="emailNumbers = [{email: '' }];e = 0;">
     <div class="invite-email-item" ng-repeat="item in emailNumbers">
       <div class="input-group m-b">
-        <input type="text" class="form-control"  ng-model="item.email" placeholder="邮箱前缀"/>
+        <input type="text" class="form-control" name="inviteEmail" required ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]$/" ng-minlength="2" ng-model="item.email" placeholder="填写邮箱前缀"/>
         <span class="input-group-addon">@baidu.com</span>
       </div>
       <button class="btn btn-default"  style="margin-bottom: 15px;" ng-if="$index > 0" ng-click="emailNumbers.splice($index,1)">移除</button>
@@ -19,8 +23,7 @@
 
     <div>
       <button type="submit" class="btn btn-default" ng-click="emailNumbers.push({email: ''})">添加邮箱</button>
-      <button type="submit" class="btn btn-info">发送邀请</button>
+      <button type="submit" class="btn btn-info {{ !inviteEmailForm.$invalid ? '' : 'disabled' }}" ng-click=" !inviteEmailForm.$invalid ? modal.data.inviteEmail(emailNumbers) : '' ">发送邀请</button>
     </div>
   </div>
-
 </form>

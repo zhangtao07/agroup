@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('SettingsCtrl', ['apiRoot', '$scope',
-    function (apiRoot, $scope) {
+  .controller('SettingsCtrl', ['apiRoot', '$scope', 'Modal',
+    function (apiRoot, $scope, Modal) {
       /*获取用户信息*/
       $scope.my_profile = $scope.__user;
 
@@ -55,11 +55,12 @@ angular.module('agroupApp')
               if (JSON.parse(xhr.responseText).status == 200) {
                 $scope.$apply(function() {
                   $scope.subIng = false;
-                  alert('保存成功！');
+                  /*提示*/
+                  Modal.notification.success('保存成功!');
+
                 });
               }else {
-                console.log('提交失败，请重试！');//这里应该有个通知
-                alert('保存失败，请重试！');
+                Modal.notification.fail('保存失败，请重试！');
                 $scope.subIng = false;
               };
             };
