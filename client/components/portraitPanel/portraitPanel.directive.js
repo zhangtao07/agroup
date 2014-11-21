@@ -45,6 +45,7 @@ angular.module('agroupApp')
           reader.onload = function (evt) {
             scope.$apply(function(scope){
               scope.myImage = evt.target.result;
+              debugger;
             });
           };
           reader.readAsDataURL(file);

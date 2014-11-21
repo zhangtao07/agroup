@@ -55,6 +55,7 @@ angular.module('agroupApp')
               if (JSON.parse(xhr.responseText).status == 200) {
                 $scope.$apply(function() {
                   $scope.subIng = false;
+
                   /*提示*/
                   Modal.notification.success('保存成功!');
 
