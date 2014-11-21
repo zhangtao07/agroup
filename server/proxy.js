@@ -50,10 +50,15 @@ exports = module.exports = function(req, res, next) {
 
   proxy.on('proxyRes', function(proxyRes, req, res) {
     //console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+    var _chunk='';
     proxyRes.on('data', function(chunk) {
+      _chunk += chunk;
+
+    })
+    proxyRes.on('end',function(){
       if (events.data.length) {
         events.data.forEach(function(d) {
-          d.call(null, chunk);
+          d.call(null, _chunk);
         });
       }
     })

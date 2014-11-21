@@ -45,20 +45,19 @@ angular.module('agroupApp')
            * @param  {String} name   - name or info to show on modal
            * @param  {All}           - any additional args are passed staight to del callback
            */
-          return function() {
+          return function(name,html,btntxt) {
             var args = Array.prototype.slice.call(arguments),
-              name = args.shift(),
               deleteModal;
 
             deleteModal = openModal({
               modal: {
                 dismissable: true,
                 title: '提示',
-                html: '<p>亲,确定要删除 <strong>' + name + '</strong> ?</p>',
+                html: html || '<p>亲,确定要删除 <strong>' + name + '</strong> ?</p>',
                 buttons: [
                   {
                     classes: 'btn-danger',
-                    text: '删除',
+                    text: btntxt || '删除',
                     click: function(e) {
                       deleteModal.close(e);
                     }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('MainCtrl', ['$scope','$timeout','$state','Modal','groupAPI',function($scope, $timeout,$state, Modal,groupAPI) {
+  .controller('MainCtrl', ['$scope','userAPI','$timeout','$state','Modal','groupAPI',function($scope, userAPI,$timeout,$state, Modal,groupAPI) {
 
     var module = {};
     $scope.module = module;
@@ -9,6 +9,13 @@ angular.module('agroupApp')
     function getPath(state){
       return state.url.split('/').slice(2).join('/')
     }
+
+    $scope.getGroups  = function(){
+      userAPI.getMockGroups().success(function(res){
+        $scope.collections = res.data;
+      });
+    }
+
 
     /**
      * angular-ui router 对二维url state change支持不完善，所以这里使用了如下
@@ -24,8 +31,7 @@ angular.module('agroupApp')
      *
      */
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      var isHome = toParams.name === 'groups';
-      if(isHome) return;
+      if(!toParams.name) return;
 
       var fromPath = getPath(fromState);
       var toPath = getPath(toState);
@@ -44,7 +50,7 @@ angular.module('agroupApp')
           };
           $scope.$broadcast('groupChanged',module.group,module.relaction,module);
         });
-      //二级导航: 组->模块切换, 二级导航时不需要重新同步group信息
+        //二级导航: 组->模块切换, 二级导航时不需要重新同步group信息
       }else if(isModuleChanging){
         $timeout(function(){
           $scope.$broadcast('moduleChanged',module.group,module.relaction,module);

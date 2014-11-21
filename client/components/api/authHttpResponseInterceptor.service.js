@@ -5,7 +5,7 @@ angular.module('agroupApp').factory('authHttpResponseInterceptor', ['$q', '$wind
     return {
       response: function(response) {
         if (response.data.status === 401 && !/\/signin/.test(location.href)) {
-          $window.location.href = 'signin';
+          $window.location.href = 'signin?url=' + location.href;
         }
         return response || $q.when(response);
       },

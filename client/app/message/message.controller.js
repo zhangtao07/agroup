@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', '$rootScope',
-  function(messageAPI, $scope, $rootScope) {
+angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', 'socket',
+  function(messageAPI, $scope, socket) {
     function loadList(group, refresh) {
 
       if(!group) return;
 
+      $scope.msglist = [];
+      $scope.hasMore = false;
       var loadParams;
       var groupId = group.id;
 
@@ -27,7 +29,23 @@ angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', '
         loadParams.offset += loadParams.limit;
 
       });
+
+      socket.joinGroup(groupId, function(res) {
+        var obj = JSON.parse(res).data;
+        var exist = false;
+        $scope.msglist.forEach(function(item,i){
+          if(item.id == obj.id){
+            scope.msglist[i] = obj;
+            exist = true;
+            return false;
+          }
+        });
+        if(!exist){
+          $scope.msglist.unshift(obj);
+        }
+      });
     }
+
 
 
     $scope.$on('groupChanged',function(event,group) {
