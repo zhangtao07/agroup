@@ -18,6 +18,7 @@ angular.module('agroupApp').factory('folderAPI', ['apiRoot', '$http','$q',
       createFolder: function(group,pid,name){
         console.log(pid);
         console.log(name);
+        debugger;
         return $http.post(apiRoot + "api/group/" + group.id + "/folder/create",{ pid: pid , name: name });
       },
       getFiles: function(groupId, folderId) {

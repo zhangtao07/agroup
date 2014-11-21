@@ -202,6 +202,55 @@ angular.module('agroupApp')
             });
           };
         }
-      }
+      },
+      notification : (function() {
+        var create = function(ok) {
+          ok = ok || angular.noop;
+
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                title: info.title,
+                html: info.content,
+                buttons: []
+              }
+            }, info.style, 'sm', true );
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
+            });
+
+          };
+        };
+        return {
+          /*成功提示*/
+          success: function(tip) {
+            var suc = create;
+            suc(function ok(createModal) {
+              createModal.close();
+            })({
+              style: 'modal-primary',
+              content: tip
+            });
+          },
+          /*失败提示*/
+          fail: function(tip) {
+            var f = create;
+            f(function ok(createModal) {
+              //success
+            })({
+              title: '提示',
+              style: 'modal-danger',
+              content: tip
+            });
+          }
+        };
+      })()
+
+
     };
   }]);
