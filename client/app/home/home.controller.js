@@ -5,9 +5,8 @@ angular.module('agroupApp')
     function($scope, userAPI) {
       $scope.message = 'Hello';
 
-      $scope.lastMsg = function(msg){
-        console.log(msg);
-        return msg.content.data.text
-      }
+      userAPI.getMockGroups().success(function(res){
+        $scope.collections = res.data;
+      });
     }
   ]);

@@ -34,14 +34,17 @@ var app = angular.module('agroupApp', [
         $rootScope.__user = obj.data.data;
       });
 
+      /*
       $q.when(userAPI.getMockGroups()).then(function(res){
-        console.log(res);
         $rootScope.collections = res.data;
       });
+      */
 
+      /*
       $q.when(userAPI.getGroups()).then(function(obj) {
         $rootScope.groups = obj.data.data;
       });
+      */
     }
   ]).run(
     ['$rootScope', '$state', '$stateParams', '$window', '$localStorage', '$translate',
