@@ -15,7 +15,7 @@
           <img class="imageitem-img img-circle group-logo" image-resize="{{group.logo}}" image-resize-width="40" image-resize-height="40" title="" />
         </a>
         <div class="clear">
-          <a href="/{{group.name}}/comments" class="text-info text-ellipsis">{{ group.displayName }}</a>
+          <a ui-sref="app.message({name:group.name})" href="" class="text-info text-ellipsis">{{ group.displayName }}</a>
           <small class="block text-muted">{{ group.desc }} &nbsp;</small>
         </div>
 
