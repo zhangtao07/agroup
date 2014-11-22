@@ -12,10 +12,10 @@
 
 <form class="form-inline ng-pristine ng-valid" name="inviteEmailForm">
   <h5>也可将链接直接发送到ta的邮箱</h5>
-  <div class="form-group" ng-init="emailNumbers = [{email: '' }];e = 0;">
+  <div class="form-group" ng-init="emailNumbers = [{email: '' }]">
     <div class="invite-email-item" ng-repeat="item in emailNumbers">
-      <div class="input-group m-b">
-        <input type="text" class="form-control" name="inviteEmail" required ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]$/" ng-minlength="2" ng-model="item.email" placeholder="填写邮箱前缀"/>
+      <div class="input-group m-b {{ inviteEmailForm['inviteEmail'+$index].$error.pattern ? 'has-error' : '' }}">
+        <input type="text" class="form-control" name="inviteEmail{{$index}}" required ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]$/" ng-minlength="2" ng-model="item.email" placeholder="填写邮箱前缀"/>
         <span class="input-group-addon">@baidu.com</span>
       </div>
       <button class="btn btn-default"  style="margin-bottom: 15px;" ng-if="$index > 0" ng-click="emailNumbers.splice($index,1)">移除</button>
