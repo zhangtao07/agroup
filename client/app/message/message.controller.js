@@ -2,13 +2,14 @@
 
 angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', 'socket',
   function(messageAPI, $scope, socket) {
+
+    var loadParams = {};
+    $scope.msglist = [];
+
+    $scope.loadList = loadList;
     function loadList(group, refresh) {
-
       if(!group) return;
-
-      $scope.msglist = [];
       $scope.hasMore = false;
-      var loadParams;
       var groupId = group.id;
 
       if (refresh) {
@@ -24,10 +25,9 @@ angular.module('agroupApp').controller('MessageCtrl', ['messageAPI', '$scope', '
         data.list.forEach(function(row) {
           $scope.msglist.push(row);
         });
-        $scope.hasMore = data.hasMore;
-        loadParams.timestamp = data.timestamp;
+        $scope.hasMore = data.total > data.page + 1;
+        loadParams.timestamp = data.datestamp;
         loadParams.offset += loadParams.limit;
-
       });
 
       socket.joinGroup(groupId, function(res) {

@@ -9,7 +9,9 @@
 
   .info {
     margin-top: 10px;
-    
+    .long-name{
+      max-width: 28%;
+    }
   }
   .text-ellipsis{
     display: inline-block;

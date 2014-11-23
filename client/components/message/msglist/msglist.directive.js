@@ -67,7 +67,13 @@ angular.module('agroupApp').directive('msglist', [
         }
 
         scope.postText = '';
+        var lastsendtime = new Date();
         scope.onPostMessage = function() {
+          var gap = (new Date()) - lastsendtime ;
+          lastsendtime = new Date();
+          if(!scope.postText || gap < 200){
+            return;
+          }
           var group = scope.module.group;
           $http.post('api/group/' + group.id + '/message/post', {
             'text': scope.postText,
