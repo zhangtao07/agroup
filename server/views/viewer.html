@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html<%- cache ? ' manifest="cache.manifest"' : '' %>>
+<html<%- cache ? ' manifest="/editor/cache.manifest"' : '' %>>
 
     <head>
         <title>AGroup 笔记</title>
@@ -13,7 +13,10 @@
         <script>
 
             // Use ?debug to serve original JavaScript files instead of minified
-            window.baseDir = 'res';
+            window.baseDir = '/editor/res';
+            var group = {
+              name : location.pathname.replace(/\/(\w+).*/,'$1')
+            }
             /*
               res-min 是编译目录，从源码中祛除,请执行 gulp 进行编译
             */
@@ -36,6 +39,7 @@
 
 
             function imgresize(url,width,height){
+              if(!url) return null;
               width = width || 30;
               height = height || 30;
               if(!/^http(s)?:\/\//.test(url)){
@@ -47,7 +51,7 @@
               return '/static/image/resize?url=' + url + '&width=' + width + '&height='+ height +'&gravity=center&type=resize'
             }
         </script>
-        <script src="res/require.js"></script>
+        <script src="/editor/res/require.js"></script>
     </head>
 
     <body class="viewer"></body>

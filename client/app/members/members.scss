@@ -1,0 +1,33 @@
+.members-content {
+  width: 100%;
+  .content-title {
+    padding: 10px;
+    margin-top: 0;
+    background: #fff;
+    border: 1px solid #dee5e7;
+  }
+  .members-list {
+    box-sizing: border-box;
+    padding: 20px;
+    .list-item {
+      width: 280px;
+      background: #fff;
+      margin-right: 40px;
+      margin-bottom: 20px;
+      float: left;
+      padding: 0;
+    }
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+  .members-content .members-list {
+    padding: 20px;
+    li.list-item {
+      margin-right: 0;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('agroupApp')
-  .directive('pdf', function () {
+  .directive('pdf', ['$sce',function ($sce) {
     return {
       templateUrl: 'components/message/pdf/pdf.html',
       restrict: 'EA',
@@ -13,11 +13,12 @@ angular.module('agroupApp')
         scope.$watchCollection('[file,download]', function(newValues) {
           var file = newValues[0],
               download = newValues[1];
-          var url = 'pdf?file='+file;
+          //var url = 'pdf?file='+file;
+          var url = file;
           if(download){
             url+='&download='+download;
           }
-          scope.url = url;
+          scope.url = $sce.trustAsResourceUrl(url);
         });
 
 
@@ -26,4 +27,4 @@ angular.module('agroupApp')
         }
       }
     };
-  });
+  }]);

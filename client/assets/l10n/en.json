@@ -13,7 +13,8 @@
       "MDS" : "Markdowns",
       "FILES" : "Files",
       "TASKS": "Tasks",
-      "LINKS": "Links"
+      "LINKS": "Links",
+      "MEMBERS": "Members"
     }
   }
 },

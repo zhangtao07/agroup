@@ -1,0 +1,11 @@
+<div class="hbox" style="border-spacing: 10px"
+  ng-init="
+    app.isHome=false;
+    app.hideAside=false;
+    app.content.classname='';
+    app.settings.navbarCollapseColor='bg-white-only';
+    ">
+  <div class="col">
+    <msglist group="module.group" style="height:100%;overflow: hidden;" ng-init="app.content.classname = 'app-content-full';"></msglist>
+  </div>
+</div>

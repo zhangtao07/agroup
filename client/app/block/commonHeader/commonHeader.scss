@@ -7,3 +7,17 @@
   display: inline-block;
   position: absolute;
 }
+
+common-header{
+  .nav{
+    .dropdown-menu{
+      .long-name{
+        width: 100px;
+        font-size: .5em;
+      }
+    }
+  }
+  .list-unstyled .long-name{
+    max-width:50%;
+  }
+}

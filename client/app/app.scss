@@ -87,7 +87,9 @@ background-color: #e4eaec!important;
 .grid-box{
   width: 200px;
 }
-
+.pos-stc{
+  position: static !important;
+}
 
 // Component styles are injected through grunt
 // injector
@@ -100,10 +102,17 @@ background-color: #e4eaec!important;
 @import 'block/commonSettings/commonSettings.scss';
 @import 'file/file.scss';
 @import 'group/group.scss';
+@import 'home/home.scss';
+@import 'invite/invite.scss';
+@import 'links/links.scss';
+@import 'main/groupAction/groupAction.scss';
 @import 'main/main.scss';
 @import 'markdown/markdown.scss';
+@import 'members/members.scss';
+@import 'message/message.scss';
 @import 'search/search.scss';
 @import 'search/searchFileList/searchFileList.scss';
+@import 'settings/settings.scss';
 @import 'test/test.scss';
 @import 'group/creategroup/creategroup.scss';
 @import 'message/dropzone/dropzone.scss';
@@ -118,5 +127,7 @@ background-color: #e4eaec!important;
 @import 'message/plainitem/plainitem.scss';
 @import 'message/uploadpanel/uploadpanel.scss';
 @import 'modal/modal.scss';
+@import 'portraitPanel/portraitPanel.scss';
 @import 'previewPanel/previewPanel.scss';
+@import 'userinfoPanel/userinfoPanel.scss';
 // endinjector

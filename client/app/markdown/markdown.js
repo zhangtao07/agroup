@@ -25,7 +25,7 @@ angular.module('agroupApp')
     function($stateProvider) {
       $stateProvider
         .state('app.markdown', {
-          url: '/markdown/{name}',
+          url: '/{name}/notes',
           templateUrl: 'app/markdown/markdown.html',
           controller: 'MarkdownCtrl'
         });

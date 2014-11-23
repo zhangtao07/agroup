@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css" />
   <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-video.css" />
   <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
+  <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
@@ -68,6 +69,14 @@
 <script src="bower_components/blueimp-gallery/js/blueimp-gallery-vimeo.js"></script>
 <script src="bower_components/blueimp-gallery/js/blueimp-gallery-youtube.js"></script>
 <script src="bower_components/highlightjs/highlight.pack.js"></script>
+<script src="bower_components/pagedown-extra/pagedown/Markdown.Converter.js"></script>
+<script src="bower_components/pagedown-extra/pagedown/Markdown.Sanitizer.js"></script>
+<script src="bower_components/pagedown-extra/Markdown.Extra.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/moment/locale/zh-cn.js"></script>
+<script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+<script src="bower_components/zeroclipboard/dist/ZeroClipboard.min.js"></script>
+<script src="bower_components/ng-clip/dest/ng-clip.min.js"></script>
 <!-- endbower -->
 <script src="assets/js/ng-infinite-scroll.js"></script>
 <script src="assets/js/angular-translate.js"></script>
@@ -96,19 +105,34 @@
 <script src="app/fileicon/fileicon.service.js"></script>
 <script src="app/group/group.controller.js"></script>
 <script src="app/group/group.js"></script>
+<script src="app/home/home.controller.js"></script>
+<script src="app/home/home.js"></script>
+<script src="app/invite/invite.controller.js"></script>
+<script src="app/invite/invite.js"></script>
+<script src="app/links/links.controller.js"></script>
+<script src="app/links/links.js"></script>
+<script src="app/main/groupAction/groupAction.directive.js"></script>
 <script src="app/main/main.controller.js"></script>
 <script src="app/main/main.js"></script>
 <script src="app/markdown/markdown.controller.js"></script>
 <script src="app/markdown/markdown.js"></script>
+<script src="app/members/members.controller.js"></script>
+<script src="app/members/members.js"></script>
+<script src="app/message/message.controller.js"></script>
+<script src="app/message/message.js"></script>
 <script src="app/root.js"></script>
 <script src="app/search/search.controller.js"></script>
 <script src="app/search/search.js"></script>
 <script src="app/search/searchFileList/searchFileList.directive.js"></script>
+<script src="app/settings/settings.controller.js"></script>
+<script src="app/settings/settings.js"></script>
 <script src="app/test/test.controller.js"></script>
 <script src="app/test/test.js"></script>
 <script src="components/api/authHttpResponseInterceptor.service.js"></script>
 <script src="components/api/folderAPI.service.js"></script>
 <script src="components/api/groupAPI.service.js"></script>
+<script src="components/api/markdown.service.js"></script>
+<script src="components/api/membersAPI.service.js"></script>
 <script src="components/api/messageAPI.service.js"></script>
 <script src="components/api/searchAPI.service.js"></script>
 <script src="components/api/userAPI.service.js"></script>
@@ -129,8 +153,10 @@
 <script src="components/message/uploadpanel/uploadpanel.service.js"></script>
 <script src="components/modal/modal.service.js"></script>
 <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+<script src="components/portraitPanel/portraitPanel.directive.js"></script>
 <script src="components/previewPanel/previewPanel.directive.js"></script>
 <script src="components/socket/socket.service.js"></script>
+<script src="components/userinfoPanel/userinfoPanel.directive.js"></script>
 <!-- endinjector -->
 <script src="assets/js/directives.js"></script>
 <!-- endbuild -->

@@ -2,6 +2,7 @@ node_modules
 .tmp
 .sass-cache
 .idea
+.tern-project
 .markdowns
 client/bower_components
 dist

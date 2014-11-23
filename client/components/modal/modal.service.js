@@ -8,17 +8,21 @@ angular.module('agroupApp')
      * @param  {String} modalClass - (optional) class(es) to be applied to the modal
      * @return {Object}            - the instance $modal.open() returns
      */
-    function openModal(scope, modalClass) {
+    function openModal(scope, modalClass,size,backdrop) {
       var modalScope = $rootScope.$new();
       scope = scope || {};
       modalClass = modalClass || 'modal-default';
+
 
       angular.extend(modalScope, scope);
 
       return $modal.open({
         templateUrl: 'components/modal/modal.html',
         windowClass: modalClass,
-        scope: modalScope
+        scope: modalScope,
+        size: size,
+        keyboard: true,
+        backdrop: backdrop || 'static'
       });
     }
 
@@ -41,27 +45,26 @@ angular.module('agroupApp')
            * @param  {String} name   - name or info to show on modal
            * @param  {All}           - any additional args are passed staight to del callback
            */
-          return function() {
+          return function(name,html,btntxt) {
             var args = Array.prototype.slice.call(arguments),
-              name = args.shift(),
               deleteModal;
 
             deleteModal = openModal({
               modal: {
                 dismissable: true,
-                title: 'Confirm Delete',
-                html: '<p>Are you sure you want to delete <strong>' + name + '</strong> ?</p>',
+                title: '提示',
+                html: html || '<p>亲,确定要删除 <strong>' + name + '</strong> ?</p>',
                 buttons: [
                   {
                     classes: 'btn-danger',
-                    text: 'Delete',
+                    text: btntxt || '删除',
                     click: function(e) {
                       deleteModal.close(e);
                     }
                   },
                   {
                     classes: 'btn-default',
-                    text: 'Cancel',
+                    text: '取消',
                     click: function(e) {
                       deleteModal.dismiss(e);
                     }
@@ -72,6 +75,50 @@ angular.module('agroupApp')
 
             deleteModal.result.then(function(event) {
               del.apply(event, args);
+            });
+          };
+        },
+        create: function(ok) {
+          ok = ok || angular.noop;
+
+          /**
+           * Open a delete confirmation modal
+           * @param  {String} name   - name or info to show on modal
+           * @param  {All}           - any additional args are passed staight to ok callback
+           */
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                dismissable: true,
+                title: info.title,
+                html: info.content,
+                data: info.data,
+                templateUrl: info.templateUrl,
+                buttons: [
+                  {
+                    classes: 'btn-default',
+                    text: '取消',
+                    click: function(e) {
+                      createModal.dismiss(e);
+                    }
+                  },
+                  {
+                    classes: 'btn-primary',
+                    text: info.ok,
+                    click: function(e) {
+                      createModal.close(e);
+                    }
+                  }
+                ]
+              }
+            }, info.style,info.size);
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
             });
           };
         }
@@ -118,6 +165,92 @@ angular.module('agroupApp')
               ok.apply(event, args);
             });
           };
-      }
+      },
+
+      /* addMember modal */
+      addMember : {
+
+        create: function(ok) {
+          ok = ok || angular.noop;
+
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                dismissable: true,
+                title: info.title,
+                html: info.content,
+                data: info.data,
+                templateUrl: info.templateUrl,
+                buttons: [
+                  {
+                    classes: 'btn-default',
+                    text: '关闭',
+                    click: function (e) {
+                      createModal.dismiss(e);
+                    }
+                  }
+                ]
+              }
+            }, info.style,info.size,true);
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
+            });
+          };
+        }
+      },
+      notification : (function() {
+        var create = function(ok) {
+          ok = ok || angular.noop;
+
+          return function(info) {
+            var args = Array.prototype.slice.call(arguments),
+              name = args.shift(),
+              createModal;
+
+            createModal = openModal({
+              modal: {
+                title: info.title,
+                html: info.content,
+                buttons: []
+              }
+            }, info.style, 'sm', true );
+
+            createModal.result.then(function(event) {
+              ok.apply(event, args);
+            });
+
+          };
+        };
+        return {
+          /*成功提示*/
+          success: function(tip) {
+            var suc = create;
+            suc(function ok(createModal) {
+              createModal.close();
+            })({
+              style: 'modal-primary',
+              content: tip
+            });
+          },
+          /*失败提示*/
+          fail: function(tip) {
+            var f = create;
+            f(function ok(createModal) {
+              //success
+            })({
+              title: '提示',
+              style: 'modal-danger',
+              content: tip
+            });
+          }
+        };
+      })()
+
+
     };
   }]);

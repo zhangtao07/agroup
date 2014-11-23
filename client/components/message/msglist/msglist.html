@@ -8,7 +8,7 @@
                 <form class="m-b-none ng-pristine ng-valid" _lpchecked="1" onsubmit="return false;"
                       ng-submit="onPostMessage()">
                     <div class="input-group">
-                        <input ng-paste="onpaste($event)" ng-model="postText" placeholder="发送文本消息" type="text" class="form-control input-lg">
+                        <input ng-paste="onpaste($event)" ng-model="postText" ng-trim="true" placeholder="发送文本消息" type="text" class="form-control input-lg">
                         <div class="input-group-btn dropdown">
                             <button type="submit" class="btn btn-lg btn-info" tabindex="-1">发送</button>
                             <button type="button" class="btn btn-lg btn-info dropdown-toggle" style="padding: 10px 7px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
@@ -22,9 +22,9 @@
         </div>
     </div>
     <div class="row-row">
-        <div class="cell list-container" infinite-scroll="loadList()" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
+        <div class="cell list-container" infinite-scroll="loadList(module.group)" infinite-scroll-disabled="!hasMore" infinite-scroll-immediate-check="false">
             <div class="m-b b-l m-l-md streamline">
-                <msgitem group="group" data="item" ng-repeat="item in msglist" ng-show="item.status=='vision'"></msgitem>
+                <msgitem group="module.group" data="item" ng-repeat="item in msglist" ng-show="item.status=='Vision'"></msgitem>
                 <div style="font-size: 30px;text-align: center;" ng-show="hasMore">
                     <i class="fa fa-spinner fa-spin"></i>
                 </div>

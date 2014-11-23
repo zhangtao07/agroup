@@ -1,0 +1,40 @@
+<div class="home" 
+  ng-init="
+    app.isHome=true;
+    app.hideAside=true;
+    app.content.classname='full-width';
+    app.settings.navbarCollapseColor='bg-black';
+    ">
+<div ng-repeat="col in collections" class="col-md-12 group-container">
+  <div ng-hide="!col.groups.length">
+    <p>{{ col.name }}</p>
+    <hr>
+  </div>
+  <div ng-repeat="group in col.groups" class="col-md-4">
+    <div class="panel b-light">
+      <div class="panel-body">
+        <a href="" class="thumb pull-left m-r">
+          <img class="imageitem-img img-circle group-logo" image-resize="{{group.logo}}" image-resize-width="40" image-resize-height="40" title="" />
+        </a>
+        <div class="clear">
+          <a ui-sref="app.message({name:group.name})" href="" class="text-info text-ellipsis">{{ group.displayName }}</a>
+          <small class="block text-muted">{{ group.desc }} &nbsp;</small>
+        </div>
+        <div class="info">
+          <img class="imageitem-img img-circle" image-resize="{{group.lastMsg.user.avatar}}" image-resize-width="15" image-resize-height="15" title="" />
+          <span class="long-name">{{ group.lastMsg.user.nickname}} : </span>
+          <span class="" ng-switch="group.lastMsg.content.type">
+            <small ng-switch-when="File" class="long-name text-muted clear">分享了{{group.lastMsg.content.data.files.length}}个文件</small>
+            <small ng-switch-default class="long-name text-muted clear">{{group.lastMsg.content.data.text}} &nbsp;</small>
+          </span>
+          <span class="text-muted pull-right">
+            <i class="fa fa-clock-o"></i>
+              {{ fromNow(group.lastMsg.createdAt) }}
+          </span>
+          <span class="clear"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

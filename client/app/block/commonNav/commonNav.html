@@ -1,53 +1,91 @@
+<div class="clearfix hidden-xs text-center hide show" id="aside-user">
+  <div class="dropdown wrapper" ng-click="setGroup()">
+    <a ui-sref="app.page.profile" href="#/app/page/profile">
+      <span class="thumb-lg w-auto-folded avatar m-t-sm">
+        <img class="imageitem-img img-circle group-logo" image-resize="{{module.group.logo}}" image-resize-width="120" image-resize-height="120" title="" />
+      </span>
+    </a>
+    <a href="" class="dropdown-toggle hidden-folded" aria-haspopup="true" aria-expanded="false">
+      <span class="clear">
+        <span class="block m-t-sm">
+          <strong class="font-bold text-lt">{{ module.group.displayName }}</strong>
+          <!--<b class="caret"></b>-->
+        </span>
+        <span class="text-muted text-xs block">{{ module.group.desc }}</span>
+      </span>
+    </a>
+  </div>
+  <group-action group="module.group" relaction="module.relaction"></group-action>
+  <div class="line dk hidden-folded"></div>
+</div>
+
 <!-- first -->
 <ul class="nav">
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span translate="aside.nav.GROUPS">Groups</span>
-    </li>
+  <!--<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">-->
+    <!--<span translate="aside.nav.GROUPS">Groups</span>-->
+  <!--</li>-->
 
-    <li ui-sref-active="active" ng-repeat="group in groups">
-        <a href ui-sref="app.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">
-            <i class="glyphicon glyphicon-file icon text-success"></i>
-            <span class="font-bold">{{group.name}}</span>
-        </a>
-    </li>
-    <li class="line dk"></li>
+  <!--<li ui-sref-active="active" ng-repeat="group in groups">-->
+    <!--<a href ui-sref="app.message.group({name:group.name})" ng-class="{active: __currentGroupId ==group.id}">-->
+      <!--<i class="glyphicon glyphicon-file icon text-success"></i>-->
+      <!--<span class="font-bold">{{group.name}}</span>-->
+    <!--</a>-->
+  <!--</li>-->
+  <!--<li class="line dk"></li>-->
 
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span translate="aside.nav.components.COMPONENTS">Components</span>
-    </li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span class="font-bold">{{ module.group.name }}</span>
+    <span translate="aside.nav.components.COMPONENTS">Components</span>
+  </li>
 
-    <li ui-sref-active="active" >
-        <a href ui-sref="app.markdown({name:__currentGroupName})">
-            <i class="glyphicon glyphicon-file icon text-success"></i>
-            <!--<span>{{__currentGroupName}}</span>-->
-            <span translate="aside.nav.components.MDS">Markdowns</span>
-        </a>
-    </li>
 
-    <li ui-sref-active="active">
-        <a ui-sref="app.file({name:__currentGroupName})">
-            <i class="glyphicon glyphicon-folder-close icon text-info-lter"></i>
-            <!--<span>{{ __currentGroupName }}</span>-->
-            <span translate="aside.nav.components.FILES">Files</span>
-        </a>
-    </li>
+  <li ui-sref-active="active">
+    <a href ui-sref="app.message({name:module.group.name})" ng-class="{active: module.group.group ==group.id}">
+      <i class="fa fa-comment text-primary-dker"></i>
+      <span class="font-bold">消息</span>
+    </a>
+  </li>
 
-    <li disabled ui-sref-active="active">
-        <a>
-            <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
-            <span translate="aside.nav.components.TASKS">Tasks</span>
-            <span>（敬请期待.）</span>
-        </a>
-    </li>
+  <li ui-sref-active="active">
+    <a href ui-sref="app.markdown({name:module.group.name})">
+      <i class="glyphicon glyphicon-edit icon text-success"></i>
+      <!--<span>{{module.group.name}}</span>-->
+      <span translate="aside.nav.components.MDS">Markdowns</span>
+    </a>
+  </li>
 
-    <!--disabled-->
-    <li disabled ui-sref-active="active">
-        <a>
-            <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
-            <span translate="aside.nav.components.LINKS">Links</span>
-            <span>（敬请期待.）</span>
-        </a>
-    </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.file({name:module.group.name})">
+      <i class="glyphicon glyphicon-folder-close icon text-info-lter"></i>
+      <!--<span>{{ module.group.name }}</span>-->
+      <span translate="aside.nav.components.FILES">Files</span>
+    </a>
+  </li>
+
+  <li ui-sref-active="active">
+    <a ui-sref="app.links({name:module.group.name})">
+      <i class="glyphicon glyphicon-link icon text-warning-lter"></i>
+      <span translate="aside.nav.components.LINKS">Links</span>
+      <!--<span>（敬请期待.）</span>-->
+    </a>
+  </li>
+
+  <li disabled ui-sref-active="active">
+    <a>
+      <i class="glyphicon glyphicon-check icon text-primary-lter"></i>
+      <span translate="aside.nav.components.TASKS">Tasks</span>
+      <span>（敬请期待.）</span>
+    </a>
+  </li>
+
+  <li ui-sref-active="active">
+    <a ui-sref="app.member({name:module.group.name})">
+
+      <i class="icon-users text-white"></i>
+      <!--<span>{{ module.group.name }}</span>-->
+      <span translate="aside.nav.components.MEMBERS">Members</span>
+    </a>
+  </li>
 
 </ul>
 <!-- / third -->

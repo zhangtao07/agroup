@@ -1,0 +1,47 @@
+.userinfo-panel {
+  width: 260px;
+  min-height: 400px;
+  background: #fff;
+  border: 1px solid #ddd;
+  position: fixed;
+  bottom: 40px;
+  right: 15px;
+  box-shadow: 0 1px 6px #ddd;
+  z-index: 1;
+  .panel-heading {
+    background: #f6f8f8;
+    height: 80px;
+    border-bottom: 1px solid #ddd;
+    .portrait {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      float: left;
+      margin-right: 20px;
+    }
+  }
+
+  .panel-body {
+    .userinfo-detail {
+      box-sizing: border-box;
+      padding: 5px;
+      li {
+        list-style-type: none;
+        margin-bottom: 10px;
+        color: #888;
+      }
+    }
+  }
+
+  .pos-a-rt {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+}
+
+
+

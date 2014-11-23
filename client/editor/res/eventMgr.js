@@ -309,17 +309,20 @@ define([
             eventMgr.onEditorPopover();
         });
 
-        var group = window.location.href.replace(/.*\/+(\w+)\?.*/,'$1');
-        var fileid = window.location.href.replace(/.*\?file=([\w]+).*/,'$1');
-        if(fileid){
-          var url = window.location.href.replace(/(.*\/+).*/,'$1') + group + '?file=' + fileid;
+        //var group = window.location.href.replace(/.*\/+(\w+)\?.*/,'$1');
+        //var fileid = window.location.href.replace(/.*\?file=([\w]+).*/,'$1');
+        var url = location.pathname.replace('/md/view','/md/data');
+        url = url.replace('/md/edit','/md/data');
+
+        //if(fileid){
+          //console.log(url);
           $.post(url, function(data) {
-              // Call onReady listeners
+               //Call onReady listeners
               onReady(data,url);
           });
-        }else{
-          onReady();
-        }
+        //}else{
+          //onReady();
+        //}
     };
 
     // For extensions that need to call other extensions

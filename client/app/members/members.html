@@ -1,0 +1,33 @@
+<div class="members-content">
+  <h5 class="content-title"><i class="icon-users"></i> 成员 <span ng-click="addMember();" class="btn btn-addon btn-sm btn-default" style="margin-left: 10px;">+ 添加成员</span></h5>
+  <div class="members-list">
+    <div class="panel panel-default list-group-item list-item clearfix" ng-repeat="member in members">
+      <div class="panel-heading">
+        <div class="clearfix">
+          <img class="pull-left thumb-md avatar b-3x m-r" ng-src="{{ member.avatar }}" alt="...">
+          <div class="clear">
+            <div class="h3 m-t-xs m-b-xs">
+              {{ member.nickname }}
+              <i class="fa fa-circle {{ member.online ? 'text-success' : 'text-white' }} pull-right text-xs m-t-sm"></i>
+            </div>
+            <small class="text-muted">
+              {{ member.online ? '当前在线' : '离线'}}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="list-group no-radius alt">
+        <div class="list-group-item" href="">
+          <i class="fa fa-user fa-fw text-muted"></i>
+          {{ member.realname }}
+        </div>
+        <div class="list-group-item" href="">
+          <i class="fa fa-envelope fa-fw text-muted"></i>
+          {{ member.email }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<userinfopanel></userinfopanel>

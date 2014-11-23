@@ -8,19 +8,16 @@ module.exports = {
 
   auth: 'uuap',
 
-  mysql: {
-    protocol: "mysql",
-    query: { pool: true,debug:true },
-    host: "127.0.0.1",
-    database: "agroup",
-    user: "root",
-    password: "1111",
-    port: 3306
-  },
   op: {
     server :'http://172.22.65.38',
     view: '/op/view.aspx?src=',
     embed: '/op/embed.aspx?src='
   },
-  hostname:'agroup.baidu.com'
+  hostname:'agroup.baidu.com',
+  service:{
+    host : 'cp01-ra-045.cp01.baidu.com',
+    port : '8087'
+    //host : 'localhost',
+    //port: 8080
+  }
 };

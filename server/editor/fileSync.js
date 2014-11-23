@@ -7,6 +7,7 @@ var _ = require('lodash');
 function Client(msg) {
   this.fileid = msg.fileid;
   this.user = msg.user;
+  this.group = msg.group;
   this.patchingInProcess = false;
   this.patchQueue = [];
 }
@@ -18,7 +19,7 @@ Client.prototype.add = function(socket) {
   self.sendToOthers(socket, 'server:clientJoin', self.user);
 
   socket.on('disconnect', function() {
-    dc.userLeave(self);
+    dc.userLeave(socket.request.headers,self);
     self.sendToOthers(socket, 'server:clientLeave', self.user);
   });
 

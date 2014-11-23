@@ -1,14 +1,14 @@
-<div ng-repeat="item in data.list" class="file-li grid-box" >
-    <div ng-if="item.cover" ng-switch on="!!item.isImg">
-        <a class="img-container" ng-switch-when="true" blueimp-href="{{item.filepath}}" blueimp-cover="{{item.cover}}" blueimp-title="{{item.filename}}" blueimp-type="{{item.mimetype}}" ng-click="onGallery($event)">
-            <img class="imageitem-img img-thumbnail" image-resize="{{item.cover}}" image-resize-width="200" image-resize-height="200" title="{{item.filename}}"/>
+<div ng-repeat="item in data.files" class="file-li grid-box" >
+    <div ng-if="item.coverUrl" ng-switch on="!!item.isImg">
+        <a class="img-container" ng-switch-when="true" blueimp-href="{{item.coverUrl}}" blueimp-cover="{{item.coverUrl}}" blueimp-title="{{item.name}}" blueimp-type="{{item.mimetype}}" ng-click="onGallery($event)">
+            <img class="imageitem-img img-thumbnail" image-resize="{{item.coverUrl}}" image-resize-width="200" image-resize-height="200" title="{{item.name}}"/>
             <i class="fa fa-play-circle-o" ng-show="item.isVideo"></i>
         </a>
 
         <div ng-switch-default>
             <img ng-hide="!item.coverLoad" ng-error="onCoverError(item)" ng-load="onCoverLoad(item)"
-                 ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.cover}}"
-                 image-resize-width="200" image-resize-height="200" title="{{item.filename}}" style="cursor: pointer"/>
+                 ng-click="onimgclick(item)" class="imageitem-img img-thumbnail" image-resize="{{item.coverUrl}}"
+                 image-resize-width="200" image-resize-height="200" title="{{item.name}}" style="cursor: pointer"/>
 
             <div class="coverLoading" ng-hide="item.coverLoad">
                 <div class="progress-striped progress active progress-xs">
@@ -24,18 +24,17 @@
 
 
     <p style="margin-top: 10px;font-weight: bold;" ng-switch on="item.isMK">
-
-      <a ng-switch-when="true" ng-href="/editor/{{ group.id }}?file={{item.file_id}}&view=true" target="_blank"
+      <a ng-switch-when="true" ng-href="/{{ group.name }}/md/view/{{item.id}}" target="_blank"
         style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
-        <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
-        <span class="long-name">{{item.filename}}</span>
+        <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.name}}"></fileicon>
+        <span class="long-name">{{item.name}}</span>
       </a>
 
-        <a ng-switch-default ng-href="{{item.filepath}}?filename={{item.filename}}" target="_blank"
+      <a ng-switch-default ng-href="{{item.downloadUrl}}" target="_blank"
            style="font-size: 15px;color: #23b7e5;text-decoration: underline;">
-            <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.filename}}"></fileicon>
-            <span class="long-name">{{item.filename}}</span>
-        </a>
+            <fileicon style="font-size: 26px;" mimetype="{{item.mimetype}}" filename="{{item.name}}"></fileicon>
+            <span class="long-name">{{item.name}}</span>
+      </a>
     </p>
 </div>
 

@@ -56,7 +56,7 @@ angular.module('agroupApp').factory('fileIcon', function() {
         className = classTypes.ppt;
       } else if (/pdf/.test(mimetype)) {
         className = classTypes.pdf;
-      } else if (/folder/.test(mimetype)) {
+      } else if (/Folder/.test(mimetype)) {
         className = classTypes.folder;
       } else if (/markdown/.test(mimetype)) {
         className = classTypes.markdown;

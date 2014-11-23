@@ -14,7 +14,7 @@ angular.module('agroupApp')
   .config(function($stateProvider) {
     $stateProvider
       .state('app.file', {
-        url: '/file/{name}',
+        url: '/{name}/files',
         templateUrl: 'app/file/file.html',
         controller: 'FileCtrl'
       });
@@ -63,13 +63,14 @@ angular.module('agroupApp')
     return {
       restrict: 'A',
       link: function(scope, element, attr) {
-        element.text(scope.item.name);
+        var item = scope.item.file || scope.item.folder;
+        element.text(item.name);
 
         element.bind('keydown keypress', function(event) {
           if (event.which === 13) {
             element.blur();
           } else if (event.which === 27) {
-            element.text(scope.item.name);
+            element.text(item.name);
             select(element[0]);
           }
         });
@@ -84,16 +85,21 @@ angular.module('agroupApp')
             element.attr('contenteditable', false);
             var content = element.text();
             if (content) {
-              scope.item.name = content;
+              item.name = content;
             } else {
-              element.text(scope.item.name);
+              element.text(item.name);
             }
           }
         });
 
-        scope.$watch('item.name', function(nv, ov) {
+        scope.$watch('item.file.name', function(nv, ov) {
           if (nv && ov && nv !== ov) {
-            return scope.updateItem && scope.updateItem(scope.item);
+            return scope.fileRename && scope.fileRename(item);
+          }
+        });
+        scope.$watch('item.folder.name', function(nv, ov) {
+          if (nv && ov && nv !== ov) {
+            return scope.folderRename && scope.folderRename(item);
           }
         });
       }

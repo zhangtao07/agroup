@@ -1,17 +1,24 @@
 'use strict';
 
 angular.module('agroupApp')
-  .controller('FileCtrl', ['$rootScope', '$scope', 'fileIcon', '$stateParams', '$http', 'Modal', '$localStorage', 'messageAPI', 'folderAPI', 'groupAPI',
-    function($rootScope, $scope, fileIcon, $stateParams, $http, Modal, $localStorage, messageAPI, folderAPI, groupAPI) {
-
-      //var level = $localStorage['file.level'] = $localStorage['file.level'] || [{
-      //files: [],
-      //parent_id: 0
-      //}];
+  .controller('FileCtrl', ['$scope', 'fileIcon', '$stateParams', 'Modal', 'messageAPI', 'folderAPI','groupAPI',
+    function($scope, fileIcon, $stateParams, Modal, messageAPI, folderAPI,groupAPI) {
 
       $scope.getIcon = function(item) {
-        if (item) {
-          return fileIcon.getClassByMimetype(item.type) || fileIcon.getClassByFilename(item.name) || 'fa fa-file';
+        if (!item) return;
+        if (item.file) {
+          return fileIcon.getClassByMimetype(item.file.mimetype) || fileIcon.getClassByFilename(item.file.name);
+        } else if (item.folder) {
+          return fileIcon.getClassByMimetype('Folder');
+        }
+      }
+
+      $scope.getName = function(item) {
+        if (!item) return;
+        if (item.file) {
+          return item.file.name;
+        } else if (item.folder) {
+          return item.folder.name;
         }
       }
 
@@ -26,23 +33,17 @@ angular.module('agroupApp')
       $scope.clearSelect = clearSelect;
       $scope.selectItem = selectItem;
       $scope.deleteItem = deleteItem;
-      $scope.addItem = addItem;
+      $scope.addFolder = addFolder;
       $scope.editItem = editItem;
       $scope.doneEditing = doneEditing;
       $scope.home = home;
       var groupName = $stateParams.name;
 
-      groupAPI.getGroupByName(groupName).success(function(res) {
-        $rootScope.__currentGroupName = res.data.name;
-        $scope.group = res.data;
-        init();
-      });
 
-
-      function getFiles(item, folder, groupId, cb) {
-        folderAPI.getFiles(groupId, item.id).success(function(files, status) {
+      function getFiles(parentFolder, folder, groupId, cb) {
+        folderAPI.getFiles(groupId, parentFolder.id).success(function(res, status) {
           return cb && cb(
-            _.each(files, function(d) {
+            _.each(res.data, function(d) {
               var isSelected = folder && folder.selectedItem && folder.selectedItem.id === +d.id;
               if (isSelected) {
                 d.selected = true;
@@ -53,12 +54,17 @@ angular.module('agroupApp')
         });
       }
 
-      function init() {
-        var group = $scope.group.id;
+      $scope.$on('groupChanged',function(event,group) {
+        init(group);
+      });
+
+      $scope.$on('moduleChanged',function(event,group) {
+        init(group);
+      });
+
+      function init(group) {
         var firstLevel = level[0];
-        getFiles({
-          id: 0
-        }, firstLevel, group, function(files) {
+        getFiles({}, firstLevel, group.id, function(files) {
           firstLevel.files = files;
           if (!files.length) {
             firstLevel.selectedItem = undefined;
@@ -72,19 +78,19 @@ angular.module('agroupApp')
       }
 
       function selectItem(folder, item) {
-        var groupId = $scope.group.id;
+        var groupId = $scope.module.group.id;
         clearSelect(folder);
         item.selected = true;
         folder.selectedItem = item;
         var index = level.indexOf(folder);
 
-        if (item.type !== 'folder') {
+        if (item.file) {
           if (index === level.length - 2) {
             closeFolder(index + 1, level.length - index);
           }
-          $scope.preview(item,folder);
-        } else {
-          getFiles(item, folder, groupId, function(files) {
+          $scope.preview(item.file, folder);
+        } else if (item.folder) {
+          getFiles(item.folder, folder, groupId, function(files) {
             var nextLevel = level[index + 1] = level[index + 1] || {};
             nextLevel.files = files;
             nextLevel.parent_id = item.id;
@@ -113,6 +119,7 @@ angular.module('agroupApp')
       }
 
       function deleteItem(folder, item) {
+        var file = item.file || item.folder;
         confirm(function() {
           var i = folder.files.indexOf(item);
           folder.files.splice(i, 1);
@@ -123,29 +130,37 @@ angular.module('agroupApp')
           if (!folder.files.length) {
             level.splice(j, 1);
           }
-          $http.delete('api/files/' + item.id);
-        })(item.name);
+          if (item.file) {
+            folderAPI.deleteFile($scope.module.group, file.id);
+          } else if (item.folder) {
+            folderAPI.deleteFolder($scope.module.group, file.id);
+          }
+        })(file.name);
       }
 
-      function addItem(index, fileid, content) {
+      function addFolder(index, fileid, content) {
         var files = level[index].files = level[index].files || [];
 
         var data = {
           name: content && content.filename || 'level' + index + '-folder' + level[index].files.length,
-          parent_id: index > 0 ? level[index - 1].selectedItem.id : 0,
+          parent_id: index > 0 ? level[index - 1].selectedItem.folder.id : 0,
           type: content && content.mimetype || 'folder',
           file_id: fileid && fileid || 0,
-          group_id: $scope.group.id
+          group_id: $scope.module.group.id
         };
-        $http.post('api/files/', data).success(function(d, status) {
-          level[index].files.push(d);
+        folderAPI.createFolder($scope.module.group, data.parent_id, data.name).success(function(d, status) {
+          level[index].files.push({
+            file: null,
+            folder: d.data
+          });
         });
       }
 
-      $scope.updateItem = function(item) {
-        $http.put('api/files/' + item.id, JSON.stringify({
-          name: item.name
-        }));
+      $scope.folderRename = function(folder) {
+        folderAPI.folderRename($scope.module.group, folder.id, folder.name);
+      }
+      $scope.fileRename = function(file) {
+        folderAPI.fileRename($scope.module.group, file.id, file.name);
       }
 
       function editItem(item) {
@@ -157,18 +172,22 @@ angular.module('agroupApp')
       }
 
       function sendFile(file, folder, folderId, length, completeQueue) {
-        var groupId = $scope.group.id;
+        var groupId = $scope.module.group.id;
         panel.addFile(file, function(file, send) {
           var formData = new FormData();
           formData.append('groupId', groupId);
           formData.append('file', file);
           formData.append('folderId', folderId);
-          send('api/message/upload', formData);
-        }, function(fileID, fd) {
+          send('api/group/' + groupId + '/file/upload', formData);
+        }, function(fileID, file) {
           var index = level.indexOf(folder);
-          level[index].files.push(fd);
+          var fe = {
+            file: file,
+            folder: null
+          };
+          level[index].files.push(fe);
           completeQueue.push(fileID);
-          $scope.selectItem(folder, fd);
+          $scope.selectItem(folder, fe);
           if (completeQueue.length === length) {
             messageAPI.uploadEnd(groupId, completeQueue.join(','));
           }
@@ -176,7 +195,7 @@ angular.module('agroupApp')
       }
       $scope.onDrop = function(files, folder) {
         var index = level.indexOf(folder);
-        var folderId = index > 0 ? level[index - 1].selectedItem.id : 0;
+        var folderId = index > 0 ? level[index - 1].selectedItem.folder.id : 0;
         var completeQueue = [];
         files.forEach(function(file) {
           sendFile(file, folder, folderId, files.length, completeQueue);

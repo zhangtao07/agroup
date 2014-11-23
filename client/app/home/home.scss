@@ -1,0 +1,25 @@
+.home{
+  .group-container{
+    padding-top:40px;
+  }
+  .group-logo {
+    width:40px;
+    height:40px;
+  }
+
+  .info {
+    margin-top: 10px;
+    .long-name{
+      max-width: 28%;
+    }
+  }
+  .text-ellipsis{
+    display: inline-block;
+    vertical-align:middle;
+  }
+
+}
+
+.app-content.full-width{
+  margin-left:0;
+}

@@ -1,29 +1,13 @@
 'use strict';
 
 var express = require('express');
-var config = require('../config/environment');
-var fake = require('./fake');
-var uuap = require('./uuap');
-
 var router = express.Router();
+var proxy = require('../proxy');
 
-router.use('/login/fake', fake);
-router.use('/login/uuap', uuap.login);
-
-router.use('/uuap/callback', uuap.callback);
-
-//默认登录
-if (config.auth === 'fake') {
-  router.use('/login', fake);
-}
-
-if (config.auth === 'uuap') {
-  router.use('/login', uuap.login);
-}
-
-router.use('/logout', function(req, res, next) {
-  delete req.session.user;
-  res.redirect(req.query.url||"/")
+router.use('/', function login(req,res,next){
+  proxy(req,res).on('data',function(chunk){
+    console.log(111,chunk.toString());
+  })
 });
 
 module.exports = router;

@@ -20,13 +20,38 @@
     "angular-animate": "latest",
     "github-markdown-css": "~1.1.1",
     "rangy-official": "~1.3.0-alpha.20140921",
-    "ng-error":"latest",
-    "ng-load":"latest",
-    "blueimp-gallery":"~2.15.1",
-    "highlightjs": "~8.3.0"
+    "ng-error": "latest",
+    "ng-load": "latest",
+    "blueimp-gallery": "~2.15.1",
+    "highlightjs": "~8.3.0",
+    "pagedown-extra": "git@github.com:jmcmanus/pagedown-extra.git",
+    "moment": "~2.8.3",
+    "ng-img-crop": "~0.2.0",
+    "zeroclipboard": "~2.1.6",
+    "ng-clip": "~0.2.4"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
+  },
+  "overrides": {
+    "pagedown-extra": {
+      "main": [
+        "pagedown/Markdown.Converter.js",
+        "pagedown/Markdown.Sanitizer.js",
+        "Markdown.Extra.js"
+      ]
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/zh-cn.js"
+      ]
+    },
+    "zeroclipboard": {
+      "main": [
+        "dist/ZeroClipboard.min.js"
+      ]
+    }
   }
 }

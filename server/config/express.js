@@ -8,15 +8,15 @@ var express = require('express');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var compression = require('compression');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
+//var restreamer = require('connect-restreamer');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
-var session = require('express-session');
-var models = require('../model/');
-var SessionStore = require('express-mysql-session');
+//var session = require('express-session');
+//var SessionStore = require('express-mysql-session');
 module.exports = function(app) {
   var env = app.get('env');
 
@@ -24,25 +24,18 @@ module.exports = function(app) {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(compression());
-  app.use(bodyParser.urlencoded({ limit: '50mb' ,extended: false }));
-  app.use(bodyParser.json());
+  //app.use(bodyParser.urlencoded({ limit: '50mb' ,extended: false }));
+  //app.use(bodyParser.json());
+  //app.use(restreamer());
   app.use(methodOverride());
   app.use(cookieParser());
-  app.use(function(req, res, next) {
-    models(function(err, db) {
-      if (err) return next(err);
-      req.models = db.models;
-      req.db = db;
-      next();
-    });
-  });
 
-  app.use(session({
-    key: 'agroup',
-    secret: 'webfe-fex-end',
-    store: new SessionStore(config.sessionStorage),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 } //for one year
-  }));
+  //app.use(session({
+    //key: 'agroup',
+    //secret: 'webfe-fex-end',
+    //store: new SessionStore(config.sessionStorage),
+    //cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 } //for one year
+  //}));
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));

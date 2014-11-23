@@ -1,7 +1,7 @@
 <div ng-init="mouseEnter=false;" ng-mouseenter="mouseEnter=true" ng-mouseleave="mouseEnter=false">
 
     <a class="pull-left thumb-sm avatar m-l-n-md">
-        <span image-resize-width="40" image-resize-height="40" image-resize="{{data.avartar}}" class="img-circle _avatar"
+        <span image-resize-width="40" image-resize-height="40" image-resize="{{data.user.avatar}}" class="img-circle _avatar"
              alt="..."></span>
     </a>
 
@@ -9,7 +9,7 @@
         <div class="panel-heading pos-rlt b-b b-light">
             <span class="arrow left"></span>
             <span>
-                {{data.nickname}}
+                {{data.user.nickname}}
                 <span>
                     {{title}}
                 </span>
@@ -18,20 +18,18 @@
             <div class="pull-right">
                 <span class="text-muted m-l-sm pull-right" ng-hide="mouseEnter">
                     <i class="fa fa-clock-o"></i>
-                    {{data.time}}
+                    {{data.updatedAt | date:'MM-dd HH:mm:ss'}}
                 </span>
                 <span class="msg-toolbar" ng-show="mouseEnter">
-                    <i ng-click="onDel(data)" class="icon-close icon" ng-show="__user.id == data.user_id"></i>
+                    <i ng-click="onDel(data)" class="icon-close icon" ng-show="__user.id == data.user.id"></i>
                 </span>
-
             </div>
         </div>
         <div class="panel-body">
-
-            <mkitem group="group" data="data.content" ng-if="data.type=='mk'"></mkitem>
-            <linkitem data="data.content" ng-if="data.type=='link'"></linkitem>
-            <plainitem data="data.content" ng-if="data.type=='plain'"></plainitem>
-            <fileitem  group="group" data="data.content" ng-if="data.type=='file'"></fileitem>
+            <mkitem group="group" data="data.content.data" ng-if="data.content.type=='MD'"></mkitem>
+            <linkitem data="data.content" ng-if="data.content.type=='Link'"></linkitem>
+            <plainitem data="data.content" ng-if="data.content.type=='Text'"></plainitem>
+            <fileitem  group="group" data="data.content.data" ng-if="data.content.type=='File'"></fileitem>
         </div>
     </div>
 </div>
